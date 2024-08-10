@@ -1,0 +1,20 @@
+{
+  "name": "gdo-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@godaddy/terminus": "^4.12.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-healthcheck": "^0.1.0",
+    "mysql2": "^3.11.0",
+    "sequelize": "^6.37.3"
+  }
+}
