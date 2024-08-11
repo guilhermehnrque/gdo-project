@@ -13,7 +13,7 @@ sequelize.sync().then(() => {
     console.error('Erro ao sincronizar modelos:', error);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 server.listen(port, () => {
     console.log(`Project GDO running at port: ${port}`);
