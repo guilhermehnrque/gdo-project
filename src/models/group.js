@@ -1,28 +1,32 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const List = require('./lists');
+const User = require('./user');
 
-const Guest = sequelize.define('Guest', {
+const Group = sequelize.define('Group', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
     },
-    name: {
+    description: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    lists_id: {
+    users_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
     },
 }, {
-    tableName: 'guests',
+    tableName: 'groups',
     timestamps: true,
 });
 
 
-Guest.belongsTo(List, { foreignKey: 'lists_id', as: 'list' });
+Group.belongsTo(User, { foreignKey: 'users_id', as: 'user' });
 
-module.exports = Guest;
+module.exports = Group;

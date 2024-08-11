@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Groups = require('./groups');
-const List = require('./lists');
+const Groups = require('./group');
 
 const Schedule = sequelize.define('Schedule', {
     id: {
@@ -21,13 +20,17 @@ const Schedule = sequelize.define('Schedule', {
     groups_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: Groups,
+            key: 'id',
+        },
     },
     start: {
-        type: DataTypes.TIMESTAMP,
+        type: DataTypes.DATE,
         allowNull: false,
     },
     finish: {
-        type: DataTypes.TIMESTAMP,
+        type: DataTypes.DATE,
         allowNull: false,
     },
 }, {
@@ -35,6 +38,7 @@ const Schedule = sequelize.define('Schedule', {
     timestamps: true,
 });
 
+// Definindo as associações
 Schedule.belongsTo(Groups, { foreignKey: 'groups_id', as: 'group' });
 Schedule.hasMany(List, { foreignKey: 'schedules_id', as: 'lists' });
 

@@ -1,10 +1,12 @@
-const { DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Schedules = require('./schedules');
+const Schedules = require('./schedule');
 const PlayersList = require('./playersList');
-const Guest = require('./guests');
+const Guest = require('./guest');
 
-const List = sequelize.define('List', {
+class List extends Model {}
+
+List.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -22,14 +24,16 @@ const List = sequelize.define('List', {
     schedules_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: Schedules,
+            key: 'id',
+        },
     },
 }, {
+    sequelize,
+    modelName: 'List',
     tableName: 'lists',
     timestamps: true,
 });
-
-List.belongsTo(Schedules, { foreignKey: 'schedules_id', as: 'schedule' });
-List.hasMany(PlayersList, { foreignKey: 'lists_id', as: 'playersLists' });
-List.hasMany(Guest, { foreignKey: 'lists_id', as: 'guests' });
 
 module.exports = List;

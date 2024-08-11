@@ -1,15 +1,18 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./user');
 const List = require('./list');
 
-class PlayersList extends Model {}
+class Guest extends Model {}
 
-PlayersList.init({
+Guest.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
+    },
+    name: {
+        type: DataTypes.STRING(255),
         allowNull: false,
     },
     lists_id: {
@@ -20,23 +23,12 @@ PlayersList.init({
             key: 'id',
         },
     },
-    players_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: User,
-            key: 'id',
-        },
-    },
-    player_status: {
-        type: DataTypes.CHAR(2),
-        allowNull: false,
-    },
 }, {
     sequelize,
-    modelName: 'PlayersList',
-    tableName: 'players_list',
+    modelName: 'Guest',
+    tableName: 'guests',
     timestamps: true,
 });
 
-module.exports = PlayersList;
+
+module.exports = Guest;

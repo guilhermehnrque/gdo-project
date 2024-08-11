@@ -1,8 +1,10 @@
-const { DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Group = require('./group');
 
-const Local = sequelize.define('Local', {
+class Local extends Model {}
+
+Local.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -32,12 +34,16 @@ const Local = sequelize.define('Local', {
     groups_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: Group,
+            key: 'id',
+        },
     },
 }, {
+    sequelize,
+    modelName: 'Local',
     tableName: 'locals',
     timestamps: true,
 });
-
-Local.belongsTo(Group, { foreignKey: 'groups_id', as: 'group' });
 
 module.exports = Local;
