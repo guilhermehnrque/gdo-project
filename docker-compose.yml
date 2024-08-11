@@ -1,20 +1,7 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
-    ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=development
-      - PROJECT_GDO_DATABASE_HOST=mysql
-      - PROJECT_GDO_DATABASE_USERNAME=root
-      - PROJECT_GDO_DATABASE_PASSWORD=root
-      - PROJECT_GDO_DATABASE=volei-gdo
-    depends_on:
-      - mysql
-
-  mysql:
+  gdo-project-db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
