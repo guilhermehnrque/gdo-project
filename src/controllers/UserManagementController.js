@@ -29,8 +29,6 @@ class UserManagementController {
         }
 
         try {
-            this.handleValidationErrors(response, validationResult(request));
-
             const token = await this.userService.loginUser(request.body)
 
             response.status(200).json({ token })
