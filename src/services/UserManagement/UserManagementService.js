@@ -25,10 +25,6 @@ class UserManagementService {
         return await this.userManagementRepository.createUser(userEntity);
     }
 
-    async getAllUsers() {
-        return await this.userManagementRepository.getAllUsers();
-    }
-
     async loginUser({ login, password }) {
         const user = await this.userManagementRepository.getUserByLogin(login);
         this.validateUserLogin(user, login);

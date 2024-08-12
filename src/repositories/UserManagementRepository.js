@@ -6,10 +6,6 @@ class UserManagementRepository {
         return await user.save();
     }
 
-    async getAllUsers() {
-        return await UserModel.findAll()
-    }
-
     async getUserByLogin(login) {
         return await UserModel.findOne({ where: { login } })
     }

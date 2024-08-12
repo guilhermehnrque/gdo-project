@@ -18,7 +18,6 @@ describe('UserManagementRepository', () => {
             const userEntity = { login: 'testuser', password: 'password123' };
             const savedUser = { id: 1, ...userEntity };
 
-            // Simulando o método build e save
             UserModel.build.mockReturnValue({
                 save: jest.fn().mockResolvedValue(savedUser),
             });
