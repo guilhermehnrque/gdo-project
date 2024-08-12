@@ -23,6 +23,8 @@ class RegisterUserDTO {
         });
     }
 
+    getLogin = () => this.login
+
 }
 
 module.exports = RegisterUserDTO

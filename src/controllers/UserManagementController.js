@@ -1,4 +1,5 @@
 const UserManagementService = require('../services/UserManagement/UserManagementService');
+const { validationResult } = require('express-validator');
 
 class UserManagementController {
 
@@ -7,33 +8,39 @@ class UserManagementController {
     }
 
     async createUser(request, response) {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
         try {
             await this.userService.createUser(request.body)
-            response.status(201).json({ message: 'User created successfully' })
-        } catch (error) {
-            response.status(500).json({ error: error.message })
-        }
-    }
 
-    async getAllUsers(request, response) {
-        try {
-            const users = await this.userService.getAllUsers()
-            response.status(200).json(users)
+            response.status(201).json({ message: 'Usuário registrado' })
         } catch (error) {
-            response.status(500).json({ error: error.message })
+            this.handleErrorResponse(response, error)
         }
     }
 
     async login(request, response) {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
         try {
             const token = await this.userService.loginUser(request.body)
 
             response.status(200).json({ token })
         } catch (error) {
-            response.status(500).json({ error: error.message })
+            this.handleErrorResponse(response, error)
         }
     }
 
+    handleErrorResponse(response, error) {
+        const statusCode = error.statusCode && Number.isInteger(error.statusCode) ? error.statusCode : 500;
+        response.status(statusCode).json({ error: error.message });
+    }
 
 }
 

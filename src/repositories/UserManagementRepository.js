@@ -1,16 +1,9 @@
 const UserModel = require('../models/user')
-const UserEntity = require('../entity/UserEntity')
 
 class UserManagementRepository {
-    async createUser(registerUserDTO) {
-        const userEntity = await UserEntity.toRegistration(registerUserDTO)
-
-        const user = new UserModel(userEntity)
+    async createUser(userEntity) {
+        const user = UserModel.build(userEntity)
         return await user.save();
-    }
-
-    async getAllUsers() {
-        return await UserModel.findAll()
     }
 
     async getUserByLogin(login) {

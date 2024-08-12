@@ -1,4 +1,5 @@
 const JwtUtils = require('../utils/JwtUtils');
+const logger = require('../utils/LoggerUtils');
 
 class ValidateBearerToken {
     static async validateBearerToken(request, response, next) {
@@ -7,10 +8,13 @@ class ValidateBearerToken {
         if (!token) {
             return ValidateBearerToken.handleUnauthorized(response, 'Token not provided')
         }
+        const decoded = await JwtUtils.verifyToken(token)
 
-        if (!await ValidateBearerToken.isTokenValid(token)) {
+        if (!decoded) {
             return ValidateBearerToken.handleUnauthorized(response, 'Invalid token')
         }
+
+        request.userType = decoded.type;
 
         next();
     }
@@ -20,14 +24,13 @@ class ValidateBearerToken {
     }
 
     static handleUnauthorized(response) {
+        logger.error('Unauthorized request')
         return response.status(401).json({ message: 'Unauthorized' })
     }
 
-    static async isTokenValid() {
+    static async isTokenValid(token) {
         try {
-            await JwtUtils.verifyToken(token)
-
-            return true
+            return await JwtUtils.verifyToken(token)
         } catch (error) {
             return false
         }
