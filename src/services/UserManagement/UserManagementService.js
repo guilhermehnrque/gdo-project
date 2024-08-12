@@ -8,6 +8,7 @@ const HashPassword = require('../../utils/HashPasswordUtils');
 const logger = require('../../utils/LoggerUtils');
 
 class UserManagementService {
+    
     constructor() {
         this.userManagementRepository = new UserManagementRepository();
     }
