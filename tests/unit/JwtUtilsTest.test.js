@@ -1,6 +1,6 @@
 const JwtUtils = require('../../src/utils/JwtUtils');
 const jwt = require('jsonwebtoken');
-const logger = require('../../src/config/logger');
+const logger = require('../../src/utils/LoggerUtils');
 
 jest.mock('jsonwebtoken');
 
