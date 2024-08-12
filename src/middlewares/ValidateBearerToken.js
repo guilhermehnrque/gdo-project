@@ -25,7 +25,7 @@ class ValidateBearerToken {
         return response.status(401).json({ message: 'Unauthorized' })
     }
 
-    static async isTokenValid() {
+    static async isTokenValid(token) {
         try {
             await JwtUtils.verifyToken(token)
 
