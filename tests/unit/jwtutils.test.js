@@ -10,24 +10,25 @@ describe('JwtUtils', () => {
 
     beforeAll(() => {
         process.env.PROJECT_GDB_SECRET_KEY = secretKey; 
-    });
+    })
 
     beforeEach(() => {
         jest.clearAllMocks()
-    });
+    })
 
     test('should verify a valid token', async () => {
         jwt.verify.mockImplementation((token, secret, callback) => {
             if (secret == secretKey){
                 callback(null, payload);
             }
-        });
+        })
+
         const result = await JwtUtils.verifyToken(token)
+        
         expect(result).toEqual(payload)
         expect(jwt.verify).toHaveBeenCalledWith(token, secretKey, expect.any(Function))
-    });
+    })
 
-    /*
     test('should throw an error for an invalid token', async () => {
         const errorMessage = 'invalid token'
         jwt.verify.mockImplementation((token, secret, callback) => {
@@ -36,7 +37,7 @@ describe('JwtUtils', () => {
 
         await expect(JwtUtils.verifyToken(token)).rejects.toThrow(errorMessage);
         expect(jwt.verify).toHaveBeenCalledWith(token, secretKey, expect.any(Function))
-    });
+    })
 
     test('should throw an error for an expired token', async () => {
         const errorMessage = 'jwt expired';
@@ -46,5 +47,5 @@ describe('JwtUtils', () => {
 
         await expect(JwtUtils.verifyToken(token)).rejects.toThrow(errorMessage)
         expect(jwt.verify).toHaveBeenCalledWith(token, secretKey, expect.any(Function))
-    });*/
+    })
 })
