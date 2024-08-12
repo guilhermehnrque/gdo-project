@@ -12,8 +12,7 @@ app.use('/api/debug', debugRoute)
 app.use('/api/users', usersRoute)
 
 app.get('/api/protected', ValidateBearerToken.validateBearerToken, (request, response) => {
-    response.json({ message: 'You have access to this protected route!' });
+    response.json({ message: 'You have access to this protected route!'});
 })
-
 
 module.exports = app;
