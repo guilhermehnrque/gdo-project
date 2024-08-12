@@ -44,39 +44,14 @@ Certifique-se de ter [Node.js](https://nodejs.org/) e [npm](https://www.npmjs.co
     DB_USER=root
     DB_PASSWORD=root
     DB_NAME=volei-gdo
+
+    PROJECT_GDB_SALT_ROUNDS=10
+    PROJECT_GDB_SECRET_KEY=maya
     ```
 
-## Execução
+## Executando Testes
 
-1. Para iniciar o servidor, execute:
-
-    ```bash
-    npm start
-    ```
-
-2. Para iniciar o servidor em modo de desenvolvimento (com recarga automática):
-
-    ```bash
-    npm run dev
-    ```
-
-## Estrutura do Projeto
-
-- **src/**: Código-fonte da aplicação.
-  - **routes/**: Definição das rotas.
-  - **models/**: Modelos Sequelize.
-  - **controllers/**: Lógica dos controladores.
-  - **config/**: Configurações do banco de dados e variáveis de ambiente.
-  - **middleware/**: Middlewares personalizados.
-  - **utils/**: Utilitários e funções auxiliares.
-
-- **app.js**: Configuração principal da aplicação e inicialização do Express.
-
-- **server.js**: Arquivo de entrada para iniciar o servidor.
-
-## Testes
-
-Para rodar os testes, use:
+Para executar os testes unitários, utilize o comando:
 
 ```bash
 npm test
