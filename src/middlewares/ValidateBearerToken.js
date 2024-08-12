@@ -1,4 +1,5 @@
 const JwtUtils = require('../utils/JwtUtils');
+const logger = require('../config/logger');
 
 class ValidateBearerToken {
     static async validateBearerToken(request, response, next) {
@@ -20,6 +21,7 @@ class ValidateBearerToken {
     }
 
     static handleUnauthorized(response) {
+        logger.error('Unauthorized request')
         return response.status(401).json({ message: 'Unauthorized' })
     }
 
