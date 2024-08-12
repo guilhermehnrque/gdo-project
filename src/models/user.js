@@ -1,8 +1,10 @@
-const { DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 const sequelize = require('../config/database');
 
-const User = sequelize.define('User', {
+class User extends Model {}
+
+User.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -11,9 +13,7 @@ const User = sequelize.define('User', {
     },
     userId: {
         type: DataTypes.UUID,
-        defaultValue: function () {
-            return uuidv4();
-        },
+        defaultValue: uuidv4,
         allowNull: false,
     },
     name: {
@@ -49,8 +49,10 @@ const User = sequelize.define('User', {
         allowNull: false,
     },
 }, {
-    tableName: 'users',
-    timestamps: false,
+    sequelize, 
+    modelName: 'User', 
+    tableName: 'users', 
+    timestamps: false, 
 });
 
 module.exports = User;
