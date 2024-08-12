@@ -18,7 +18,8 @@
     "gdo-project": "file:",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.0",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "winston": "^3.14.1"
   },
   "devDependencies": {
     "jest": "^29.7.0"
