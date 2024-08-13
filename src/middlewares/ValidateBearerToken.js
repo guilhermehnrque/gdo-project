@@ -8,6 +8,7 @@ class ValidateBearerToken {
         if (!token) {
             return ValidateBearerToken.handleUnauthorized(response, 'Token not provided')
         }
+
         const decoded = await JwtUtils.verifyToken(token)
 
         if (!decoded) {
@@ -23,9 +24,8 @@ class ValidateBearerToken {
         return request.headers.authorization?.split(' ')[1];
     }
 
-    static handleUnauthorized(response) {
-        logger.error('Unauthorized request')
-        return response.status(401).json({ message: 'Unauthorized' })
+    static handleUnauthorized(response, message) {
+        return response.status(401).json({ message })
     }
 
     static async isTokenValid(token) {

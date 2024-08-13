@@ -23,7 +23,7 @@ class JwtUtils {
             return decoded;
         } catch (error) {
             logger.error(error);
-            throw error;
+            return null;
         }
     }
 }
