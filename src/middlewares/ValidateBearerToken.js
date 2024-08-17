@@ -35,6 +35,7 @@ class ValidateBearerToken {
             return false
         }
     }
+    
 }
 
 module.exports = ValidateBearerToken;
