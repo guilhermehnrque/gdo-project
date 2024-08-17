@@ -27,14 +27,7 @@ class ValidateBearerToken {
     static handleUnauthorized(response, message) {
         return response.status(401).json({ message })
     }
-
-    static async isTokenValid(token) {
-        try {
-            return await JwtUtils.verifyToken(token)
-        } catch (error) {
-            return false
-        }
-    }
+    
 }
 
 module.exports = ValidateBearerToken;
