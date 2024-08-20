@@ -14,7 +14,7 @@ class JwtUtils {
             type: payload.type
         }
 
-        return jwt.sign(secrets, secretKey, { expiresIn: '1h' })
+        return jwt.sign(secrets, secretKey, { expiresIn: '100h' })
     }
 
     static async verifyToken(token) {
