@@ -11,21 +11,29 @@ Local.init({
         primaryKey: true,
         allowNull: false,
     },
+    country: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+    },
+    state: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+    },
     city: {
         type: DataTypes.STRING(250),
         allowNull: false,
     },
-    district: {
+    street: {
         type: DataTypes.STRING(250),
         allowNull: false,
     },
-    cep: {
+    zip_code: {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
     number: {
         type: DataTypes.INTEGER,
-        allowNull: true, // Permite que seja nulo
+        allowNull: true, 
     },
     description: {
         type: DataTypes.STRING(255),
@@ -43,7 +51,7 @@ Local.init({
     sequelize,
     modelName: 'Local',
     tableName: 'locals',
-    timestamps: true,
+    timestamps: false,
 });
 
 module.exports = Local;
