@@ -1,11 +1,9 @@
-const GroupModel = require('../models/group')
+const GroupModel = require('../models/group');
 
 class GroupRepository {
-    async createGroup(groupEntity) {
-        const group = GroupModel.build(groupEntity)
-        return await group.save();
+    async createGroup(description, id, options = {}) {
+        return GroupModel.create({ description, users_id: id }, options)
     }
-
 }
 
-module.exports = GroupRepository
+module.exports = GroupRepository;

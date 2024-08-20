@@ -1,12 +1,16 @@
-const GroupService = require('../services/GroupService');
+const GroupService = require('../services/GroupService/GroupService')
+const GroupRegisterDTO = require('../dtos/GroupRegisterDTO')
+
 class GroupController {
 
     constructor() {
         this.groupService = new GroupService();
     }
     async createGroup(request, response) {
+        const registerGroupDTO = GroupRegisterDTO.fromRequest(request.body);
+
         try {
-            await this.groupService.createGroup(request.body)
+            await this.groupService.createGroup(registerGroupDTO, request.userId)
 
             response.status(201).json({ message: 'Grupo registrado' })
         } catch (error) {
