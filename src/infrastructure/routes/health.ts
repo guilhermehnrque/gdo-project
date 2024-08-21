@@ -1,5 +1,7 @@
-const { createTerminus } = require('@godaddy/terminus');
-const sequelize = require('../config/database');
+import { createTerminus } from "@godaddy/terminus";
+import sequelize from "../database";
+import { Server } from "http";
+
 const startTime = Date.now();
 
 async function onHealthCheck() {
@@ -18,7 +20,7 @@ async function onHealthCheck() {
             status: 'error',
             database: 'disconnected',
             uptime: `${Date.now() - startTime}ms`,
-            error: error.message,
+            error: (error as Error).message,
         };
     }
 }
@@ -28,7 +30,7 @@ function onSignal() {
     return Promise.resolve();
 }
 
-function setupHealthCheck(server) {
+function healthCheck(server: Server) {
     createTerminus(server, {
         healthChecks: {
             '/health': onHealthCheck,
@@ -37,4 +39,4 @@ function setupHealthCheck(server) {
     });
 }
 
-module.exports = setupHealthCheck;
+export default healthCheck;

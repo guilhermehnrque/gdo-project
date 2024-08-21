@@ -1,9 +1,19 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const Group = require('./group');
-const User = require('./user');
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../index'; 
+import Group from './GroupModel'; 
+import User from './UserModel';
 
-class GroupsUsers extends Model {}
+interface GroupsUsersAttributes {
+    id?: number;
+    groups_id: number;
+    users_id: number;
+}
+
+class GroupsUsers extends Model<GroupsUsersAttributes> implements GroupsUsersAttributes {
+    public id!: number;
+    public groups_id!: number;
+    public users_id!: number;
+}
 
 GroupsUsers.init({
     id: {
@@ -35,4 +45,7 @@ GroupsUsers.init({
     timestamps: false,
 });
 
-module.exports = GroupsUsers;
+GroupsUsers.belongsTo(User, { foreignKey : 'users_id'});
+GroupsUsers.belongsTo(Group, { foreignKey : 'groups_id'});
+
+export default GroupsUsers;

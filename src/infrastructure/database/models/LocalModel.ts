@@ -1,8 +1,34 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const Group = require('./group');
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../index'; 
+import Group from './GroupModel'; 
 
-class Local extends Model {}
+interface LocalAttributes {
+    id?: number;
+    country: string;
+    state: string;
+    city: string;
+    street: string;
+    zip_code: number;
+    number?: number;
+    description: string;
+    groups_id: number;
+    created_at: Date;
+    updated_at?: Date;
+}
+
+class Local extends Model<LocalAttributes> implements LocalAttributes {
+    public id!: number;
+    public country!: string;
+    public state!: string;
+    public city!: string;
+    public street!: string;
+    public zip_code!: number;
+    public number?: number;
+    public description!: string;
+    public groups_id!: number;
+    public created_at!: Date;
+    public updated_at?: Date;
+}
 
 Local.init({
     id: {
@@ -63,7 +89,10 @@ Local.init({
     tableName: 'locals',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at', 
+    updatedAt: 'updated_at',
 });
 
-module.exports = Local;
+
+Local.belongsTo(Group, { foreignKey: 'groups_id' });
+
+export default Local;

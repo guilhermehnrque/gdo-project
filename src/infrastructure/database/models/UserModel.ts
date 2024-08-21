@@ -1,8 +1,39 @@
-const { Model, DataTypes } = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
-const sequelize = require('../config/database');
+import { Model, DataTypes } from 'sequelize';
+import { v4 as uuidv4 } from 'uuid';
+import sequelize from '../index'; 
+import Group from './GroupModel';
 
-class User extends Model {}
+interface UserAttributes {
+    id?: number;
+    user_id: string;
+    name: string;
+    surname: string;
+    type: string;
+    status: number;
+    is_staff: number;
+    login: string;
+    password: string;
+    phone_number: number;
+    created_at: Date;
+    updated_at?: Date;
+    deleted_at?: Date;
+}
+
+class User extends Model<UserAttributes> implements UserAttributes {
+    public id!: number;
+    public user_id!: string;
+    public name!: string;
+    public surname!: string;
+    public type!: string;
+    public status!: number;
+    public is_staff!: number;
+    public login!: string;
+    public password!: string;
+    public phone_number!: number;
+    public created_at!: Date;
+    public updated_at?: Date;
+    public deleted_at?: Date;
+}
 
 User.init({
     id: {
@@ -64,12 +95,15 @@ User.init({
         field: 'deleted_at',
     },
 }, {
-    sequelize, 
-    modelName: 'User', 
-    tableName: 'users', 
-    timestamps: true, 
+    sequelize,
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at', 
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
 });
 
-module.exports = User;
+User.hasMany(Group, { foreignKey: 'users_id' });
+
+export default User;
