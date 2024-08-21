@@ -11,7 +11,7 @@ User.init({
         primaryKey: true,
         allowNull: false,
     },
-    userId: {
+    user_id: {
         type: DataTypes.UUID,
         defaultValue: uuidv4,
         allowNull: false,
@@ -48,11 +48,28 @@ User.init({
         type: DataTypes.BIGINT,
         allowNull: false,
     },
+    created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'created_at',
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'updated_at',
+    },
+    deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'deleted_at',
+    },
 }, {
     sequelize, 
     modelName: 'User', 
     tableName: 'users', 
-    timestamps: false, 
+    timestamps: true, 
+    createdAt: 'created_at',
+    updatedAt: 'updated_at', 
 });
 
 module.exports = User;

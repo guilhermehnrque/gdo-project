@@ -11,7 +11,7 @@ class UserManagementRepository {
     }
 
     async getUserByUserId(userId) {
-        return await UserModel.findOne({ where: { "userId": userId } })
+        return await UserModel.findOne({ where: { user_id: userId } })
     }
 
 }

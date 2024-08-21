@@ -26,9 +26,21 @@ const Group = sequelize.define('Group', {
             key: 'id',
         },
     },
+    created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'created_at',
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'updated_at',
+    },
 }, {
     tableName: 'groups',
-    timestamps: false, 
+    timestamps: true, 
+    createdAt: 'created_at',
+    updatedAt: 'updated_at', 
 });
 
 Group.belongsTo(User, { foreignKey: 'users_id', as: 'user' })

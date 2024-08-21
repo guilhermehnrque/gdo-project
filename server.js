@@ -6,13 +6,13 @@ const sequelize = require('./src/config/database');
 const server = http.createServer(app);
 
 setupHealthCheck(server);
-
+/*
 sequelize.sync().then(() => {
     console.log('Modelos sincronizados com o banco de dados.');
 }).catch((error) => {
     console.error('Erro ao sincronizar modelos:', error);
 });
-
+*/
 const port = process.env.PORT;
 
 server.listen(port, () => {

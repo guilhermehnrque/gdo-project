@@ -7,6 +7,7 @@ class GroupController {
     constructor() {
         this.groupService = new GroupService();
     }
+    
     async createGroup(request, response) {
         const registerGroupDTO = GroupRegisterDTO.fromRequest(request.body);
 
@@ -74,6 +75,9 @@ class GroupController {
         } catch (error) {
             this.handleErrorResponse(response, error)
         }
+    }
+
+    async removeGroupMember(request, response) {
     }
 
     handleErrorResponse(response, error) {

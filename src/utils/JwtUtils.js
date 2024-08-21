@@ -10,7 +10,7 @@ class JwtUtils {
     
     static async generateToken(payload) {
         const secrets = { 
-            userId: payload.userId,
+            userId: payload.user_id,
             type: payload.type
         }
 

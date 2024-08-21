@@ -47,11 +47,23 @@ Local.init({
             key: 'id',
         },
     },
+    created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'created_at',
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'updated_at',
+    },
 }, {
     sequelize,
     modelName: 'Local',
     tableName: 'locals',
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at', 
 });
 
 module.exports = Local;
