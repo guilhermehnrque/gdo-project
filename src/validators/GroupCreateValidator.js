@@ -72,7 +72,7 @@ const groupSchema = {
     }
 };
 
-const validateRequest = [
+const validateGroupCreate = [
     checkSchema(groupSchema),
     (req, res, next) => {
         const errors = validationResult(req);
@@ -91,5 +91,5 @@ const validateRequest = [
 ];
 
 module.exports = {
-    validateRequest
+    validateGroupCreate
 };

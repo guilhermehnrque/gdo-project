@@ -15,16 +15,12 @@ class GroupService {
     }
 
     async createGroup(groupRegisterDTO, userId) {
-        const user = await this.userManagementRepository.getUserByUserId(userId)
-
-        if (!user) {
-            this.logAndThrow(new UserNotFoundError('Usuário não encontrado'), userId)
-        }
+        const user = await this.validateAndGetUser(userId)
 
         const transaction = await sequelize.transaction();
 
         try {
-            const group = await this.groupRepsitory.createGroup(groupRegisterDTO.getDescription(), user.id, { transaction })
+            const group = await this.groupRepsitory.createGroup(groupRegisterDTO.getDescription(), user.id, true, { transaction })
             const local = await this.localRepository.createLocal(groupRegisterDTO.getLocal(), group.id, { transaction })
 
             await Promise.all([
@@ -37,9 +33,26 @@ class GroupService {
             return group
 
         } catch (error) {
+            console.log(error)
             await transaction.rollback()
-            DatabaseError(error, 'Error no insercao do grupo ou local')
+            this.logAndThrow(new DatabaseError('Error no insercao do grupo ou local'), error)
         }
+    }
+
+    async getUserGroups(userId) {
+        const user = await this.validateAndGetUser(userId)
+        
+        return await this.groupRepsitory.getGroupsById(user.id)
+    }
+
+    async validateAndGetUser(userId) {
+        const user = await this.userManagementRepository.getUserByUserId(userId)
+
+        if (!user) {
+            this.logAndThrow(new UserNotFoundError('Usuário inválido'), userId)
+        }
+
+        return user
     }
 
     logAndThrow(error, context) {

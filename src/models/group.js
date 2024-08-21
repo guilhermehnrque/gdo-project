@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./user');
+const Local = require('./local');
 
 const Group = sequelize.define('Group', {
     id: {
@@ -11,6 +12,10 @@ const Group = sequelize.define('Group', {
     },
     description: {
         type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    is_active: {
+        type: DataTypes.TINYINT,
         allowNull: false,
     },
     users_id: {
@@ -26,6 +31,7 @@ const Group = sequelize.define('Group', {
     timestamps: false, 
 });
 
-Group.belongsTo(User, { foreignKey: 'users_id', as: 'user' });
+Group.belongsTo(User, { foreignKey: 'users_id', as: 'user' })
+Group.hasMany(Local, { foreignKey: 'groups_id', as: 'local' })
 
 module.exports = Group;

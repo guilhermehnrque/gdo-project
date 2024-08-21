@@ -11,11 +11,21 @@ class GroupController {
 
         try {
             await this.groupService.createGroup(registerGroupDTO, request.userId)
-
             response.status(201).json({ message: 'Grupo registrado' })
         } catch (error) {
             this.handleErrorResponse(response, error)
         }
+
+    }
+
+    async getUserGroups(request, response) {   
+        try {
+            const userGroup = await this.groupService.getUserGroups(request.userId)
+            response.status(200).json(userGroup)
+        } catch (error) {
+            this.handleErrorResponse(response, error)
+        }
+ 
     }
 
     handleErrorResponse(response, error) {
