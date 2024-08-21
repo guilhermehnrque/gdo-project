@@ -1,5 +1,6 @@
 const GroupModel = require('../models/group')
 const LocalModel = require('../models/local')
+const GroupUser = require('../models/groupUser')
 
 class GroupRepository {
     async createGroup(description, id, active,  options = {}) {
@@ -42,6 +43,10 @@ class GroupRepository {
 
     async updateGroupStatus(id, status, userId) {
         return GroupModel.update({ is_active: status }, { where: { id, users_id: userId } })
+    }
+
+    async insertGroupMember(userId, groupId, options = {}) {
+        return GroupUser.create({ groups_id: groupId, users_id: userId }, options)
     }
 
 }

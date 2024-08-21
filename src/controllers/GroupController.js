@@ -55,13 +55,24 @@ class GroupController {
     async updateGroupStatus(request, response) {
         const groupId = request.params.groupId
         const { active } = request.query
-        const userId = request.userId
 
         try {
             await this.groupService.updateGroupStatus(groupId, active, userId)
             response.status(200).json({ message: 'Status atualizado' })
         } catch (error) {
             this.handleErrorResponse(response, error)   
+        }
+    }
+
+    async insertGroupMember(request, response) {
+        const userId = request.userId
+        const groupId = request.body.group_id
+
+        try {
+            await this.groupService.insertGroupMember(userId, groupId)
+            response.status(201).json({ message: 'Membro inserido' })
+        } catch (error) {
+            this.handleErrorResponse(response, error)
         }
     }
 

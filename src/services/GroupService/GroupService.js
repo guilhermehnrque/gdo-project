@@ -80,6 +80,24 @@ class GroupService {
             this.logAndThrow(new DatabaseError('Erro na atualização de status'), error)
         }
     }
+
+    async insertGroupMember(userId, groupId) {  
+        const user = await this.validateAndGetUser(userId)
+
+        const transaction = await sequelize.transaction()
+
+        try {
+            const groupUser = await this.groupRepsitory.insertGroupMember(user.id, groupId, { transaction })
+
+            await transaction.commit()
+
+            return groupUser
+        } catch (error) {
+            await transaction.rollback()
+            this.logAndThrow(new DatabaseError('Erro na inserção de membro no grupo'), error)
+        }
+    }
+
     // Validations
     async validateAndGetUser(userId) {
         const user = await this.userManagementRepository.getUserByUserId(userId)
