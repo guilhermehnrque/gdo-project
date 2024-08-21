@@ -10,6 +10,10 @@ class UserManagementRepository {
         return await UserModel.findOne({ where: { login } })
     }
 
+    async getUserByUserId(userId) {
+        return await UserModel.findOne({ where: { user_id: userId } })
+    }
+
 }
 
 module.exports = UserManagementRepository

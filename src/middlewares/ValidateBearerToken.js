@@ -15,7 +15,8 @@ class ValidateBearerToken {
             return ValidateBearerToken.handleUnauthorized(response, 'Invalid token')
         }
 
-        request.userType = decoded.type;
+        request.userType = decoded.type
+        request.userId = decoded.userId
 
         next();
     }

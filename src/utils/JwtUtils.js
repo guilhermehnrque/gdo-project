@@ -10,11 +10,11 @@ class JwtUtils {
     
     static async generateToken(payload) {
         const secrets = { 
-            userId: payload.userId,
+            userId: payload.user_id,
             type: payload.type
         }
 
-        return jwt.sign(secrets, secretKey, { expiresIn: '1h' })
+        return jwt.sign(secrets, secretKey, { expiresIn: '100h' })
     }
 
     static async verifyToken(token) {
