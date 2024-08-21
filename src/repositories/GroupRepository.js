@@ -40,6 +40,10 @@ class GroupRepository {
         return GroupModel.update({ description, is_active: active }, { where: { id } })
     }
 
+    async updateGroupStatus(id, status, userId) {
+        return GroupModel.update({ is_active: status }, { where: { id, users_id: userId } })
+    }
+
 }
 
 module.exports = GroupRepository;

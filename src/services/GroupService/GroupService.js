@@ -8,7 +8,7 @@ const { DatabaseError } = require('sequelize')
 const InvalidUserTypeError = require('../../erros/InvalidUserTypeError')
 const logger = require('../../utils/LoggerUtils')
 const sequelize = require('../../config/database')
-const TinyintToBoolean  = require('../../utils/TinyIntToBoolean')
+const { tinyIntToBoolean, booleanToTinyInt }  = require('../../utils/BooleanUtils')
 
 class GroupService {
 
@@ -66,11 +66,20 @@ class GroupService {
         try {
             return await this.groupRepsitory.updateGroupById(groupId, groupUpdateDTO.toObject())
         } catch (error) {
-            console.error(error)
-            this.logAndThrow(new GroupNotFoundError('Update nao realizado'), error)
+            this.logAndThrow(new DatabaseError('Erro na atualização de grupo'), error)
         }
     }
 
+    async updateGroupStatus(groupId, status, userId) {
+        const user = await this.validateAndGetUser(userId)
+        const booleanStatus = booleanToTinyInt(status)
+
+        try {   
+            return await this.groupRepsitory.updateGroupStatus(groupId, booleanStatus, user.id)
+        } catch (error) {
+            this.logAndThrow(new DatabaseError('Erro na atualização de status'), error)
+        }
+    }
     // Validations
     async validateAndGetUser(userId) {
         const user = await this.userManagementRepository.getUserByUserId(userId)
@@ -91,7 +100,7 @@ class GroupService {
     }
 
     validateIsUserStaff(user) {
-        let isUserStaff = TinyintToBoolean(user.isStaff)
+        let isUserStaff = tinyIntToBoolean(user.isStaff)
 
         if (!isUserStaff) {
             this.logAndThrow(new InvalidUserTypeError('Usuário não é staff'), user.id)

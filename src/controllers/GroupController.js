@@ -30,7 +30,7 @@ class GroupController {
     }
 
     async getGroupById(request, response) {
-        let groupId = request.params.groupId
+        const groupId = request.params.groupId
  
         try {
             const group = await this.groupService.getGroupById(groupId)
@@ -41,7 +41,7 @@ class GroupController {
     }
 
     async updateGroupById(request, response) {
-        let groupId = request.params.groupId
+        const groupId = request.params.groupId
         const groupUpdateDTO = GroupUpdateDTO.fromRequest(request.body)
        
         try {
@@ -49,6 +49,19 @@ class GroupController {
             response.status(200).json({ message: 'Grupo atualizado' })
         } catch (error) {
             this.handleErrorResponse(response, error)
+        }
+    }
+
+    async updateGroupStatus(request, response) {
+        const groupId = request.params.groupId
+        const { active } = request.query
+        const userId = request.userId
+
+        try {
+            await this.groupService.updateGroupStatus(groupId, active, userId)
+            response.status(200).json({ message: 'Status atualizado' })
+        } catch (error) {
+            this.handleErrorResponse(response, error)   
         }
     }
 
