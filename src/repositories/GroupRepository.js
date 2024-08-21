@@ -35,6 +35,11 @@ class GroupRepository {
             ]
         })
     }
+
+    async updateGroupById(id, { description, active} ) {
+        return GroupModel.update({ description, is_active: active }, { where: { id } })
+    }
+
 }
 
 module.exports = GroupRepository;

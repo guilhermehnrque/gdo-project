@@ -18,6 +18,7 @@ class GroupService {
         this.localRepository = new LocalRepository()
     }
 
+    // Main functions
     async createGroup(groupRegisterDTO, userId) {
         const user = await this.validateAndGetUser(userId)
 
@@ -39,7 +40,6 @@ class GroupService {
             await transaction.commit()
 
             return group
-
         } catch (error) {
             await transaction.rollback()
 
@@ -62,6 +62,16 @@ class GroupService {
         return group
     }
 
+    async updateGroupById(groupId, groupUpdateDTO) { 
+        try {
+            return await this.groupRepsitory.updateGroupById(groupId, groupUpdateDTO.toObject())
+        } catch (error) {
+            console.error(error)
+            this.logAndThrow(new GroupNotFoundError('Update nao realizado'), error)
+        }
+    }
+
+    // Validations
     async validateAndGetUser(userId) {
         const user = await this.userManagementRepository.getUserByUserId(userId)
 

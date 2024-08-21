@@ -1,5 +1,6 @@
 const GroupService = require('../services/GroupService/GroupService')
-const GroupRegisterDTO = require('../dtos/GroupRegisterDTO')
+const GroupRegisterDTO = require('../dtos/Group/GroupRegisterDTO')
+const GroupUpdateDTO = require('../dtos/Group/GroupUpdateDTO')
 
 class GroupController {
 
@@ -34,6 +35,18 @@ class GroupController {
         try {
             const group = await this.groupService.getGroupById(groupId)
             response.status(200).json(group)
+        } catch (error) {
+            this.handleErrorResponse(response, error)
+        }
+    }
+
+    async updateGroupById(request, response) {
+        let groupId = request.params.groupId
+        const groupUpdateDTO = GroupUpdateDTO.fromRequest(request.body)
+       
+        try {
+            await this.groupService.updateGroupById(groupId, groupUpdateDTO)
+            response.status(200).json({ message: 'Grupo atualizado' })
         } catch (error) {
             this.handleErrorResponse(response, error)
         }
