@@ -17,6 +17,24 @@ class GroupRepository {
             ]
         })
     }
+
+    async getGroupByDescription(description) {
+        return GroupModel.findOne({
+            where: { description }
+        })
+    }
+
+    async getGroupById(id) {
+        return GroupModel.findOne({
+            where: { id },
+            include: [
+                {
+                    model: LocalModel,
+                    as: 'local',
+                }
+            ]
+        })
+    }
 }
 
 module.exports = GroupRepository;

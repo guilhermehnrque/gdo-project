@@ -28,11 +28,22 @@ class GroupController {
  
     }
 
+    async getGroupById(request, response) {
+        let groupId = request.params.groupId
+ 
+        try {
+            const group = await this.groupService.getGroupById(groupId)
+            response.status(200).json(group)
+        } catch (error) {
+            this.handleErrorResponse(response, error)
+        }
+    }
+
     handleErrorResponse(response, error) {
         const statusCode = error.statusCode && Number.isInteger(error.statusCode) ? error.statusCode : 500;
-        response.status(statusCode).json({ error: error.message });
+        response.status(statusCode).json({ error: error.message })
     }
 
 }
 
-module.exports = GroupController;
+module.exports = GroupController
