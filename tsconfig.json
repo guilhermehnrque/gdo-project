@@ -8,7 +8,9 @@
     "outDir": "./dist",                      // Diretório onde os arquivos compilados serão colocados
     "rootDir": "./src",                      // Diretório raiz onde os arquivos TypeScript estão localizados
     "skipLibCheck": true,                    // Ignora a verificação de tipos das definições de biblioteca
-    "resolveJsonModule": true                // Permite a importação de arquivos JSON
+    "resolveJsonModule": true,                // Permite a importação de arquivos JSON
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "include": ["src/**/*"],                   // Inclui todos os arquivos TypeScript dentro do diretório src
   "exclude": ["node_modules", "stack-utils"] // Exclui diretórios que não devem ser compilados

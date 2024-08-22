@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../index'; 
+import sequelize from '../../infrastructure/database/index'; 
 import Group from './GroupModel'; 
 
 interface LocalAttributes {

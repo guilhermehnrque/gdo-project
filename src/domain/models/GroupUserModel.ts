@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../index'; 
+import { User } from './UserModel'; 
+import sequelize from '../../infrastructure/database/index'; 
 import Group from './GroupModel'; 
-import User from './UserModel';
 
 interface GroupsUsersAttributes {
     id?: number;

@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../index'; 
-import User from './UserModel'; // Importa o modelo User
+import { User } from './UserModel'; 
+import sequelize from '../../infrastructure/database/index'; 
 
 interface GroupAttributes {
     id?: number;

@@ -1,10 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-import { v4 as uuidv4 } from 'uuid';
-import sequelize from '../index'; 
+import { Model, DataTypes, Optional } from 'sequelize';
+import sequelize from '../../infrastructure/database/index'; 
 import Group from './GroupModel';
 
 interface UserAttributes {
-    id?: number;
+    id: number;
     user_id: string;
     name: string;
     surname: string;
@@ -15,11 +14,13 @@ interface UserAttributes {
     password: string;
     phone_number: number;
     created_at: Date;
-    updated_at?: Date;
+    updated_at: Date;
     deleted_at?: Date;
 }
 
-class User extends Model<UserAttributes> implements UserAttributes {
+type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: number;
     public user_id!: string;
     public name!: string;
@@ -31,8 +32,12 @@ class User extends Model<UserAttributes> implements UserAttributes {
     public password!: string;
     public phone_number!: number;
     public created_at!: Date;
-    public updated_at?: Date;
+    public updated_at!: Date;
     public deleted_at?: Date;
+
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+    public readonly deletedAt?: Date;
 }
 
 User.init({
@@ -44,7 +49,6 @@ User.init({
     },
     user_id: {
         type: DataTypes.UUID,
-        defaultValue: uuidv4,
         allowNull: false,
     },
     name: {
@@ -102,8 +106,9 @@ User.init({
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     deletedAt: 'deleted_at',
+    paranoid: true,
 });
 
 User.hasMany(Group, { foreignKey: 'users_id' });
 
-export default User;
+export { User, UserCreationAttributes };
