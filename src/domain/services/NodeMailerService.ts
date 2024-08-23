@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
-import logger from '../configs/LoggerConfig';
+import logger from '../../infrastructure/configs/LoggerConfig';
 import EmailInterface from './interfaces/EmailInterface';
 
 class NodeMailerService {

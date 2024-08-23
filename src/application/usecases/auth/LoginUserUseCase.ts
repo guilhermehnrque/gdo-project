@@ -1,8 +1,8 @@
 import AuthRepositoryImpl from '../../../infrastructure/repositories/AuthRepositoryImpl';
-import HashPassword from '../../configs/HashPassword';
-import logger from '../../configs/LoggerConfig';
-import { LoginUserRequest } from '../../requests/auth/LoginUserRequest';
-import Jwt from '../../configs/Jwt';
+import HashPassword from '../../../infrastructure/configs/HashPassword';
+import logger from '../../../infrastructure/configs/LoggerConfig';
+import { LoginUserRequest } from '../../../infrastructure/requests/auth/LoginUserRequest';
+import Jwt from '../../../infrastructure/configs/Jwt';
 import LoginError from '../../erros/LoginError';
 import { User } from '../../../domain/models/UserModel';
 

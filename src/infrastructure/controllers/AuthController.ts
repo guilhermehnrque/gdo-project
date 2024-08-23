@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import AuthGateway from "../gateways/AuthGateway";
-import CustomError from "../erros/CustomError";
+import AuthGateway from "../gateways/AuthGatewayImpl";
+import CustomError from "../../application/erros/CustomError";
 
 class AuthController {
 

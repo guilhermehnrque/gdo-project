@@ -1,8 +1,9 @@
 import { Request } from "express";
-import { LoginUserUseCase } from "../usecases/auth/LoginUserUseCase";
-import { RegisterUserUseCase } from "../usecases/auth/RegisterUserUseCase";
-import { ForgotPasswordUseCase } from "../usecases/auth/ForgotPasswordUseCase";
-import { ResetPasswordUseCase } from "../usecases/auth/ResetPasswordUseCase";
+import { AuthGateway } from "../../application/interfaces/AuthGateway";
+import { LoginUserUseCase } from "../../application/usecases/auth/LoginUserUseCase";
+import { RegisterUserUseCase } from "../../application/usecases/auth/RegisterUserUseCase";
+import { ForgotPasswordUseCase } from "../../application/usecases/auth/ForgotPasswordUseCase";
+import { ResetPasswordUseCase } from "../../application/usecases/auth/ResetPasswordUseCase";
 
 // Requests
 import { LoginUserRequest } from "../requests/auth/LoginUserRequest";
@@ -10,7 +11,7 @@ import { RegisterUserRequest } from "../requests/auth/RegisterUserRequest";
 import { ForgotPasswordRequest } from "../requests/auth/ForgotPasswordRequest";
 import { ResetPasswordRequest } from "../requests/auth/ResetPasswordRequest";
 
-export default class AuthGateway {
+export default class AuthGatewayImpl implements AuthGateway {
 
     private loginUserUseCase: LoginUserUseCase;
     private registerUserUseCase: RegisterUserUseCase;

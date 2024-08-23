@@ -1,13 +1,13 @@
 import crypto from 'crypto';
 import { Request } from 'express';
-import logger from '../../configs/LoggerConfig';
-import NodeMailerService from "../../services/NodeMailerService";
-import EmailInterface from "../../services/interfaces/EmailInterface";
+import logger from '../../../infrastructure/configs/LoggerConfig';
+import NodeMailerService from "../../../domain/services/NodeMailerService";
+import EmailInterface from "../../../domain/services/interfaces/EmailInterface";
 import CustomError from "../../erros/CustomError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
 import { User } from "../../../domain/models/UserModel";
 import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
-import { ForgotPasswordRequest } from '../../requests/auth/ForgotPasswordRequest';
+import { ForgotPasswordRequest } from '../../../infrastructure/requests/auth/ForgotPasswordRequest';
 
 export class ForgotPasswordUseCase {
 

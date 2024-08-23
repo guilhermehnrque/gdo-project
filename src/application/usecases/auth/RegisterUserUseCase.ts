@@ -2,8 +2,8 @@ import AuthRepositoryImpl from '../../../infrastructure/repositories/AuthReposit
 import UserEntity from '../../../domain/entity/UserEntity';
 import UserAlreadyExistsError from '../../erros/UserAlreadyExistsError';
 import DatabaseError from '../../erros/DatabaseError';
-import logger from '../../configs/LoggerConfig';
-import { RegisterUserRequest } from '../../requests/auth/RegisterUserRequest'; 
+import logger from '../../../infrastructure/configs/LoggerConfig';
+import { RegisterUserRequest } from '../../../infrastructure/requests/auth/RegisterUserRequest'; 
 import CustomError from '../../erros/CustomError';
 
 export class RegisterUserUseCase {

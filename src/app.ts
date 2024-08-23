@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import express, { Application } from 'express'
-import AuthRoute from './application/routes/v1/AuthRoute'
+import AuthRoute from './infrastructure/routes/v1/AuthRoute'
 
 const app: Application = express()
 

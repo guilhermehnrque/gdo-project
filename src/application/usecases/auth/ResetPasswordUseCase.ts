@@ -1,9 +1,9 @@
-import logger from '../../configs/LoggerConfig';
+import logger from '../../../infrastructure/configs/LoggerConfig';
 import CustomError from "../../erros/CustomError";
 import { User } from "../../../domain/models/UserModel";
 import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
-import HashPassword from "../../configs/HashPassword";
-import { ResetPasswordRequest } from '../../requests/auth/ResetPasswordRequest';
+import HashPassword from "../../../infrastructure/configs/HashPassword";
+import { ResetPasswordRequest } from '../../../infrastructure/requests/auth/ResetPasswordRequest';
 import InvalidTokenError from '../../erros/InvalidTokenError';
 
 export class ResetPasswordUseCase {

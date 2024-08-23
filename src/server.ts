@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import app from './app';
-import healthCheck from './application/routes/health';
+import healthCheck from './infrastructure/routes/health';
 import { createServer } from 'http';
 
 const server = createServer(app);
