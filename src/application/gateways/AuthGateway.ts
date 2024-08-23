@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { LoginUserUseCase } from "../usecases/auth/LoginUserUseCase";
 import { RegisterUserUseCase } from "../usecases/auth/RegisterUserUseCase";
 import { ForgotPasswordUseCase } from "../usecases/auth/ForgotPasswordUseCase";
