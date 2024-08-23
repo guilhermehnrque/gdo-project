@@ -9,6 +9,7 @@ const sequelize = new Sequelize(
     host: process.env.PROJECT_GDO_DATABASE_HOST,
     port: parseInt(process.env.PROJECT_GDO_DATABASE_PORT as string, 10),
     dialect: process.env.PROJECT_GDO_DATABASE_DIALECT as Dialect,
+    timezone: process.env.PROJECT_GDO_DATABASE_TIMEZONE,
   }
 );
 
