@@ -47,7 +47,7 @@ class UserEntity {
     static async createFromPayload(payload: any): Promise<UserEntity> {
         const password = await HashPassword.hashPassword(payload.password);
         const userId = uuidv4(); 
-        const isStaff = booleanToTinyInt(payload.isStaff);
+        const isStaff = booleanToTinyInt(payload.is_staff);
 
         return new UserEntity(
             userId,
@@ -56,7 +56,7 @@ class UserEntity {
             payload.type,
             payload.status,
             isStaff,
-            payload.phoneNumber,
+            payload.phone_number,
             payload.login,
             password
         );

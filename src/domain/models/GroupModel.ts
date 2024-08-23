@@ -55,12 +55,13 @@ Group.init({
     },
 }, {
     sequelize,
+    modelName: 'group',
     tableName: 'groups',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
 
-Group.belongsTo(User, { foreignKey: 'users_id', as: 'user' });
+// Group.belongsTo(User, { foreignKey: 'users_id'});
 
 export default Group;

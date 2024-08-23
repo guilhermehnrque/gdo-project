@@ -11,9 +11,11 @@
     "express": "^4.19.2",
     "express-healthcheck": "^0.1.0",
     "express-validator": "^7.2.0",
+    "install": "^0.13.0",
     "jest": "^24.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.0",
+    "npm": "^10.8.2",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.3",
     "tough-cookie": "^4.1.4",
@@ -28,6 +30,7 @@
     "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsyringe": "^4.8.0",
     "typescript": "^5.5.4"
   }
 }
