@@ -1,7 +1,7 @@
 import AuthRepositoryImpl from '../../../infrastructure/repositories/AuthRepositoryImpl';
 import HashPassword from '../../configs/HashPassword';
 import logger from '../../configs/LoggerConfig';
-import { LoginUserCase } from '../../requests/auth/LoginUserRequest';
+import { LoginUserRequest } from '../../requests/auth/LoginUserRequest';
 import Jwt from '../../configs/Jwt';
 import LoginError from '../../erros/LoginError';
 import { User } from '../../../domain/models/UserModel';
@@ -15,7 +15,7 @@ export class LoginUserUseCase {
         this.authRepository = new AuthRepositoryImpl();
     }
 
-    async execute(loginUserRequest: LoginUserCase): Promise<string> {
+    async execute(loginUserRequest: LoginUserRequest): Promise<string> {
         const user = await this.checkAndGetUser(loginUserRequest.login);
 
         if (user) {

@@ -1,27 +1,18 @@
 import { Request, Response } from "express";
-import { RegisterUserUseCase } from "../usecases/auth/RegisterUserUseCase";
-import { LoginUserUseCase } from "../usecases/auth/LoginUserUseCase";
-import { ForgotPasswordUseCase } from "../usecases/auth/ForgotPasswordUseCase";
-import { ResetPasswordUseCase } from "../usecases/auth/ResetPasswordUseCase";
+import AuthGateway from "../gateways/AuthGateway";
 import CustomError from "../erros/CustomError";
 
 class AuthController {
 
-    private registerUserUseCase: RegisterUserUseCase;
-    private loginUserUseCase: LoginUserUseCase;
-    private forgotPasswordUseCase: ForgotPasswordUseCase;
-    private ResetPasswordUseCase: ResetPasswordUseCase;
+    private authGateway: AuthGateway;
 
     constructor() {
-        this.registerUserUseCase = new RegisterUserUseCase();
-        this.loginUserUseCase = new LoginUserUseCase();
-        this.forgotPasswordUseCase = new ForgotPasswordUseCase();
-        this.ResetPasswordUseCase = new ResetPasswordUseCase();
+        this.authGateway = new AuthGateway();
     }
 
     public async createUser(request: Request, response: Response): Promise<Response> {
         try {
-            const user = await this.registerUserUseCase.execute(request.body);
+            const user = await this.authGateway.register(request);
 
             return response.status(201).json({ message: "O usuário foi registrado :3", user });
         } catch (error) {
@@ -32,7 +23,7 @@ class AuthController {
     
     public async loginUser (request: Request, response: Response): Promise<Response> {
         try {
-            const token = await this.loginUserUseCase.execute(request.body);
+            const token = await this.authGateway.login(request);
             return response.status(200).json({ token });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -42,7 +33,7 @@ class AuthController {
 
     public async forgotPassword(request: Request, response: Response): Promise<Response> {
         try{
-            await this.forgotPasswordUseCase.execute(request.body, request);
+            await this.authGateway.forgotPassword(request);
             return response.status(200).json({ message: "A solitição de reset de senha foi enviado para o seu email" });
         } catch (error) { 
             const { statusCode = 500, message } = error as CustomError;
@@ -50,9 +41,9 @@ class AuthController {
         }
     }
 
-    public async performResetPassword(request: Request, response: Response): Promise<Response> {
+    public async resetPassword(request: Request, response: Response): Promise<Response> {
         try{
-            await this.ResetPasswordUseCase.execute(request);
+            await this.authGateway.resetPassword(request);
             return response.status(200).json({ message: "A sua senha foi resetada :3" });
         } catch (error) { 
             const { statusCode = 500, message } = error as CustomError;
