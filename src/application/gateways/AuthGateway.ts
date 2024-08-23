@@ -3,8 +3,12 @@ import { LoginUserUseCase } from "../usecases/auth/LoginUserUseCase";
 import { RegisterUserUseCase } from "../usecases/auth/RegisterUserUseCase";
 import { ForgotPasswordUseCase } from "../usecases/auth/ForgotPasswordUseCase";
 import { ResetPasswordUseCase } from "../usecases/auth/ResetPasswordUseCase";
+
+// Requests
 import { LoginUserRequest } from "../requests/auth/LoginUserRequest";
 import { RegisterUserRequest } from "../requests/auth/RegisterUserRequest";
+import { ForgotPasswordRequest } from "../requests/auth/ForgotPasswordRequest";
+import { ResetPasswordRequest } from "../requests/auth/ResetPasswordRequest";
 
 export default class AuthGateway {
 
@@ -29,11 +33,11 @@ export default class AuthGateway {
     }
     
     async forgotPassword(request: Request) {
-        return this.forgotPasswordUseCase.execute(request.body, request);
+        return this.forgotPasswordUseCase.execute(request.body as ForgotPasswordRequest, request);
     }
     
     async resetPassword(request: Request) {
-        return this.resetPasswordUseCase.execute(request.body);
+        return this.resetPasswordUseCase.execute(request.body as ResetPasswordRequest, request.params.token);
     }
 
 }

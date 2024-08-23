@@ -1,14 +1,14 @@
-import { Router } from 'express';
-import { container } from 'tsyringe';
+import { Router, Request, Response } from 'express';
 import AuthController from '../../controllers/AuthController';
+import { schemas, handleValidationErrors } from '../../middlewares/auth/AuthValidator';
 
 const router = Router();
 
-const authController = container.resolve(AuthController);
+const authController = new AuthController();
 
-router.post('/', (req, res) => authController.createUser(req, res));
-router.post('/login', (req, res) => authController.loginUser(req, res));
-router.post('/forgot-password', (req, res) => authController.forgotPassword(req, res));
-router.post('/reset-password/:token', (req, res) => authController.resetPassword(req, res));
+router.post('/', [...schemas.register, handleValidationErrors], (request: Request, response: Response) => authController.createUser(request, response));
+router.post('/login', [...schemas.login, handleValidationErrors], (request: Request, response: Response) => authController.loginUser(request, response));
+router.post('/forgot-password', [...schemas.forgotPassword, handleValidationErrors], (request: Request, response: Response) => authController.forgotPassword(request, response));
+router.post('/reset-password/:token', [...schemas.resetPassword, handleValidationErrors], (request: Request, response: Response) => authController.resetPassword(request, response));
 
 export default router;

@@ -7,6 +7,7 @@ import CustomError from "../../erros/CustomError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
 import { User } from "../../../domain/models/UserModel";
 import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
+import { ForgotPasswordRequest } from '../../requests/auth/ForgotPasswordRequest';
 
 export class ForgotPasswordUseCase {
 
@@ -18,7 +19,7 @@ export class ForgotPasswordUseCase {
         this.nodeMailerService = new NodeMailerService();
     }
 
-    async execute(payload: any, request: Request): Promise<void> {
+    async execute(payload: ForgotPasswordRequest, request: Request): Promise<void> {
         const user = await this.getUserIfExists(payload.email);
 
         if (!user) {
@@ -28,6 +29,7 @@ export class ForgotPasswordUseCase {
         const token = crypto.randomBytes(8).toString('hex');
         const expiration = new Date();
         expiration.setHours(expiration.getHours() + 1);
+        console.log(`Token -> ${token}`);
 
         user!.reset_password_token = token;
         user!.reset_password_expires = expiration;

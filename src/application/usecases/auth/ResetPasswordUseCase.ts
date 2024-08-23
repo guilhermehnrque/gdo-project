@@ -1,9 +1,10 @@
 import logger from '../../configs/LoggerConfig';
 import CustomError from "../../erros/CustomError";
-import UserNotFoundError from "../../erros/UserNotFoundError";
 import { User } from "../../../domain/models/UserModel";
 import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
 import HashPassword from "../../configs/HashPassword";
+import { ResetPasswordRequest } from '../../requests/auth/ResetPasswordRequest';
+import InvalidTokenError from '../../erros/InvalidTokenError';
 
 export class ResetPasswordUseCase {
 
@@ -13,14 +14,13 @@ export class ResetPasswordUseCase {
         this.authRepository = new AuthRepositoryImpl();
     }
 
-    async execute(payload: any): Promise<void> {
-        const { token } = payload.params;
-        const { password } = payload.body;
+    async execute(payload: ResetPasswordRequest, token: string): Promise<void> {
+        const { password } = payload;
 
         const user = await this.getUserIfExists(token);
 
         if (!user) {
-            this.logAndThrowError(new UserNotFoundError("Token expirado"), `[ResetPasswordUseCase] Usuário não encontrado -> ${payload.email}`);
+            this.logAndThrowError(new InvalidTokenError("Token expirado"), `[ResetPasswordUseCase] Token inválido -> ${payload.email}`);
         }
 
         const hashedPassword = await HashPassword.hashPassword(password);
