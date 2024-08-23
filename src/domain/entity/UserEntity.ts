@@ -1,11 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import HashPassword from '../../application/configs/HashPassword';
 import { booleanToTinyInt } from '../../application/utils/BooleanUtils';
+import { RegisterUserRequest } from '../../application/requests/auth/RegisterUserRequest';
 
 class UserEntity {
     user_id: string;
     name: string;
     surname: string;
+    email: string;
     type: string;
     status: number;
     is_staff: number;
@@ -20,6 +22,7 @@ class UserEntity {
         user_id: string, 
         name: string,
         surname: string,
+        email: string,
         type: string,
         status: number,
         is_staff: number,
@@ -33,6 +36,7 @@ class UserEntity {
         this.user_id = user_id; 
         this.name = name;
         this.surname = surname;
+        this.email = email;
         this.type = type;
         this.status = status;
         this.is_staff = is_staff;
@@ -44,7 +48,7 @@ class UserEntity {
         this.deleted_at = deleted_at;
     }
 
-    static async createFromPayload(payload: any): Promise<UserEntity> {
+    static async createFromPayload(payload: RegisterUserRequest): Promise<UserEntity> {
         const password = await HashPassword.hashPassword(payload.password);
         const userId = uuidv4(); 
         const isStaff = booleanToTinyInt(payload.is_staff);
@@ -53,6 +57,7 @@ class UserEntity {
             userId,
             payload.name,
             payload.surname,
+            payload.email,
             payload.type,
             payload.status,
             isStaff,

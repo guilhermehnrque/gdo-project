@@ -7,6 +7,7 @@ interface UserAttributes {
     user_id: string;
     name: string;
     surname: string;
+    email: string;
     type: string;
     status: number;
     is_staff: number;
@@ -16,6 +17,8 @@ interface UserAttributes {
     created_at: Date;
     updated_at: Date;
     deleted_at?: Date;
+    reset_password_token?: string | null;
+    reset_password_expires?: Date | null;
 }
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
@@ -25,6 +28,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public user_id!: string;
     public name!: string;
     public surname!: string;
+    public email!: string;
     public type!: string;
     public status!: number;
     public is_staff!: number;
@@ -34,6 +38,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public created_at!: Date;
     public updated_at!: Date;
     public deleted_at?: Date;
+    public reset_password_token?: string | null;
+    public reset_password_expires?: Date | null;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -56,6 +62,10 @@ User.init({
         allowNull: false,
     },
     surname: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+    },
+    email: {
         type: DataTypes.STRING(150),
         allowNull: false,
     },
@@ -97,6 +107,14 @@ User.init({
         type: DataTypes.DATE,
         allowNull: true,
         field: 'deleted_at',
+    },
+    reset_password_token: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    reset_password_expires: {
+        type: DataTypes.DATE,
+        allowNull: true,
     },
 }, {
     sequelize,

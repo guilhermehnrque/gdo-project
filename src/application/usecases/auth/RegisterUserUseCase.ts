@@ -4,6 +4,7 @@ import UserAlreadyExistsError from '../../erros/UserAlreadyExistsError';
 import DatabaseError from '../../erros/DatabaseError';
 import logger from '../../configs/LoggerConfig';
 import { RegisterUserRequest } from '../../requests/auth/RegisterUserRequest'; 
+import CustomError from '../../erros/CustomError';
 
 export class RegisterUserUseCase {
 
@@ -36,7 +37,7 @@ export class RegisterUserUseCase {
         return user !== null;
     }
 
-    private logAndThrowError(error: Error, context: string): void {
+    private logAndThrowError(error: CustomError, context: string): void {
         logger.error(context);
         throw error;
     }
