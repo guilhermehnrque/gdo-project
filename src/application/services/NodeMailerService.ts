@@ -25,9 +25,9 @@ class NodeMailerService {
                 subject: email.subject,
                 text: email.text
             });
-            logger.info(`Email sent successfully to ${email.to}, subject: ${email.subject}`);
+            logger.info(`[NodeMailerService] Email foi enviado com sucesso -> ${email.to}, assunto -> ${email.subject}`);
         } catch (error) {
-            logger.error(`Error sending email: ${error}, to: ${email.to}, subject: ${email.subject}`);
+            logger.error(`[NodeMailerService] Falha no envio de email: ${error}, para -> ${email.to}, assunto -> ${email.subject}`);
         }
     }
 }
