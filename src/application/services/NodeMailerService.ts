@@ -8,7 +8,8 @@ class NodeMailerService {
 
     constructor() {
         this.transporter = nodemailer.createTransport({
-            service: process.env.PROJECT_GDO_EMAIL_SERVICE_NAME,
+            host: process.env.PROJECT_GDO_EMAIL_HOST,
+            port: Number(process.env.PROJECT_GDO_EMAIL_PORT),
             auth: {
                 user: process.env.PROJECT_GDO_EMAIL_USER,
                 pass: process.env.PROJECT_GDO_EMAIL_PASSWORD,
@@ -19,7 +20,7 @@ class NodeMailerService {
     async sendEmail(email: EmailInterface): Promise<void> {
         try {
             await this.transporter.sendMail({
-                from: process.env.PROJECT_GDO_EMAIL_USER,
+                from: process.env.PROJECT_GDO_EMAIL_FROM,
                 to: email.to,
                 subject: email.subject,
                 text: email.text
