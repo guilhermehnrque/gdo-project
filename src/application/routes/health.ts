@@ -1,5 +1,5 @@
 import { createTerminus } from "@godaddy/terminus";
-import sequelize from "../database";
+import sequelize from "../../infrastructure/database";
 import { Server } from "http";
 
 const startTime = Date.now();

@@ -1,7 +1,7 @@
 import bcrypt  from 'bcrypt';
 
-const saltRounds = parseInt(process.env.PROJECT_GDB_SALT_ROUNDS || '10', 10);
-const secretKey = process.env.PROJECT_GDB_SECRET_KEY || '';
+const saltRounds = parseInt(process.env.PROJECT_GDB_SALT_ROUNDS ?? '10', 10);
+const secretKey = process.env.PROJECT_GDB_SECRET_KEY ?? '';
 
 class HashPassword {
     static async hashPassword(password: string) {
