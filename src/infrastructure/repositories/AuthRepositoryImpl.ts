@@ -1,10 +1,8 @@
 import { AuthRepository } from "../../domain/repositories/AuthRepository";
 import UserEntity from "../../domain/entity/UserEntity";
 import { User as UserModel } from "../../domain/models/UserModel";
-import { injectable } from 'tsyringe';
 import { Op } from "sequelize";
 
-@injectable()
 class AuthRepositoryImpl implements AuthRepository {
     create(userEntity: UserEntity): Promise<UserModel> {
         const user = UserModel.build(userEntity);
