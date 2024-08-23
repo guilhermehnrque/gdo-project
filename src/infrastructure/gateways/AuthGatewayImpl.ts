@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { AuthGateway } from "../../application/interfaces/AuthGateway";
+import { AuthGateway } from "../../application/interfaces/AuthGatewayInterface";
 import { LoginUserUseCase } from "../../application/usecases/auth/LoginUserUseCase";
 import { RegisterUserUseCase } from "../../application/usecases/auth/RegisterUserUseCase";
 import { ForgotPasswordUseCase } from "../../application/usecases/auth/ForgotPasswordUseCase";

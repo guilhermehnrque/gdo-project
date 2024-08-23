@@ -13,7 +13,6 @@ class AuthController {
     public async createUser(request: Request, response: Response): Promise<Response> {
         try {
             const user = await this.authGateway.register(request);
-
             return response.status(201).json({ message: "O usuário foi registrado :3", user });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
