@@ -3,7 +3,7 @@ import LoggerUtils from '../../application/utils/LoggerUtils';
 import { EmailAdapterInterface } from "../../application/interfaces/email/EmailAdapterInterface";
 import EmailAttributesInterface from '../../application/interfaces/email/EmailAttributesInterface';
 
-export class EmailAdapter implements EmailAdapterInterface {
+export class EmailAdapterImpl implements EmailAdapterInterface {
 
     private transporter: nodemailer.Transporter;
 

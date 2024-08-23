@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import { Request } from 'express';
 import logger from '../../../infrastructure/configs/LoggerConfig';
-import NodeMailerService from "../../../domain/services/NodeMailerService";
-import EmailInterface from "../../../domain/services/interfaces/EmailInterface";
+import { EmailAdapterImpl } from '../../../infrastructure/adapters/EmailAdapterImpl';
+import EmailAttributesInterface from '../../interfaces/email/EmailAttributesInterface';
 import CustomError from "../../erros/CustomError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
 import { User } from "../../../domain/models/UserModel";
@@ -12,11 +12,11 @@ import { ForgotPasswordRequest } from '../../../infrastructure/requests/auth/For
 export class ForgotPasswordUseCase {
 
     private authRepository: AuthRepositoryImpl;
-    private nodeMailerService: NodeMailerService;
+    private emailAdapter: EmailAdapterImpl;
 
     constructor() {
         this.authRepository = new AuthRepositoryImpl();
-        this.nodeMailerService = new NodeMailerService();
+        this.emailAdapter = new EmailAdapterImpl();
     }
 
     async execute(payload: ForgotPasswordRequest, request: Request): Promise<void> {
@@ -43,7 +43,7 @@ export class ForgotPasswordUseCase {
         
         const email = user!.email;
 
-        const mailOptions: EmailInterface = {
+        const mailOptions: EmailAttributesInterface = {
             to: email,
             subject: '[GDO] Recuperação de senha',
             text: `Você está recebendo esta mensagem porque você (ou outra pessoa) solicitou a redefinição da senha da sua conta.\n\n
@@ -52,7 +52,7 @@ export class ForgotPasswordUseCase {
                     Se você não solicitou isso, por favor, ignore este e-mail e sua senha permanecerá inalterada.\n`,
         };
 
-        this.nodeMailerService.sendEmail(mailOptions);
+        this.emailAdapter.sendEmail(mailOptions);
     }
 
     private async getUserIfExists(userEmail: string): Promise<User | null> {
