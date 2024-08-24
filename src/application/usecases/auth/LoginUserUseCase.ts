@@ -22,7 +22,7 @@ export class LoginUserUseCase {
             await this.validatePassword(loginUserRequest.password, user.password, user.login);
         }
 
-        return user ? Jwt.generateToken(user.toJSON()) : '';
+        return Jwt.generateToken(user!.toJSON());
     }
 
     private async checkAndGetUser(userLogin: string): Promise<User | null> {
@@ -35,7 +35,7 @@ export class LoginUserUseCase {
         return user;
     }
 
-    private async validatePassword(password: string, hash: string, login:string) {
+    private async validatePassword(password: string, hash: string, login: string) {
         const isValid = await HashPassword.comparePassword(password, hash);
 
         if (!isValid) {

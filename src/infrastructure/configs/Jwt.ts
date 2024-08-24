@@ -1,10 +1,7 @@
-import jwt from 'jsonwebtoken';
-import { promisify } from 'util';
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import logger from './LoggerConfig';
 
 const secretKey = process.env.PROJECT_GDB_SECRET_KEY;
-
-const verifyTokenAsync = promisify(jwt.verify);
 
 export default class JwtUtils {
     
@@ -14,15 +11,19 @@ export default class JwtUtils {
             type: payload.type
         }
 
-        return jwt.sign(secrets, secretKey ?? '', { expiresIn: '100h' })
+        return jwt.sign(secrets, secretKey!, { expiresIn: '100h' })
     }
 
-    static async verifyToken(token: any) {
-        try {
-            return await verifyTokenAsync(token);
-        } catch (error) {
-            logger.error(error);
-            return null;
-        }
+    static async verifyToken(token: string): Promise<jwt.JwtPayload | boolean>{
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, secretKey as Secret, (err, decoded) => {
+                if (err) {
+                    logger.error(err);
+                    resolve(false);
+                } else {
+                    resolve(decoded as JwtPayload);
+                }
+            });
+        });
     }
 }

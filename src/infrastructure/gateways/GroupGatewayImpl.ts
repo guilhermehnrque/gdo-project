@@ -13,8 +13,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
 
     createGroup(request: Request): Promise<any> {
         const req = request.body as CreateGroupRequest;
-        console.table(req);
-        throw new Error("Method not implemented.");
+        return this.createGroupUseCase.execute(req);
     }
     getUserGroupsByUserId(request: Request): Promise<any> {
         throw new Error("Method not implemented.");

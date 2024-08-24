@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import GroupController from '../../controllers/GroupController';
-import { schemas, handleValidationErrors } from '../../middlewares/group/GroupValidator';
+import { schemas, handleValidationErrors } from '../../middlewares/Group/GroupValidator';
 
 const router = Router();
 
