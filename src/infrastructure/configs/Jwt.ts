@@ -11,7 +11,7 @@ export default class JwtUtils {
             type: payload.type
         }
 
-        return jwt.sign(secrets, secretKey!, { expiresIn: '100h' })
+        return jwt.sign(secrets, secretKey!, { expiresIn: '1000h' })
     }
 
     static async verifyToken(token: string): Promise<jwt.JwtPayload | boolean>{

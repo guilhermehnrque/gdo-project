@@ -6,7 +6,7 @@ import EmailAttributesInterface from '../../interfaces/email/EmailAttributesInte
 import CustomError from "../../erros/CustomError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
 import { User } from "../../../domain/models/UserModel";
-import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
+import AuthRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
 import { ForgotPasswordRequest } from '../../../infrastructure/requests/auth/ForgotPasswordRequest';
 
 export class ForgotPasswordUseCase {

@@ -1,9 +1,9 @@
-import { AuthRepository } from "../../domain/repositories/AuthRepository";
+import { AuthRepositoryInterface } from "../../domain/repositories/UserRepositoryInterface";
 import UserEntity from "../../domain/entity/UserEntity";
 import { User as UserModel } from "../../domain/models/UserModel";
 import { Op } from "sequelize";
 
-class AuthRepositoryImpl implements AuthRepository {
+class UserRepositoryImpl implements AuthRepositoryInterface {
     create(userEntity: UserEntity): Promise<UserModel> {
         const user = UserModel.build(userEntity);
         return user.save();
@@ -17,8 +17,12 @@ class AuthRepositoryImpl implements AuthRepository {
         });
     }
 
-    getUserById(user_id: number): Promise<UserModel | null> {
-        throw new Error("Method not implemented.");
+    getUserByUserId(userId: string): Promise<UserModel | null> {
+        return UserModel.findOne({
+            where: {
+                user_id: userId,
+            }
+        });
     }
 
     getUserByEmail(email: string): Promise<UserModel | null>{
@@ -44,4 +48,4 @@ class AuthRepositoryImpl implements AuthRepository {
     
 }
 
-export default AuthRepositoryImpl;
+export default UserRepositoryImpl;

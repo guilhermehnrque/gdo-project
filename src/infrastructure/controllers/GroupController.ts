@@ -13,8 +13,8 @@ export default class GroupController {
 
     async createGroup(request: Request, response: Response) {
         try {
-            const user = await this.groupGateway.createGroup(request);
-            return response.status(201).json({ message: "O grupo foi criado :3", user });
+            await this.groupGateway.createGroup(request);
+            return response.status(201).json({ message: "O grupo foi criado :3" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });

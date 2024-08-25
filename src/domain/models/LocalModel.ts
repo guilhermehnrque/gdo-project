@@ -9,21 +9,23 @@ interface LocalAttributes {
     city: string;
     street: string;
     zip_code: number;
-    number?: number;
+    number: number | null;
     description: string;
     groups_id: number;
     created_at: Date;
     updated_at?: Date;
 }
 
-class Local extends Model<LocalAttributes> implements LocalAttributes {
+type LocalCreationAttributes = Omit<LocalAttributes, 'id' | 'created_at' | 'updated_at'>;
+
+class Local extends Model<LocalAttributes, LocalCreationAttributes> implements LocalAttributes {
     public id!: number;
     public country!: string;
     public state!: string;
     public city!: string;
     public street!: string;
     public zip_code!: number;
-    public number?: number;
+    public number!: number | null;
     public description!: string;
     public groups_id!: number;
     public created_at!: Date;

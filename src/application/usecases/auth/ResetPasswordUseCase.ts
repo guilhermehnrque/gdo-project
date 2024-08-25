@@ -1,7 +1,7 @@
 import logger from '../../../infrastructure/configs/LoggerConfig';
 import CustomError from "../../erros/CustomError";
 import { User } from "../../../domain/models/UserModel";
-import AuthRepositoryImpl from "../../../infrastructure/repositories/AuthRepositoryImpl";
+import AuthRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
 import HashPassword from "../../../infrastructure/configs/HashPassword";
 import { ResetPasswordRequest } from '../../../infrastructure/requests/auth/ResetPasswordRequest';
 import InvalidTokenError from '../../erros/InvalidTokenError';

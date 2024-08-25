@@ -1,4 +1,4 @@
-import AuthRepositoryImpl from '../../../infrastructure/repositories/AuthRepositoryImpl';
+import AuthRepositoryImpl from '../../../infrastructure/repositories/UserRepositoryImpl';
 import HashPassword from '../../../infrastructure/configs/HashPassword';
 import logger from '../../../infrastructure/configs/LoggerConfig';
 import { LoginUserRequest } from '../../../infrastructure/requests/auth/LoginUserRequest';

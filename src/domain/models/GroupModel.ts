@@ -3,7 +3,7 @@ import { User } from './UserModel';
 import sequelize from '../../infrastructure/database/index'; 
 
 interface GroupAttributes {
-    id?: number;
+    id: number;
     description: string;
     is_active: number;
     users_id: number;
@@ -11,13 +11,18 @@ interface GroupAttributes {
     updated_at?: Date;
 }
 
-class Group extends Model<GroupAttributes> implements GroupAttributes {
+type GroupCreationAttributes = Omit<GroupAttributes, 'id' | 'created_at' | 'updated_at'>;
+
+class Group extends Model<GroupAttributes, GroupCreationAttributes> implements GroupAttributes {
     public id!: number;
     public description!: string;
     public is_active!: number;
     public users_id!: number;
     public created_at!: Date;
     public updated_at?: Date;
+
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 Group.init({

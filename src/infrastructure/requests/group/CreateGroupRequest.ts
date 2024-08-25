@@ -1,4 +1,5 @@
 export interface CreateGroupRequest {
+    is_active: string;
     group: {
         description: string;
     };

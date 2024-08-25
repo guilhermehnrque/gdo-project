@@ -1,4 +1,4 @@
-import AuthRepositoryImpl from '../../../infrastructure/repositories/AuthRepositoryImpl';
+import AuthRepositoryImpl from '../../../infrastructure/repositories/UserRepositoryImpl';
 import UserEntity from '../../../domain/entity/UserEntity';
 import UserAlreadyExistsError from '../../erros/UserAlreadyExistsError';
 import DatabaseError from '../../erros/DatabaseError';
