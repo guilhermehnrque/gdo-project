@@ -1,10 +1,11 @@
 # Projeto GDO
 
-Este é um exemplo de um projeto Node.js com objetivo no desenvolvimento de uma API para gerenciamento ...
+Este é um exemplo de um projeto Node.js com o objetivo de desenvolver uma API para gerenciamento ...
 
 ## Tecnologias Usadas
 
 - **Node.js**: Plataforma para execução de código JavaScript no servidor.
+- **TypeScript**: Superset do JavaScript que adiciona tipagem estática ao código.
 - **Express**: Framework web para Node.js.
 - **Sequelize**: ORM para SQL, facilitando a interação com bancos de dados.
 - **dotenv**: Carregamento de variáveis de ambiente.
@@ -36,22 +37,17 @@ Certifique-se de ter [Node.js](https://nodejs.org/) e [npm](https://www.npmjs.co
 
 4. Configure as variáveis de ambiente:
 
-    Crie um arquivo `.env` na raiz do projeto e adicione as variáveis de ambiente necessárias. Exemplo:
+    Copie o arquivo `.env.example` na raiz do projeto e adicione as variáveis de ambiente necessárias.
 
-    ```env
-    PORT=3000
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=root
-    DB_NAME=volei-gdo
+5. Compile o projeto:
 
-    PROJECT_GDB_SALT_ROUNDS=10
-    PROJECT_GDB_SECRET_KEY=maya
+    ```bash
+    npm run build
     ```
 
-## Executando Testes
+## Executando o Projeto
 
-Para executar os testes unitários, utilize o comando:
+Para iniciar a aplicação em modo de desenvolvimento, utilize o comando:
 
 ```bash
-npm test
+npm run dev
