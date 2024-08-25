@@ -4,7 +4,7 @@ import Group from "../models/GroupModel";
 export interface GroupRepositoryInterface {
     createGroup(groupEntity: GroupEntity, options: any): Promise<Group>;
     getUserGroupsByUserId(id: number): Promise<Group[]>;
-    getGroupById(): Promise<any>;
+    getGroupById(groupId: number, userId: number): Promise<Group | null>;
     updateGroupById(): Promise<any>;
     changeGroupStatus(): Promise<any>;
     deleteGroupById(): Promise<any>;

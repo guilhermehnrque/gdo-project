@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import handleValidationErrors from '../HandleValidationErrors';
 
 const schemas = {
@@ -35,6 +35,12 @@ const schemas = {
             .notEmpty().withMessage('Descrição é obrigatório')
             .isString().withMessage('Descrição deve ser uma string'),
     ],
+
+    detail: [
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable')
+    ]
 
 };
 

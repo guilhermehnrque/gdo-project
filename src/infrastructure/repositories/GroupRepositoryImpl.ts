@@ -19,7 +19,7 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
     async getUserGroupsByUserId(id: number): Promise<Group[]> {
         return await Group.findAll({
             where: { users_id: id },
-              include: [
+            include: [
                 {
                     model: Local,
                     as: 'local',
@@ -28,8 +28,24 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         });
     }
 
-    async getGroupById(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async getGroupById(groupId: number, userId: number): Promise<Group | null> {
+        try {
+
+            return await Group.findOne({
+                where: { id: groupId, users_id: userId },
+                include: [
+                    {
+                        model: Local,
+                        as: 'local',
+                    }
+                ]
+            });
+
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error getting group by id: ${customError.message}`);
+        }
+
     }
 
     async getGroupByDescription(groupDescription: string): Promise<boolean> {

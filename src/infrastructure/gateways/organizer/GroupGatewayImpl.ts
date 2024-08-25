@@ -7,21 +7,22 @@ import CreateLocalDTO from "../../../application/dto/local/CreateLocalDTO";
 import CreateLocalUseCase from "../../../application/usecases/organizer/locals/CreateLocalUseCase";
 import sequelize from "../../database";
 import { GetGroupsUseCase } from "../../../application/usecases/organizer/group/GetGroupsUseCase";
-import { GroupDTO } from '../../../application/dto/group/GroupDTO';
 import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
+import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/group/GetGroupDetailsUseCase";
+import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
     private createGroupUseCase: CreateGroupUseCase;
     private createLocalUseCase: CreateLocalUseCase;
     private getGroupsUseCase: GetGroupsUseCase;
+    private getGroupDetailsUseCase: GetGroupDetailsUseCase;
 
-    constructor(
-
-    ) {
+    constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
         this.createLocalUseCase = new CreateLocalUseCase();
         this.getGroupsUseCase = new GetGroupsUseCase();
+        this.getGroupDetailsUseCase = new GetGroupDetailsUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -53,8 +54,11 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return groupDTOs;
     }
 
-    getGroupById(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+    async getGroupById(request: Request): Promise<GroupDTO> {
+        const userId = request.userId as string;
+        const groupId = parseInt(request.params.groupId);
+
+        return await this.getGroupDetailsUseCase.execute(groupId, userId);
     }
 
     updateGroupById(request: Request): Promise<any> {

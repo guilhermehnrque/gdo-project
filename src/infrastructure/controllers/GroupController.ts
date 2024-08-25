@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import GroupGatewayImpl from "../gateways/organizer/GroupGatewayImpl";
 import CustomError from "../../application/erros/CustomError";
 
-
 export default class GroupController {
 
     private groupGateway: GroupGatewayImpl;
@@ -32,8 +31,14 @@ export default class GroupController {
         }
     }
 
-    async getGroupById() {
-        throw new Error("Method not implemented.");
+    async getGroupById(request: Request, response: Response) {
+        try {
+            const group = await this.groupGateway.getGroupById(request);
+            return response.status(200).json(group);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
     }
 
     async updateGroupById() {
