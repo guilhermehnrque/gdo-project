@@ -22,8 +22,9 @@ export class RemoveGroupUserUseCase {
         const user = await this.getUser(userId);
         const group = await this.validateAndGetGroupAndUser(groupId, user?.id!);
         const groupUserDTO = new RegisterGroupUserDTO(group.id, usersId);
+        const sanitizedArray = await this.removeMembers(groupUserDTO.getUsersId(), user?.id!);
 
-        return await this.groupUserRepository.removeGroupUser(group.id, groupUserDTO.getUsersId(), { transaction });
+        return await this.groupUserRepository.removeGroupUser(group.id, sanitizedArray, { transaction });
     }
 
     async validateAndGetGroupAndUser(groupId: number, userId: number): Promise<Group> {
@@ -39,6 +40,10 @@ export class RemoveGroupUserUseCase {
 
     async getUser(userId: string): Promise<User | null> {
         return await this.userRepository.getUserByUserId(userId);
+    }
+
+    async removeMembers(usersArray: Array<number>, userId: number): Promise<Array<number>> {
+        return usersArray.filter(user => user !== userId);
     }
 
 }
