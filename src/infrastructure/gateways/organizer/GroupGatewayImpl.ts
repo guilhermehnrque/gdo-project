@@ -1,20 +1,25 @@
 import { Request } from "express";
-import GroupGatewayInterface from "../../application/interfaces/GroupGatewayInterface";
-import CreateGroupUseCase from "../../application/usecases/group/CreateGroupUseCase";
-import { CreateGroupRequest } from "../requests/group/CreateGroupRequest";
-import CreateGroupDTO from "../../application/dto/group/CreateGroupDTO";
-import CreateListDTO from "../../application/dto/list/CreateListDTO";
-import CreateLocalUseCase from "../../application/usecases/locals/CreateLocalUseCase";
-import sequelize from "../../infrastructure/database";
+import GroupGatewayInterface from "../../../application/interfaces/GroupGatewayInterface";
+import CreateGroupUseCase from "../../../application/usecases/organizer/group/CreateGroupUseCase";
+import { CreateGroupRequest } from "../../requests/group/CreateGroupRequest";
+import RegisterUseToGroupUseCase  from "../../../application/usecases/organizer/group/RegisterUseToGroupUseCase";
+import CreateGroupDTO from "../../../application/dto/group/CreateGroupDTO";
+import CreateListDTO from "../../../application/dto/list/CreateListDTO";
+import CreateLocalUseCase from "../../../application/usecases/organizer/locals/CreateLocalUseCase";
+import sequelize from "../../database";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
     private createGroupUseCase: CreateGroupUseCase;
     private createLocalUseCase: CreateLocalUseCase;
+    private registerUserToGroupUseCase: RegisterUseToGroupUseCase;
 
-    constructor() {
+    constructor(
+
+    ) {
         this.createGroupUseCase = new CreateGroupUseCase();
         this.createLocalUseCase = new CreateLocalUseCase();
+        this.registerUserToGroupUseCase = new RegisterUseToGroupUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -41,21 +46,27 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     getUserGroupsByUserId(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
     getGroupById(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
     updateGroupById(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
     changeGroupStatus(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
     deleteGroupById(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
     addUserToGroup(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
     }
+    
     removeUserFromGroup(request: Request): Promise<void> {
         throw new Error("Method not implemented.");
     } 

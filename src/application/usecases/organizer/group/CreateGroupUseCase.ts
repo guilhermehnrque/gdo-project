@@ -1,14 +1,14 @@
-import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
-import GroupEntity from "../../../domain/entity/GroupEntity";
-import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
-import Group from "../../../domain/models/GroupModel";
-import CustomError from "../../erros/CustomError";
-import logger from "../../../infrastructure/configs/LoggerConfig";
-import { User } from "../../../domain/models/UserModel";
-import DatabaseError from "../../erros/DatabaseError";
-import UserNotStaffError from "../../erros/groups/UserNotStaffError";
-import GroupAlreadyExistsError from "../../erros/groups/GroupAlreadyExistsError";
-import CreateGroupDTO from "../../dto/group/CreateGroupDTO";
+import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
+import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
+import { User } from "../../../../domain/models/UserModel";
+import GroupEntity from "../../../../domain/entity/GroupEntity";
+import Group from "../../../../domain/models/GroupModel";
+import CustomError from "../../../erros/CustomError";
+import logger from "../../../../infrastructure/configs/LoggerConfig";
+import DatabaseError from "../../../erros/DatabaseError";
+import UserNotStaffError from "../../../erros/groups/UserNotStaffError";
+import GroupAlreadyExistsError from "../../../erros/groups/GroupAlreadyExistsError";
+import CreateGroupDTO from "../../../dto/group/CreateGroupDTO";
 
 export default class CreateGroupUseCase {
 
@@ -19,6 +19,7 @@ export default class CreateGroupUseCase {
         this.groupRepository = new GroupRepositoryImpl();
         this.userRepository = new UserRepositoryImpl();
     }
+    
     async execute(createGroupDTO: CreateGroupDTO, userId: string, transaction: any): Promise<Group> {
         try {
             const user = await this.validateUserAndGroup(createGroupDTO, userId);

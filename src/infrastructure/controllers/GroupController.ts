@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import GroupGatewayImpl from "../gateways/GroupGatewayImpl";
+import GroupGatewayImpl from "../gateways/organizer/GroupGatewayImpl";
 import CustomError from "../../application/erros/CustomError";
 
 
