@@ -64,6 +64,13 @@ const schemas = {
         query('active')
             .notEmpty().withMessage('Status é obrigatório')
             .isBoolean().withMessage('Status deve ser um booleano')
+    ],
+
+    delete: [
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable'),
+
     ]
 
 };

@@ -1,18 +1,28 @@
 import { Request } from "express";
+
+// Interfaces
 import GroupGatewayInterface from "../../../application/interfaces/GroupGatewayInterface";
+
+// Use Cases
 import CreateGroupUseCase from "../../../application/usecases/organizer/group/CreateGroupUseCase";
+import CreateLocalUseCase from "../../../application/usecases/organizer/locals/CreateLocalUseCase";
+import { GetGroupsUseCase } from "../../../application/usecases/organizer/group/GetGroupsUseCase";
+import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/group/GetGroupDetailsUseCase";
+import { UpdateGroupUseCase } from "../../../application/usecases/organizer/group/UpdateGroupUseCase";
+import { UpdateGroupStatusUseCase } from "../../../application/usecases/organizer/group/UpdateGroupStatusUseCase";
+
+// Requests
 import { CreateGroupRequest } from "../../requests/organizer/group/CreateGroupRequest";
+import { UpdateGroupRequest } from "../../requests/organizer/group/UpdateGroupRequest";
+
+// DTOs
 import CreateGroupDTO from "../../../application/dto/group/CreateGroupDTO";
 import CreateLocalDTO from "../../../application/dto/local/CreateLocalDTO";
-import CreateLocalUseCase from "../../../application/usecases/organizer/locals/CreateLocalUseCase";
-import sequelize from "../../database";
-import { GetGroupsUseCase } from "../../../application/usecases/organizer/group/GetGroupsUseCase";
-import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
-import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/group/GetGroupDetailsUseCase";
 import { GroupDTO } from "../../../application/dto/group/GroupDTO";
-import { UpdateGroupUseCase } from "../../../application/usecases/organizer/group/UpdateGroupUseCase";
-import { UpdateGroupRequest } from "../../requests/organizer/group/UpdateGroupRequest";
-import { UpdateGroupStatusUseCase } from "../../../application/usecases/organizer/group/UpdateGroupStatusUseCase";
+
+// Mappers
+import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
+import sequelize from "../../database";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -84,7 +94,10 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     }
 
     deleteGroupById(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+        const userId = request.userId as string;
+        const groupId = parseInt(request.params.groupId);
+        const status = false;
+        return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
     addUserToGroup(request: Request): Promise<any> {
