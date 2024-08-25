@@ -21,8 +21,15 @@ export default class GroupController {
         }
     }
 
-    async getUserGroupsByUserId() {
-        throw new Error("Method not implemented.");
+    async getUserGroupsByUserId(request: Request, response: Response) {
+        try {
+            const groups = await this.groupGateway.getUserGroupsByUserId(request);
+            return response.status(200).json(groups);
+        }
+        catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
     }
 
     async getGroupById() {

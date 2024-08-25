@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { User } from './UserModel'; 
+import Local from './LocalModel';
 import sequelize from '../../infrastructure/database/index'; 
 
 interface GroupAttributes {
@@ -23,6 +24,8 @@ class Group extends Model<GroupAttributes, GroupCreationAttributes> implements G
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+    public readonly local?: Local;
+
 }
 
 Group.init({
@@ -67,6 +70,6 @@ Group.init({
     updatedAt: 'updated_at',
 });
 
-// Group.belongsTo(User, { foreignKey: 'users_id'});
+Group.hasOne(Local, { foreignKey: 'groups_id', as: 'local' });
 
 export default Group;

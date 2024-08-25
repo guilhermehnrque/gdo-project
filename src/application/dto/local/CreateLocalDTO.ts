@@ -1,6 +1,6 @@
-import { CreateGroupRequest } from "../../../infrastructure/requests/group/CreateGroupRequest";
+import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/group/CreateGroupRequest";
 
-export default class CreateListDTO {
+export default class CreateLocalDTO {
     public country: string;
     public state: string;
     public city: string;
@@ -27,8 +27,8 @@ export default class CreateListDTO {
         this.description = description;
     }
 
-    static async createFromPayload(payload: CreateGroupRequest): Promise<CreateListDTO> {
-        return new CreateListDTO(
+    static async createFromPayload(payload: CreateGroupRequest): Promise<CreateLocalDTO> {
+        return new CreateLocalDTO(
             payload.local.country,
             payload.local.state,
             payload.local.city,

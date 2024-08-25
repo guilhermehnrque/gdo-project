@@ -1,4 +1,4 @@
-import { CreateGroupRequest } from "../../../infrastructure/requests/group/CreateGroupRequest";
+import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/group/CreateGroupRequest";
 
 export default class CreateGroupDTO {
     

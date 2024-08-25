@@ -35,6 +35,7 @@ const schemas = {
             .notEmpty().withMessage('Descrição é obrigatório')
             .isString().withMessage('Descrição deve ser uma string'),
     ],
+
 };
 
 export { schemas, handleValidationErrors };

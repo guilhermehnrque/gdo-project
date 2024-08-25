@@ -1,4 +1,4 @@
-import CreateListDTO from "../../application/dto/list/CreateListDTO";
+import CreateLocalDTO from "../../application/dto/local/CreateLocalDTO";
 
 export default class LocalEntity {
 
@@ -40,7 +40,7 @@ export default class LocalEntity {
         this.updated_at = updated_at;
     }
 
-    static async createFromDTO(payload: CreateListDTO, groupId: number): Promise<LocalEntity> {
+    static async createFromDTO(payload: CreateLocalDTO, groupId: number): Promise<LocalEntity> {
         return new LocalEntity(
             payload.description,
             payload.state,

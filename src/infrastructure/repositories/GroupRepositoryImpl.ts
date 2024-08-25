@@ -3,6 +3,7 @@ import { GroupRepositoryInterface } from "../../domain/repositories/GroupReposit
 import Group from "../../domain/models/GroupModel";
 import DatabaseError from "../../application/erros/DatabaseError";
 import CustomError from "../../application/erros/CustomError";
+import Local from "../../domain/models/LocalModel";
 
 export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
@@ -15,8 +16,16 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
-    async getUserGroupsByUserId(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async getUserGroupsByUserId(id: number): Promise<Group[]> {
+        return await Group.findAll({
+            where: { users_id: id },
+              include: [
+                {
+                    model: Local,
+                    as: 'local',
+                }
+            ]
+        });
     }
 
     async getGroupById(): Promise<any> {

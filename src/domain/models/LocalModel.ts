@@ -95,6 +95,4 @@ Local.init({
 });
 
 
-Local.belongsTo(Group, { foreignKey: 'groups_id' });
-
 export default Local;
