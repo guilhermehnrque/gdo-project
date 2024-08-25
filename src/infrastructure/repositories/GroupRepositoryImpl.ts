@@ -66,8 +66,17 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         }
     }
 
-    async changeGroupStatus(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async changeGroupStatus(groupEntity: GroupEntity): Promise<any> {
+        try {
+            return await Group.update(groupEntity.toUpdatePayload(),
+                {
+                    where: {
+                        id: groupEntity.id!,
+                        users_id: groupEntity.users_id
+                    }
+                });
+        } catch (error) {
+        }
     }
 
     async deleteGroupById(): Promise<any> {

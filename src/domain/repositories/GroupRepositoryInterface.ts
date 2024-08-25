@@ -6,7 +6,7 @@ export interface GroupRepositoryInterface {
     getUserGroupsByUserId(id: number): Promise<Group[]>;
     getGroupById(groupId: number, userId: number): Promise<Group | null>;
     updateGroupById(groupEntity: GroupEntity): Promise<void>;
-    changeGroupStatus(): Promise<any>;
+    changeGroupStatus(groupEntity: GroupEntity): Promise<any>;
     deleteGroupById(): Promise<any>;
     addUserToGroup(): Promise<any>;
     removeUserFromGroup(): Promise<void>;

@@ -12,6 +12,7 @@ import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/
 import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 import { UpdateGroupUseCase } from "../../../application/usecases/organizer/group/UpdateGroupUseCase";
 import { UpdateGroupRequest } from "../../requests/organizer/group/UpdateGroupRequest";
+import { UpdateGroupStatusUseCase } from "../../../application/usecases/organizer/group/UpdateGroupStatusUseCase";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -20,6 +21,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     private getGroupsUseCase: GetGroupsUseCase;
     private getGroupDetailsUseCase: GetGroupDetailsUseCase;
     private updateGroupUseCase: UpdateGroupUseCase;
+    private updateGroupStatusUseCase: UpdateGroupStatusUseCase;
 
     constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
@@ -27,6 +29,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         this.getGroupsUseCase = new GetGroupsUseCase();
         this.getGroupDetailsUseCase = new GetGroupDetailsUseCase();
         this.updateGroupUseCase = new UpdateGroupUseCase();
+        this.updateGroupStatusUseCase = new UpdateGroupStatusUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -48,7 +51,6 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
             throw error;
         }
     }
-
 
     async getUserGroupsByUserId(request: Request): Promise<any> {
         const userId = request.userId as string;
@@ -73,8 +75,12 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         await this.updateGroupUseCase.execute(groupId, userId, description, status);
     }
 
-    changeGroupStatus(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+    async changeGroupStatus(request: Request): Promise<any> {
+        const userId = request.userId as string;
+        const groupId = parseInt(request.params.groupId);
+        const status = request.query.active as unknown as boolean;
+
+        return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
     deleteGroupById(request: Request): Promise<any> {

@@ -10,5 +10,7 @@ router.get('', async (req: Request, res: Response) => { groupController.getUserG
 router.post('', schemas.register, handleValidationErrors, async (req: Request, res: Response) => { groupController.createGroup(req, res); });
 router.get('/:groupId', schemas.detail, handleValidationErrors, async (req: Request, res: Response) => { groupController.getGroupById(req, res); });
 router.put('/:groupId', schemas.update, handleValidationErrors, async (req: Request, res: Response) => { groupController.updateGroupById(req, res); });
+router.patch('/:groupId/status', schemas.updateStatus, handleValidationErrors, async (req: Request, res: Response) => { groupController.changeGroupStatus(req, res); });
+
 
 export default router;

@@ -33,6 +33,15 @@ export default class GroupEntity {
         )
     }
 
+    static async createFromChangeStatus() {
+        return new GroupEntity(
+            null,
+            '',
+            false,
+            0
+        )
+    }
+
     toCreatePayload() {
         return {
             description: this.description,

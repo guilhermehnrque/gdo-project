@@ -51,8 +51,14 @@ export default class GroupController {
         }
     }
 
-    async changeGroupStatus() {
-        throw new Error("Method not implemented.");
+    async changeGroupStatus(request: Request, response: Response) {
+        try {
+            const group = await this.groupGateway.changeGroupStatus(request);
+            return response.status(201).json(group);
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
     }
 
     async deleteGroupById() {

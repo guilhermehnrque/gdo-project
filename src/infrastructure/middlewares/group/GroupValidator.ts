@@ -1,4 +1,4 @@
-import { body, param } from 'express-validator';
+import { body, param, query } from 'express-validator';
 import handleValidationErrors from '../HandleValidationErrors';
 
 const schemas = {
@@ -52,6 +52,16 @@ const schemas = {
             .isString().withMessage('Descrição deve ser uma string'),
 
         body('status')
+            .notEmpty().withMessage('Status é obrigatório')
+            .isBoolean().withMessage('Status deve ser um booleano')
+    ],
+
+    updateStatus: [
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable'),
+
+        query('active')
             .notEmpty().withMessage('Status é obrigatório')
             .isBoolean().withMessage('Status deve ser um booleano')
     ]
