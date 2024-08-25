@@ -9,7 +9,9 @@ interface GroupsUsersAttributes {
     users_id: number;
 }
 
-class GroupsUsers extends Model<GroupsUsersAttributes> implements GroupsUsersAttributes {
+type GroupsUsersCreationAttributes = Omit<GroupsUsersAttributes, 'id'>;
+
+class GroupsUsers extends Model<GroupsUsersAttributes, GroupsUsersCreationAttributes> implements GroupsUsersAttributes {
     public id!: number;
     public groups_id!: number;
     public users_id!: number;

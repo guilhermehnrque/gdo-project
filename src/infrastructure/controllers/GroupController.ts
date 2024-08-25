@@ -72,8 +72,15 @@ export default class GroupController {
         }
     }
 
-    async addUserToGroup() {
-        throw new Error("Method not implemented.");
+    async addUserToGroup(request: Request, response: Response) {
+        try {
+            await this.groupGateway.addUserToGroup(request);
+            return response.status(201).json({ message: "Usuário adicionado ao grupo com sucesso!" });
+        }
+        catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
     }
 
     async removeUserFromGroup() {

@@ -23,6 +23,8 @@ import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 // Mappers
 import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
 import sequelize from "../../database";
+import { RegisterGroupUserUseCase } from "../../../application/usecases/organizer/group/RegisterGroupUserUseCase";
+import { RegisterUserGroupRequest } from "../../requests/organizer/group/RegisterUserGroupRequest";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -32,6 +34,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     private getGroupDetailsUseCase: GetGroupDetailsUseCase;
     private updateGroupUseCase: UpdateGroupUseCase;
     private updateGroupStatusUseCase: UpdateGroupStatusUseCase;
+    private registerGroupUserUseCase: RegisterGroupUserUseCase;
 
     constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
@@ -40,6 +43,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         this.getGroupDetailsUseCase = new GetGroupDetailsUseCase();
         this.updateGroupUseCase = new UpdateGroupUseCase();
         this.updateGroupStatusUseCase = new UpdateGroupStatusUseCase();
+        this.registerGroupUserUseCase = new RegisterGroupUserUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -49,17 +53,20 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         const createLocalDTO = CreateLocalDTO.createFromPayload(req);
 
         const transaction = await sequelize.transaction();
+        let group: any = null;
 
         try {
-            const group = await this.createGroupUseCase.execute(await createGroupDTO, userId, transaction);
+            group = await this.createGroupUseCase.execute(await createGroupDTO, userId, transaction);
             await this.createLocalUseCase.execute(await createLocalDTO, group.id, transaction);
-
+           
             await transaction.commit();
-            return group !== null;
         } catch (error) {
             await transaction.rollback();
             throw error;
         }
+
+        await this.registerGroupUserUseCase.execute([group.users_id], userId, group.id, null);
+        return group !== null;
     }
 
     async getUserGroupsByUserId(request: Request): Promise<any> {
@@ -93,15 +100,35 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
-    deleteGroupById(request: Request): Promise<any> {
+    async deleteGroupById(request: Request): Promise<any> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
         const status = false;
+        
         return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
-    addUserToGroup(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+    async addUserToGroup(request: Request): Promise<void> {
+        const { userId, groupId, req } = this.prepareData(request);
+
+        const transaction = await sequelize.transaction();
+
+        try {
+            await this.registerGroupUserUseCase.execute(req.users_id, userId, groupId, null);
+            transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    }
+
+    private prepareData(request: Request) {
+        const userId = request.userId as string;
+        const groupId = parseInt(request.params.groupId);
+        const req = request.body as RegisterUserGroupRequest;
+
+        return { userId, groupId, req }
+
     }
 
     removeUserFromGroup(request: Request): Promise<void> {

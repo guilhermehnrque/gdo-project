@@ -12,6 +12,6 @@ router.get('/:groupId', schemas.detail, handleValidationErrors, async (req: Requ
 router.put('/:groupId', schemas.update, handleValidationErrors, async (req: Request, res: Response) => { groupController.updateGroupById(req, res); });
 router.patch('/:groupId/status', schemas.updateStatus, handleValidationErrors, async (req: Request, res: Response) => { groupController.changeGroupStatus(req, res); });
 router.delete('/:groupId', schemas.delete, handleValidationErrors, async (req: Request, res: Response) => { groupController.deleteGroupById(req, res); });
-
+//router.post('/:groupId/invite', schemas.invite, handleValidationErrors, async (req: Request, res: Response) => { groupController.inviteUser(req, res); });
 
 export default router;
