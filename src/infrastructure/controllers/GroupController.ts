@@ -83,8 +83,15 @@ export default class GroupController {
         }
     }
 
-    async removeUserFromGroup() {
-        throw new Error("Method not implemented.");
+    async removeUserFromGroup(request: Request, response: Response) {
+        try {
+            await this.groupGateway.removeUsersFromGroup(request);
+            return response.status(201).json({ message: "Usuário(s) removido do grupo!" });
+        }
+        catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
     }
 
 }

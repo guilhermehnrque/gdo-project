@@ -16,6 +16,6 @@ export default interface GroupGatewayInterface {
 
     addUserToGroup(request: Request): Promise<any>;
 
-    removeUserFromGroup(request: Request): Promise<void>;
+    removeUsersFromGroup(request: Request): Promise<void>;
 
 }

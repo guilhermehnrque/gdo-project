@@ -10,15 +10,30 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
                 groups_id: groupId,
                 users_id: userId
             }));
-    
+
             return await GroupsUsers.bulkCreate(groupUsers, { transaction: options.transaction });
-    
+
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupUserRepository] Error creating group user: ${customError.message}`);
         }
     }
-    
+
+    async removeGroupUser(groupId: number, usersId: Array<number>, options: any): Promise<number> {
+        try {
+            return await GroupsUsers.destroy({
+                where: {
+                    groups_id: groupId,
+                    users_id: usersId
+                },
+                transaction: options.transaction
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupUserRepository] Error removing group user: ${customError.message}`);
+        }
+    }
+
 
 }
 

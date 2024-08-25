@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../infrastructure/database/index'; 
 import Group from './GroupModel';
+import InvitationModel from './InvitationModel';
 
 interface UserAttributes {
     id: number;
@@ -128,5 +129,6 @@ User.init({
 });
 
 User.hasMany(Group, { foreignKey: 'users_id' });
+User.hasMany(InvitationModel, { foreignKey: 'users_id' });
 
 export { User, UserCreationAttributes };

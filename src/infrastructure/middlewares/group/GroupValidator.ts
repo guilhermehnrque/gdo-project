@@ -73,15 +73,15 @@ const schemas = {
 
     ],
 
-    invite: [
-        param('group_id')
-            .isString().withMessage('groupId should be a type of text')
-            .notEmpty().withMessage('GroupId should be declared Path Variable'),
+    addOrRemoverMember: [
+        body('group_id')
+            .isNumeric().withMessage('groupId should be a type of number')
+            .notEmpty().withMessage('GroupId should be declared in body'),
 
-        query('users_id')
+        body('users_id')
             .notEmpty().withMessage('usersId should be a type of array')
             .isArray().withMessage('usersId deve ser um array')
-    ]
+    ],
 
 };
 
