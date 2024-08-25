@@ -10,6 +10,8 @@ import { GetGroupsUseCase } from "../../../application/usecases/organizer/group/
 import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
 import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/group/GetGroupDetailsUseCase";
 import { GroupDTO } from "../../../application/dto/group/GroupDTO";
+import { UpdateGroupUseCase } from "../../../application/usecases/organizer/group/UpdateGroupUseCase";
+import { UpdateGroupRequest } from "../../requests/organizer/group/UpdateGroupRequest";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -17,12 +19,14 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     private createLocalUseCase: CreateLocalUseCase;
     private getGroupsUseCase: GetGroupsUseCase;
     private getGroupDetailsUseCase: GetGroupDetailsUseCase;
+    private updateGroupUseCase: UpdateGroupUseCase;
 
     constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
         this.createLocalUseCase = new CreateLocalUseCase();
         this.getGroupsUseCase = new GetGroupsUseCase();
         this.getGroupDetailsUseCase = new GetGroupDetailsUseCase();
+        this.updateGroupUseCase = new UpdateGroupUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -61,8 +65,12 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return await this.getGroupDetailsUseCase.execute(groupId, userId);
     }
 
-    updateGroupById(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+    async updateGroupById(request: Request): Promise<any> {
+        const userId = request.userId as string;
+        const groupId = parseInt(request.params.groupId);
+        const { description, status } = request.body as UpdateGroupRequest
+
+        await this.updateGroupUseCase.execute(groupId, userId, description, status);
     }
 
     changeGroupStatus(request: Request): Promise<any> {

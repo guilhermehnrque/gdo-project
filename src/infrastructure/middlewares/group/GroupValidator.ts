@@ -40,6 +40,20 @@ const schemas = {
         param('groupId')
             .isString().withMessage('groupId should be a type of text')
             .notEmpty().withMessage('GroupId should be declared Path Variable')
+    ],
+
+    update: [
+        param('groupId')
+            .isString().withMessage('groupId should be a type of text')
+            .notEmpty().withMessage('GroupId should be declared Path Variable'),
+
+        body('description')
+            .notEmpty().withMessage('A descrição é obrigatório')
+            .isString().withMessage('Descrição deve ser uma string'),
+
+        body('status')
+            .notEmpty().withMessage('Status é obrigatório')
+            .isBoolean().withMessage('Status deve ser um booleano')
     ]
 
 };

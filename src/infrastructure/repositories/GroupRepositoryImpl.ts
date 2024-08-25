@@ -30,7 +30,6 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     async getGroupById(groupId: number, userId: number): Promise<Group | null> {
         try {
-
             return await Group.findOne({
                 where: { id: groupId, users_id: userId },
                 include: [
@@ -53,8 +52,18 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         return group !== null;
     }
 
-    async updateGroupById(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async updateGroupById(groupEntity: GroupEntity): Promise<any> {
+        try {
+            return await Group.update(groupEntity.toUpdatePayload(), {
+                where: {
+                    id: groupEntity.id!,
+                    users_id: groupEntity.users_id
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error getting group by id: ${customError.message}`);
+        }
     }
 
     async changeGroupStatus(): Promise<any> {
