@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { schemas, handleValidationErrors } from '../../../middlewares/Group/GroupValidator';
+import { schemas, handleValidationErrors } from '../../../middlewares/group/GroupValidator';
 import GroupController from '../../../controllers/GroupController';
 
 const router = Router();
@@ -13,6 +13,6 @@ router.put('/:groupId', schemas.update, handleValidationErrors, async (req: Requ
 router.patch('/:groupId/status', schemas.updateStatus, handleValidationErrors, async (req: Request, res: Response) => { groupController.changeGroupStatus(req, res); });
 router.delete('/:groupId', schemas.delete, handleValidationErrors, async (req: Request, res: Response) => { groupController.deleteGroupById(req, res); });
 router.post('/members', schemas.addOrRemoverMember, handleValidationErrors, async (req: Request, res: Response) => { groupController.addUserToGroup(req, res); });
-router.post('/members/removal', schemas.addOrRemoverMember, handleValidationErrors, async (req: Request, res: Response) => { groupController.removeUserFromGroup(req, res); });
+router.delete('/members/removal', schemas.addOrRemoverMember, handleValidationErrors, async (req: Request, res: Response) => { groupController.removeUserFromGroup(req, res); });
 
 export default router;

@@ -11,6 +11,7 @@ interface GroupAttributes {
     users_id: number;
     created_at: Date;
     updated_at?: Date;
+    deleted_at?: Date;
 }
 
 type GroupCreationAttributes = Omit<GroupAttributes, 'id' | 'created_at' | 'updated_at'>;
@@ -22,10 +23,13 @@ class Group extends Model<GroupAttributes, GroupCreationAttributes> implements G
     public users_id!: number;
     public created_at!: Date;
     public updated_at?: Date;
+    public deleted_at?: Date;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
     public readonly local?: Local;
+    public readonly deletedAt?: Date;
+
 
 }
 
@@ -62,6 +66,11 @@ Group.init({
         allowNull: true,
         field: 'updated_at',
     },
+    deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'deleted_at',
+    },
 }, {
     sequelize,
     modelName: 'group',
@@ -69,6 +78,8 @@ Group.init({
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
+    paranoid: true,
 });
 
 Group.hasOne(Local, { foreignKey: 'groups_id', as: 'local' });

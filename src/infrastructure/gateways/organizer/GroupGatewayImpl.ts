@@ -24,8 +24,8 @@ import CreateLocalDTO from "../../../application/dto/local/CreateLocalDTO";
 import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 
 // Mappers
-import { mapGroupToDTO } from '../../../application/mappers/GroupMapper';
 import sequelize from "../../database";
+import { DeleteGroupUseCase } from "../../../application/usecases/organizer/group/DeleteGroupUseCase";
 
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
@@ -38,6 +38,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     private updateGroupStatusUseCase: UpdateGroupStatusUseCase;
     private registerGroupUserUseCase: RegisterGroupUserUseCase;
     private removeGroupUserUseCase: RemoveGroupUserUseCase;
+    private deleteGroupUseCase: DeleteGroupUseCase
 
     constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
@@ -48,6 +49,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         this.updateGroupStatusUseCase = new UpdateGroupStatusUseCase();
         this.registerGroupUserUseCase = new RegisterGroupUserUseCase();
         this.removeGroupUserUseCase = new RemoveGroupUserUseCase();
+        this.deleteGroupUseCase = new DeleteGroupUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -73,12 +75,9 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return group !== null;
     }
 
-    async getUserGroupsByUserId(request: Request): Promise<any> {
+    async getUserGroupsByUserId(request: Request): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
         const userId = request.userId as string;
-        const groups = await this.getGroupsUseCase.execute(userId);
-        const groupDTOs = await Promise.all(groups.map(mapGroupToDTO));
-
-        return groupDTOs;
+        return await this.getGroupsUseCase.execute(userId);
     }
 
     async getGroupById(request: Request): Promise<GroupDTO> {
@@ -88,15 +87,15 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return await this.getGroupDetailsUseCase.execute(groupId, userId);
     }
 
-    async updateGroupById(request: Request): Promise<any> {
+    async updateGroupById(request: Request): Promise<number> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
         const { description, status } = request.body as UpdateGroupRequest
 
-        await this.updateGroupUseCase.execute(groupId, userId, description, status);
+        return await this.updateGroupUseCase.execute(groupId, userId, description, status);
     }
 
-    async changeGroupStatus(request: Request): Promise<any> {
+    async changeGroupStatus(request: Request): Promise<number> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
         const status = request.query.active as unknown as boolean;
@@ -104,12 +103,11 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
-    async deleteGroupById(request: Request): Promise<any> {
+    async deleteGroupById(request: Request): Promise<void> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
-        const status = false;
 
-        return this.updateGroupStatusUseCase.execute(groupId, userId, status);
+        this.deleteGroupUseCase.execute(groupId, userId);
     }
 
     async addUserToGroup(request: Request): Promise<void> {
@@ -149,6 +147,5 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         return { userId, groupId, req }
 
     }
-
 
 }

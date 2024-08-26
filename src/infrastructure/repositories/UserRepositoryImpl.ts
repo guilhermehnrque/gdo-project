@@ -25,7 +25,7 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
         });
     }
 
-    getUserByEmail(email: string): Promise<UserModel | null>{
+    getUserByEmail(email: string): Promise<UserModel | null> {
         return UserModel.findOne({
             where: {
                 email,
@@ -45,7 +45,11 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
     save(user: UserModel): Promise<UserModel> {
         return user.save();
     }
-    
+
+    getUserByPK(userId: number): Promise<UserModel | null> {
+        return UserModel.findOne({ where: { id: userId } });
+    }
+
 }
 
 export default UserRepositoryImpl;

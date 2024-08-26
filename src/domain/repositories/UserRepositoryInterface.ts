@@ -8,4 +8,5 @@ export interface AuthRepositoryInterface {
     getUserByEmail(email: string): Promise<UserModel | null>;
     save(user: UserModel): Promise<UserModel>;
     getUserByToken(token: string): Promise<UserModel | null>;
+    getUserByPK(userId: number): Promise<UserModel | null>
 }
