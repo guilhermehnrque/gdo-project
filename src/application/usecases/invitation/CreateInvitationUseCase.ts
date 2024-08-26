@@ -35,11 +35,7 @@ export class CreateInvitationUseCase {
 
         const invitationEntity = await InvitationEntity.createFromPayload(group.id, user.id, InvitationStatus.PENDING, userOwner.id);
         
-        const invitationCreated = await this.invitationRepository.createInvitation(invitationEntity);
-
-        if (!invitationCreated) {
-            throw new Error('Error creating invitation');
-        }
+        await this.invitationRepository.createInvitation(invitationEntity);
         
         return invitationEntity.code;
     }
