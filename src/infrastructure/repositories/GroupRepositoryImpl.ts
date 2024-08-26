@@ -17,16 +17,24 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
     }
 
     async getUserGroupsByUserId(id: number): Promise<Group[]> {
-        return await Group.findAll({
-            where: { users_id: id},
-            include: [
-                {
-                    model: Local,
-                    as: 'local',
-                }
-            ],
-            paranoid: false
-        });
+
+        try {
+            return await Group.findAll({
+                where: { users_id: id },
+                include: [
+                    {
+                        model: Local,
+                        as: 'local',
+                    }
+                ],
+                paranoid: false
+            });
+        }
+        catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error creating group: ${customError.message}`);
+        }
+
     }
 
     async getGroupById(groupId: number, userId: number): Promise<Group | null> {

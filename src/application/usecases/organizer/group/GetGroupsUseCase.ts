@@ -1,10 +1,8 @@
 import Group from '../../../../domain/models/GroupModel';
 import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
 import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
-import DatabaseError from '../../../erros/DatabaseError';
 import { mapGroupToDTO } from '../../../../application/mappers/GroupMapper';
 import { GroupDTO } from '../../../dto/group/GroupDTO';
-
 
 export class GetGroupsUseCase {
 
@@ -18,15 +16,10 @@ export class GetGroupsUseCase {
 
     async execute(userId: string): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
         const user = await this.getUserByUserId(userId);
+        const groups = await this.groupRepository.getUserGroupsByUserId(user?.id!);
+        const groupDTO = await this.createGroupDTO(groups);
 
-        try {
-            const groups = await this.groupRepository.getUserGroupsByUserId(user?.id!);
-            const groupDTO =  await this.createGroupDTO(groups);
-            return this.categorizeGroupsByStatus(groupDTO);
-        } catch (error) {
-            const { message } = error as Error;
-            throw new DatabaseError(`Failed to get groups: ${message}`);
-        }
+        return this.categorizeGroupsByStatus(groupDTO);
     }
 
     async createGroupDTO(groups: Group[]): Promise<GroupDTO[]> {
@@ -42,7 +35,7 @@ export class GetGroupsUseCase {
             }
             return acc;
         }, { active: [], inactive: [] });
-    
+
         return groupsWithStatus;
     }
 
