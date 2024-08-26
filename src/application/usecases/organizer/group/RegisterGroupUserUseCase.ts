@@ -36,7 +36,7 @@ export class RegisterGroupUserUseCase {
     }
 
     async validateAndGetGroupAndUser(groupId: number, userId: number): Promise<Group> {
-        const group = await this.groupRepository.getGroupById(groupId, userId);
+        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, userId);
 
         if (!group) {
             throw new GroupNotFoundError();

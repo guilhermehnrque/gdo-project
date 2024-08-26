@@ -37,7 +37,7 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     }
 
-    async getGroupById(groupId: number, userId: number): Promise<Group | null> {
+    async getOwnerGroupByIdAndUserId(groupId: number, userId: number): Promise<Group | null> {
         try {
             return await Group.findOne({
                 where: { id: groupId, users_id: userId },
@@ -99,6 +99,15 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] Error changing group status: ${customError.message}`);
+        }
+    }
+
+    async getGroupById(groupId: number): Promise<Group | null> {
+        try {
+            return await Group.findByPk(groupId);
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error getting group by id: ${customError.message}`);
         }
     }
 

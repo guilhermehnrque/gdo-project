@@ -30,7 +30,7 @@ export class DeleteGroupUseCase {
     }
 
     async getUserGroup(userId: number, groupId: number) {
-        const group = await this.groupRepository.getGroupById(groupId, userId);
+        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, userId);
 
         if (group == null) {
             logger.warn(`Group with id ${groupId} not found`);

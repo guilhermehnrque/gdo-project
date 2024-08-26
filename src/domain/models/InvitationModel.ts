@@ -2,17 +2,19 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 
 interface InvitationAttributes {
-    id?: number;
+    id: number;
     code: string;
     status: string;
     users_id: number;
-    expires_at: Date;
-    created_at: Date;
-    updated_at: Date;
+    expires_at: Date | undefined;
+    created_at?: Date;
+    updated_at?: Date;
     groups_id: number;
+    created_by: number | undefined;
+    is_expired?: boolean;
 }
 
-type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at'>;
+type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at' | 'is_expired' >;
 
 class Invitation extends Model<InvitationAttributes, InvitationCreationAttributes> implements InvitationAttributes {
     public id!: number;
@@ -23,6 +25,8 @@ class Invitation extends Model<InvitationAttributes, InvitationCreationAttribute
     public created_at!: Date;
     public updated_at!: Date;
     public groups_id!: number;
+    public created_by!: number;
+    public is_expired!: boolean;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -64,6 +68,15 @@ Invitation.init(
         groups_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+        },
+        created_by: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        is_expired: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
     },
     {

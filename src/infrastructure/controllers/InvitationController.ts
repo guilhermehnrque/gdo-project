@@ -12,8 +12,12 @@ export class InvitationController {
 
     async createInvitation(request: Request, response: Response) {
         try {
-            await this.invitationGateway.createInvitation(request);
-            return response.status(201).json({ message: "O convite foi criado :3" });
+            const inviteCode = await this.invitationGateway.createInvitation(request);
+            return response.status(201).json({
+                message: "Convite criado ", data: {
+                    invite_code: inviteCode
+                }
+            });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
