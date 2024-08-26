@@ -15,13 +15,13 @@ export class UpdateGroupStatusUseCase {
         this.userRepository = new UserRepositoryImpl();
     }
 
-    async execute(groupId: number, userId: string, status: boolean): Promise<void> {
+    async execute(groupId: number, userId: string, status: boolean): Promise<number> {
         const user = await this.getUserByUserId(userId);
         const group = await this.getUserGroup(user?.id!, groupId);
 
         const groupEntity = await GroupEntity.createFromPayloadUpdate(group.id, user?.id!, group?.description, status)
 
-        await this.groupRepository.changeGroupStatus(groupEntity);
+        return await this.groupRepository.changeGroupStatus(groupEntity);
     }
 
     async getUserByUserId(userId: string) {

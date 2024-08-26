@@ -18,13 +18,14 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     async getUserGroupsByUserId(id: number): Promise<Group[]> {
         return await Group.findAll({
-            where: { users_id: id },
+            where: { users_id: id},
             include: [
                 {
                     model: Local,
                     as: 'local',
                 }
-            ]
+            ],
+            paranoid: false
         });
     }
 
@@ -52,43 +53,45 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
         return group !== null;
     }
 
-    async updateGroupById(groupEntity: GroupEntity): Promise<any> {
+    async updateGroupById(groupEntity: GroupEntity): Promise<number> {
         try {
-            return await Group.update(groupEntity.toUpdatePayload(), {
+            const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(), {
                 where: {
                     id: groupEntity.id!,
                     users_id: groupEntity.users_id
                 }
             });
+            return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] Error getting group by id: ${customError.message}`);
         }
     }
 
-    async changeGroupStatus(groupEntity: GroupEntity): Promise<any> {
+    async changeGroupStatus(groupEntity: GroupEntity): Promise<number> {
         try {
-            return await Group.update(groupEntity.toUpdatePayload(),
+            const [affectedCount] = await Group.update(groupEntity.toUpdatePayload(),
                 {
                     where: {
                         id: groupEntity.id!,
                         users_id: groupEntity.users_id
                     }
                 });
+            return affectedCount;
         } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error changing group status: ${customError.message}`);
         }
     }
 
-    async deleteGroupById(): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-
-    async addUserToGroup(): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-
-    async removeUserFromGroup(): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteGroupById(groupId: number, userId: number): Promise<void> {
+        try {
+            await Group.destroy({ where: { id: groupId, users_id: userId } });
+        }
+        catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error changing group status: ${customError.message}`);
+        }
     }
 
 }
