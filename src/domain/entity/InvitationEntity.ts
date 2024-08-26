@@ -1,9 +1,11 @@
+import { InvitationStatus } from '../enums/InvitationStatus';
+
 export class InvitationEntity {
     public id?: number | null;
     public code: string;
     public group_id: number;
     public user_id: number;
-    public status: string;
+    public status: InvitationStatus;
     public expires_at?: Date;
     public created_at?: Date;
     public updated_at?: Date;
@@ -13,7 +15,7 @@ export class InvitationEntity {
     constructor(
         group_id: number,
         user_id: number,
-        status: string,
+        status: InvitationStatus,
         code?: string,
         id?: number | null,
         created_at?: Date,
@@ -34,7 +36,7 @@ export class InvitationEntity {
         this.is_expired = is_expired ?? false;
     }
 
-    static async createFromPayload(group_id: number, user_id: number, status: string, userIdOwner: number): Promise<InvitationEntity> {
+    static async createFromPayload(group_id: number, user_id: number, status: InvitationStatus, userIdOwner: number): Promise<InvitationEntity> {
         return new InvitationEntity(group_id, user_id, status, undefined, null, undefined, undefined, userIdOwner);
     }
 
@@ -51,7 +53,7 @@ export class InvitationEntity {
     toRegister() {
         return {
             code: this.code,
-            status: this.status,
+            status: this.status.toString(),
             users_id: this.user_id,
             groups_id: this.group_id,
             expires_at: this.expires_at,

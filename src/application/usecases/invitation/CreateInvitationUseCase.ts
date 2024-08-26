@@ -1,10 +1,14 @@
 import { InvitationEntity } from "../../../domain/entity/InvitationEntity";
+import { InvitationStatus } from "../../../domain/enums/InvitationStatus";
 import Group from "../../../domain/models/GroupModel";
 import { User } from "../../../domain/models/UserModel";
+import logger from "../../../infrastructure/configs/LoggerConfig";
 import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
 import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+import CustomError from "../../erros/CustomError";
 import GroupNotFoundError from "../../erros/groups/GroupNotFoundError";
+import InvitationPendingError from "../../erros/invitation/InvitationPendingError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
 
 export class CreateInvitationUseCase {
@@ -23,8 +27,13 @@ export class CreateInvitationUseCase {
         const user = await this.getUserByUserPk(userId);
         const userOwner = await this.getUserByUserId(ownerInvitationUserId);
         const group = await this.getGroupById(groupId);
+        const hasInvitation = await this.validateIfUserHasInvitation(user.id, groupId);
 
-        const invitationEntity = await InvitationEntity.createFromPayload(group.id, user.id, 'PENDING', userOwner.id);
+        if (hasInvitation) {
+            this.logAndThrowError(new InvitationPendingError(), `[CreateInvitationUseCase] User already has a pending invitation -> ${user.id}`);
+        }
+
+        const invitationEntity = await InvitationEntity.createFromPayload(group.id, user.id, InvitationStatus.PENDING, userOwner.id);
         
         const invitationCreated = await this.invitationRepository.createInvitation(invitationEntity);
 
@@ -63,6 +72,22 @@ export class CreateInvitationUseCase {
         }
 
         return group
+    }
+
+    async validateIfUserHasInvitation(userId: number, groupId: number): Promise<boolean> {
+        const invitation = await this.invitationRepository.getInvitationByStatusAndGroupId(InvitationStatus.PENDING, groupId, false);
+
+        if (invitation == null) {
+            return false;
+        }
+
+        return invitation.users_id == userId;
+    }
+
+
+    private logAndThrowError(error: CustomError, context: string): void {
+        logger.error(context);
+        throw error;
     }
 
 }

@@ -7,10 +7,10 @@ import DatabaseError from "../../application/erros/DatabaseError";
 export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
 
     async createInvitation(invitationEntity: InvitationEntity): Promise<boolean> {
-        try{
+        try {
             await InvitationModel.create(invitationEntity.toRegister());
             return true;
-        } catch (error) {  
+        } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[InvitationRepositoryImpl] Error creating invitation: ${customError.message}`);
         }
@@ -26,6 +26,26 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
 
     deleteInvitationByCode(request: Request): Promise<any> {
         throw new Error("Method not implemented.");
+    }
+
+    async getInvitationByStatusAndGroupId(status: string, groupId: number, isExpired: boolean): Promise<InvitationModel | null> {
+        try {
+            return await InvitationModel.findOne({
+                where: {
+                    status: status,
+                    groups_id: groupId,
+                    is_expired: isExpired
+                }
+            });
+        }
+        catch (error) {
+            const customError = error as CustomError;
+            throw this.handleError(customError, 'Error getting invitation by status and group id');;
+        }
+    }
+
+    private handleError(error: CustomError, customMessage: string): CustomError {
+        return new DatabaseError(`[InvitationRepositoryImpl] ${customMessage} ${error.message}`);
     }
 
 }
