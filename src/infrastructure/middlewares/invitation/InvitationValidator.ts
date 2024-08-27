@@ -3,9 +3,9 @@ import handleValidationErrors from '../HandleValidationErrors';
 
 const schemas = {
     register: [
-        body('invite.user_id')
-            .notEmpty().withMessage('user_id é obrigatório')
-            .isNumeric().withMessage('user_id deve ser uma string'),
+        body('invite.guest_id')
+            .notEmpty().withMessage('guest_id é obrigatório')
+            .isString().withMessage('guest_id deve ser uma string'),
 
         body('invite.group_id')
             .notEmpty().withMessage('group_id é obrigatório')

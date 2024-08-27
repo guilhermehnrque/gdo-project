@@ -1,9 +1,17 @@
+// Entities
 import GroupEntity from "../../domain/entity/GroupEntity";
+
+// Interfaces
 import { GroupRepositoryInterface } from "../../domain/repositories/GroupRepositoryInterface";
+
+// Models
 import Group from "../../domain/models/GroupModel";
+import Local from "../../domain/models/LocalModel";
+
+// Errors
 import DatabaseError from "../../application/erros/DatabaseError";
 import CustomError from "../../application/erros/CustomError";
-import Local from "../../domain/models/LocalModel";
+
 
 export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 

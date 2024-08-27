@@ -1,10 +1,19 @@
-import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
-import InvitationNotFoundError from "../../erros/invitation/InvitationNotFoundError";
-import logger from "../../../infrastructure/configs/LoggerConfig";
-import { InvitationDTO } from "../../dto/invitation/InvitationDTO";
+// Models
 import InvitationModel from "../../../domain/models/InvitationModel";
-import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
 import { User } from "../../../domain/models/UserModel";
+
+// DTOs
+import { InvitationDTO } from "../../dto/invitation/InvitationDTO";
+
+// Repositories
+import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
+import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+
+// Errors
+import InvitationNotFoundError from "../../erros/invitation/InvitationNotFoundError";
+
+// Configs
+import logger from "../../../infrastructure/configs/LoggerConfig";
 
 export class GetInvitationUseCase {
 
@@ -16,24 +25,50 @@ export class GetInvitationUseCase {
         this.userRepository = new UserRepositoryImpl();
     }
 
-    async execute(invitationCode: string): Promise<InvitationDTO> {
-        const invitation = await this.invitationRepository.getInvitationByCode(invitationCode);
+    async execute(invitationCode: string, userId: string): Promise<Object> {
+        const user = await this.getUser(userId);
+        const invitation = await this.invitationRepository.getInvitationByCodeAndUserId(invitationCode, user?.id!);
 
-        if (invitation == null || invitation == undefined) {
+        if (!invitation) {
             this.logAndThrowError(new InvitationNotFoundError(), `Error getting invitation by code: ${invitationCode}`);
         }
 
-        const invitedUser = await this.getUserId(invitation?.users_id!);
-        const invitationUser = await this.getUserId(invitation?.created_by!);
+        const invitationUser = await this.getUserByPk(invitation!.inviting_user_id);
+        const invitedUser = await this.getUserByPk(invitation!.invited_user_id);
 
-        return this.invitationDTO(invitation!, invitedUser?.user_id!, invitationUser?.user_id!);
+        this.validateUserPermissions(invitation!, invitationUser?.id!, invitedUser?.id!);
+
+        return this.toInvitationDTO(invitation!, invitedUser?.user_id!, invitationUser?.user_id!)
+                .toResponse();
     }
 
-    private async getUserId(id: number): Promise<User | null> {
-        return await this.userRepository.getUserByPK(id);
+    private validateUserPermissions(invitation: InvitationModel, invitationUserId: number, invitedUserId: number): void {
+        if (!this.isInvitationOwner(invitation, invitationUserId)) {
+            this.logAndThrowError(new Error(), `User ${invitationUserId} is not the owner of the invitation ${invitation.code}`);
+        }
+
+        if (!this.isInvitedUser(invitation, invitedUserId)) {
+            this.logAndThrowError(new Error(), `User ${invitedUserId} does not have permission to access invitation ${invitation.code}`);
+        }
     }
 
-    private invitationDTO(invitation: InvitationModel, invitedId: string, invitationUser: string): InvitationDTO {
+    private isInvitationOwner(invitation: InvitationModel, userId: number): boolean {
+        return invitation.inviting_user_id === userId;
+    }
+
+    private isInvitedUser(invitation: InvitationModel, userId: number): boolean {
+        return invitation.invited_user_id === userId;
+    }
+
+    private async getUserByPk(id: number): Promise<User | null> {
+        return this.userRepository.getUserByPK(id);
+    }
+
+    private async getUser(id: string): Promise<User | null> {
+        return this.userRepository.getUserByUserId(id);
+    }
+
+    private toInvitationDTO(invitation: InvitationModel, invitedId: string, invitationUser: string): InvitationDTO {
         return new InvitationDTO(
             invitation.code,
             invitation.status,
@@ -42,7 +77,7 @@ export class GetInvitationUseCase {
             invitedId,
             invitation.groups_id,
             invitationUser,
-            invitation.updated_at
+            invitation.expires_at
         );
     }
 

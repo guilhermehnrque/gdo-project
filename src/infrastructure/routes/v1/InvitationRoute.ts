@@ -7,7 +7,8 @@ const router = express.Router();
 const invitationController = new InvitationController();
 
 router.post('/', [...schemas.register], handleValidationErrors, (req: Request, res: Response) => { invitationController.createInvitation(req, res); });
-router.get('/:invitationCode', (req: Request, res: Response) => { invitationController.getInvitationByCode(req, res); });
+router.get('/:invitationCode', [...schemas.getInvite], handleValidationErrors, (req: Request, res: Response) => { invitationController.getInvitationByCode(req, res); });
+router.patch('/:invitationCode/accept', [...schemas.getInvite], handleValidationErrors, (req: Request, res: Response) => { invitationController.acceptInvitationByCode(req, res); });
 
 // PUT /v1/invitation/:id
 router.put('/:id', (req: Request, res: Response) => {

@@ -5,12 +5,12 @@ interface InvitationAttributes {
     id: number;
     code: string;
     status: string;
-    users_id: number;
+    invited_user_id: number;
     expires_at: Date | undefined;
     created_at?: Date;
     updated_at?: Date;
     groups_id: number;
-    created_by: number | undefined;
+    inviting_user_id: number | undefined;
     is_expired?: boolean;
 }
 
@@ -20,12 +20,12 @@ class Invitation extends Model<InvitationAttributes, InvitationCreationAttribute
     public id!: number;
     public code!: string;
     public status!: string;
-    public users_id!: number;
+    public invited_user_id!: number;
     public expires_at!: Date;
     public created_at!: Date;
     public updated_at!: Date;
     public groups_id!: number;
-    public created_by!: number;
+    public inviting_user_id!: number;
     public is_expired!: boolean;
 
     public readonly createdAt!: Date;
@@ -47,7 +47,7 @@ Invitation.init(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        users_id: {
+        invited_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -69,7 +69,7 @@ Invitation.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        created_by: {
+        inviting_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

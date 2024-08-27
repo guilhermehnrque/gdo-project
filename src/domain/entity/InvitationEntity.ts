@@ -4,34 +4,34 @@ export class InvitationEntity {
     public id?: number | null;
     public code: string;
     public group_id: number;
-    public user_id: number;
+    public invited_user_id: number;
     public status: InvitationStatus;
     public expires_at?: Date;
     public created_at?: Date;
     public updated_at?: Date;
-    public created_by?: number;
+    public inviting_user_id?: number;
     public is_expired?: boolean | null;
 
     constructor(
         group_id: number,
-        user_id: number,
+        invited_user_id: number,
         status: InvitationStatus,
         code?: string,
         id?: number | null,
         created_at?: Date,
         updated_at?: Date,
-        created_by?: number,
+        inviting_user_id?: number,
         expires_at?: Date,
         is_expired?: boolean | null
     ) {
         this.id = id ?? null;
         this.code = code ?? this.generateCreationCode();
         this.group_id = group_id;
-        this.user_id = user_id;
+        this.invited_user_id = invited_user_id;
         this.status = status;
         this.created_at = created_at;
         this.updated_at = updated_at;
-        this.created_by = created_by;
+        this.inviting_user_id = inviting_user_id;
         this.expires_at = expires_at ?? this.generateExpirationDate();
         this.is_expired = is_expired ?? false;
     }
@@ -54,10 +54,10 @@ export class InvitationEntity {
         return {
             code: this.code,
             status: this.status.toString(),
-            users_id: this.user_id,
+            invited_user_id: this.invited_user_id,
             groups_id: this.group_id,
             expires_at: this.expires_at,
-            created_by: this.created_by
+            inviting_user_id: this.inviting_user_id
         };
     }
 }

@@ -14,7 +14,7 @@ app.use('/api/v1/auth', AuthRoute)
 app.use('/api/v1/organizer/groups', bearerToken.validate, GroupRoute)
 app.use('/api/v1/invitations', bearerToken.validate, InvitationRoute)
 
-app.get('/api/protected', bearerToken.validate, (request: Request, response: Response) => {
+app.get('/api/v1/protected', bearerToken.validate, (request: Request, response: Response) => {
     response.json({ message: 'You have access to this protected route!', userId: request.userId, userType: request.userType });
 })
 

@@ -1,16 +1,30 @@
+// Entities
 import { InvitationEntity } from "../../../domain/entity/InvitationEntity";
+
+// Enums
 import { InvitationStatus } from "../../../domain/enums/InvitationStatus";
+
+// Models
 import Group from "../../../domain/models/GroupModel";
 import { User } from "../../../domain/models/UserModel";
+
+// Adapters
 import { EmailAdapterImpl } from "../../../infrastructure/adapters/EmailAdapterImpl";
+
+// Configs
 import logger from "../../../infrastructure/configs/LoggerConfig";
+
+// Repositories
 import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
 import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+
+// Errors
 import CustomError from "../../erros/CustomError";
 import GroupNotFoundError from "../../erros/groups/GroupNotFoundError";
 import InvitationPendingError from "../../erros/invitation/InvitationPendingError";
 import UserNotFoundError from "../../erros/UserNotFoundError";
+
 
 export class CreateInvitationUseCase {
 
@@ -82,7 +96,7 @@ export class CreateInvitationUseCase {
             return false;
         }
 
-        return invitation.users_id == userId;
+        return invitation.invited_user_id == userId;
     }
 
     private logAndThrowError(error: CustomError, context: string): void {

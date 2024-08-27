@@ -129,6 +129,7 @@ User.init({
 });
 
 User.hasMany(Group, { foreignKey: 'users_id' });
-User.hasMany(InvitationModel, { foreignKey: 'users_id' });
+User.hasMany(InvitationModel, { foreignKey: 'invited_user_id' });
+User.hasMany(InvitationModel, { foreignKey: 'inviting_user_id' });
 
 export { User, UserCreationAttributes };
