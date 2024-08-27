@@ -19,6 +19,16 @@ const schemas = {
             .isString().withMessage('Código de convite deve ser uma string'),
     ],
 
+    handleInvitation: [
+        param('invitationCode')
+            .notEmpty().withMessage('Código de convite é obrigatório')
+            .isString().withMessage('Código de convite deve ser uma string'),
+
+        param('status')
+            .notEmpty().withMessage('Status é obrigatório')
+            .isString().withMessage('Status deve ser uma string'),
+    ],
+
 
 };
 

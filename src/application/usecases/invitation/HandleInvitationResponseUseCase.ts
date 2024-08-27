@@ -15,8 +15,9 @@ import InvitationAcceptError from "../../erros/invitation/InvitationAcceptError"
 
 // Configs
 import logger from "../../../infrastructure/configs/LoggerConfig";
+import InvitationInvalidStatusError from "../../erros/invitation/InvitationInvalidStatusError";
 
-export class AcceptInvitationUseCase {
+export class HandleInvitationResponseUseCase {
 
     private invitationRepository: InvitationRepositoryImpl;
     private userRepository: UserRepositoryImpl;
@@ -26,13 +27,16 @@ export class AcceptInvitationUseCase {
         this.userRepository = new UserRepositoryImpl();
     }
 
-    async execute(invitationCode: string, invitedUserId: string): Promise<boolean> {
+    async execute(invitationCode: string, invitedUserId: string, status: string): Promise<boolean> {
         const invitedUser = await this.getUser(invitedUserId);
         const invitation = await this.invitationRepository.getInvitationByCodeAndUserId(invitationCode, invitedUser?.id!);
 
         await this.makeValidations(invitation!, invitationCode, invitedUser!);
 
-        invitation!.status = InvitationStatus.ACCEPTED;
+        const statusEnum = this.validateAndgetStatusByEnum(status);
+
+        invitation!.status = statusEnum.toString();
+
         return await this.invitationRepository.save(invitation!);
     }
 
@@ -41,8 +45,8 @@ export class AcceptInvitationUseCase {
             throw new InvitationNotFoundError();
         }
 
-        if (invitation.status === InvitationStatus.ACCEPTED) {
-            this.logAndThrowError(new InvitationAcceptError(), `Invitation ${invitationCode} already accepted`);
+        if (invitation.status != InvitationStatus.PENDING) {
+            this.logAndThrowError(new InvitationAcceptError(), `Invitation ${invitationCode} already accepted or rejected`);
         }
 
         if (invitation.inviting_user_id == invitedUser.id) {
@@ -52,6 +56,16 @@ export class AcceptInvitationUseCase {
 
     private async getUser(id: string): Promise<User | null> {
         return await this.userRepository.getUserByUserId(id);
+    }
+
+    private validateAndgetStatusByEnum(status: string): InvitationStatus {
+        const upperCaseStatus = status.toUpperCase();
+
+        if ((upperCaseStatus !== InvitationStatus.ACCEPTED) && (upperCaseStatus !== InvitationStatus.REJECTED)) {
+            throw new InvitationInvalidStatusError();
+        }
+
+        return InvitationStatus[status.toUpperCase() as keyof typeof InvitationStatus];
     }
 
     logAndThrowError(error: Error, message: string) {

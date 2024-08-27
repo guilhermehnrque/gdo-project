@@ -7,7 +7,7 @@ import { InvitationGatewayInterface } from "../../../application/interfaces/Invi
 // Use Cases
 import { CreateInvitationUseCase } from "../../../application/usecases/invitation/CreateInvitationUseCase";
 import { GetInvitationUseCase } from "../../../application/usecases/invitation/GetInvitationUseCase";
-import { AcceptInvitationUseCase } from "../../../application/usecases/invitation/AcceptInvitationUseCase";
+import { HandleInvitationResponseUseCase } from "../../../application/usecases/invitation/HandleInvitationResponseUseCase";
 
 // Requests
 import CreateInvitationRequest from "../../requests/invitation/CreateInvitationRequest";
@@ -17,12 +17,12 @@ export class InvitationGatewayImpl implements InvitationGatewayInterface {
 
     private createInvitationUseCase: CreateInvitationUseCase;
     private getInvitationUseCase: GetInvitationUseCase;
-    private acceptInvitationUseCase: AcceptInvitationUseCase;
+    private handlerInvitationResponseUseCase: HandleInvitationResponseUseCase;
 
     constructor() {
         this.createInvitationUseCase = new CreateInvitationUseCase();
         this.getInvitationUseCase = new GetInvitationUseCase();
-        this.acceptInvitationUseCase = new AcceptInvitationUseCase();
+        this.handlerInvitationResponseUseCase = new HandleInvitationResponseUseCase();
     }
 
     async createInvitation(request: Request): Promise<string> {
@@ -40,11 +40,12 @@ export class InvitationGatewayImpl implements InvitationGatewayInterface {
         return this.getInvitationUseCase.execute(invitationCode, userId);
     }
 
-    async acceptInvitationByCode(request: Request): Promise<boolean> {
+    async acceptOrRecuseInvitationByCode(request: Request): Promise<boolean> {
         const userId = request.userId as string;
         const invitationCode = request.params.invitationCode;
+        const status = request.params.status;
 
-        return this.acceptInvitationUseCase.execute(invitationCode, userId);
+        return this.handlerInvitationResponseUseCase.execute(invitationCode, userId, status);
     }
 
     deleteInvitationByCode(request: Request): Promise<any> {

@@ -34,9 +34,9 @@ export class InvitationController {
         }
     }
 
-    async acceptInvitationByCode(request: Request, response: Response) {
+    async acceptOrRecuseInvitationByCode(request: Request, response: Response) {
         try {
-            await this.invitationGateway.acceptInvitationByCode(request);
+            await this.invitationGateway.acceptOrRecuseInvitationByCode(request);
             return response.status(201).json({ message: "Convite aceito" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
