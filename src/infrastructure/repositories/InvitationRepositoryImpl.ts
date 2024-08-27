@@ -3,6 +3,7 @@ import { InvitationRepositoryInterface } from "../../domain/repositories/Invitat
 import InvitationModel from "../../domain/models/InvitationModel";
 import CustomError from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
+import logger from "../configs/LoggerConfig";
 
 export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
 
@@ -12,12 +13,21 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
             return true;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[InvitationRepositoryImpl] Error creating invitation: ${customError.message}`);
+            throw this.handleError(customError, `Error creating invitation: ${customError.message}`);
         }
     }
 
-    getInvitationByCode(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
+    async getInvitationByCode(invitationCode: string): Promise<InvitationModel | null> {
+        try {
+            return await InvitationModel.findOne({
+                where: {
+                    code: invitationCode
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw this.handleError(customError, `Error getting invitation: ${customError.message}`);
+        }
     }
 
     updateInvitationByCode(request: Request): Promise<any> {
@@ -40,11 +50,12 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         }
         catch (error) {
             const customError = error as CustomError;
-            throw this.handleError(customError, 'Error getting invitation by status and group id');;
+            throw this.handleError(customError, 'Error getting invitation by status and group id');
         }
     }
 
     private handleError(error: CustomError, customMessage: string): CustomError {
+        logger.error(`[InvitationRepositoryImpl] ${customMessage} ${error.message}`);
         return new DatabaseError(`[InvitationRepositoryImpl] ${customMessage} ${error.message}`);
     }
 

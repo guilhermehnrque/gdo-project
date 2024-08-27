@@ -2,6 +2,7 @@ import { InvitationEntity } from "../../../domain/entity/InvitationEntity";
 import { InvitationStatus } from "../../../domain/enums/InvitationStatus";
 import Group from "../../../domain/models/GroupModel";
 import { User } from "../../../domain/models/UserModel";
+import { EmailAdapterImpl } from "../../../infrastructure/adapters/EmailAdapterImpl";
 import logger from "../../../infrastructure/configs/LoggerConfig";
 import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
@@ -16,15 +17,17 @@ export class CreateInvitationUseCase {
     private invitationRepository: InvitationRepositoryImpl;
     private userRepository: UserRepositoryImpl;
     private groupRepository: GroupRepositoryImpl;
+    private emailAdapter: EmailAdapterImpl;
 
     constructor() {
         this.invitationRepository = new InvitationRepositoryImpl();
         this.userRepository = new UserRepositoryImpl();
         this.groupRepository = new GroupRepositoryImpl();
+        this.emailAdapter = new EmailAdapterImpl();
     }
 
-    async execute(userId: number, groupId: number, ownerInvitationUserId: string): Promise<string> {
-        const user = await this.getUserByUserPk(userId);
+    async execute(guestId: string, groupId: number, ownerInvitationUserId: string): Promise<string> {
+        const user = await this.getUserByUserUserId(guestId);
         const userOwner = await this.getUserByUserId(ownerInvitationUserId);
         const group = await this.getGroupById(groupId);
         const hasInvitation = await this.validateIfUserHasInvitation(user.id, groupId);
@@ -36,12 +39,14 @@ export class CreateInvitationUseCase {
         const invitationEntity = await InvitationEntity.createFromPayload(group.id, user.id, InvitationStatus.PENDING, userOwner.id);
         
         await this.invitationRepository.createInvitation(invitationEntity);
+
+        this.prepareEmail(user, group, invitationEntity.code);
         
         return invitationEntity.code;
     }
 
-    async getUserByUserPk(userId: number): Promise<User> {
-        const user = await this.userRepository.getUserByPK(userId);
+    async getUserByUserUserId(guestId: string): Promise<User> {
+        const user = await this.userRepository.getUserByUserId(guestId);
 
         if (user == null) {
             throw new UserNotFoundError();
@@ -80,10 +85,24 @@ export class CreateInvitationUseCase {
         return invitation.users_id == userId;
     }
 
-
     private logAndThrowError(error: CustomError, context: string): void {
         logger.error(context);
         throw error;
+    }
+
+    private prepareEmail(user: User, group: Group, invitationCode: string): void {
+        const email = user.email;
+
+        const mailOptions = {
+            to: email,
+            subject: '[GDO] Convite para grupo',
+            text: `Você foi convidado para participar do grupo ${group.description} no GDO.\n\n
+                    Por favor, clique no link a seguir ou cole-o no seu navegador para aceitar o convite:\n\n
+                    http://localhost:3000/invitation/accept/${invitationCode}\n\n
+                    Se você não solicitou isso, por favor, ignore este e-mail.\n`,
+        };
+
+        this.emailAdapter.sendEmail(mailOptions);
     }
 
 }
