@@ -22,7 +22,6 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
 
         const updateData = {
             status: invitation.status,
-            is_expired: invitation.is_expired,
             updatedAt: new Date(),
             expires_at: invitation.expires_at,
             inviting_user_id: invitation.inviting_user_id,
@@ -74,13 +73,12 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         throw new Error("Method not implemented.");
     }
 
-    async getInvitationByStatusAndGroupId(status: string, groupId: number, isExpired: boolean): Promise<InvitationModel | null> {
+    async getInvitationByStatusAndGroupId(status: string, groupId: number): Promise<InvitationModel | null> {
         try {
             return await InvitationModel.findOne({
                 where: {
                     status: status,
-                    groups_id: groupId,
-                    is_expired: isExpired
+                    groups_id: groupId
                 }
             });
         }

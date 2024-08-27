@@ -2,7 +2,6 @@ export class InvitationDTO {
     private id?: string
     private code: string
     private status: string
-    private isExpired: boolean
     private createdAt: Date
     private updatedAt?: Date
     private expiresAt: Date
@@ -13,7 +12,6 @@ export class InvitationDTO {
     constructor(
         code: string, 
         status: string, 
-        isExpired: boolean, 
         createdAt: Date, 
         invitingUserId: string, 
         groupId: number, 
@@ -24,7 +22,6 @@ export class InvitationDTO {
     ) {
         this.code = code
         this.status = status
-        this.isExpired = isExpired;
         this.createdAt = createdAt;
         this.invitingUserId = invitingUserId;
         this.groupId = groupId;
@@ -40,7 +37,6 @@ export class InvitationDTO {
             id: this.id,
             code: this.code,
             status: this.status,
-            is_expired: this.isExpired,
             created_at: this.createdAt,
             updated_at: this.updatedAt,
             expires_at: this.expiresAt,

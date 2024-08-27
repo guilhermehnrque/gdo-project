@@ -10,7 +10,6 @@ export class InvitationEntity {
     public created_at?: Date;
     public updated_at?: Date;
     public inviting_user_id?: number;
-    public is_expired?: boolean | null;
 
     constructor(
         group_id: number,
@@ -22,7 +21,6 @@ export class InvitationEntity {
         updated_at?: Date,
         inviting_user_id?: number,
         expires_at?: Date,
-        is_expired?: boolean | null
     ) {
         this.id = id ?? null;
         this.code = code ?? this.generateCreationCode();
@@ -33,7 +31,6 @@ export class InvitationEntity {
         this.updated_at = updated_at;
         this.inviting_user_id = inviting_user_id;
         this.expires_at = expires_at ?? this.generateExpirationDate();
-        this.is_expired = is_expired ?? false;
     }
 
     static async createFromPayload(group_id: number, user_id: number, status: InvitationStatus, userIdOwner: number): Promise<InvitationEntity> {

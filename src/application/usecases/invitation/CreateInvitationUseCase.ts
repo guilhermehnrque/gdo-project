@@ -90,7 +90,7 @@ export class CreateInvitationUseCase {
     }
 
     async validateIfUserHasInvitation(userId: number, groupId: number): Promise<boolean> {
-        const invitation = await this.invitationRepository.getInvitationByStatusAndGroupId(InvitationStatus.PENDING, groupId, false);
+        const invitation = await this.invitationRepository.getInvitationByStatusAndGroupId(InvitationStatus.PENDING, groupId);
 
         if (invitation == null) {
             return false;

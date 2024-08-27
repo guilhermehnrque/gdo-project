@@ -6,6 +6,6 @@ export interface InvitationRepositoryInterface {
     getInvitationByCodeAndUserId(invitationCode: string, userIdPk: number): Promise<InvitationModel | null>;
     updateInvitationByCode(request: Request): Promise<any>;
     deleteInvitationByCode(request: Request): Promise<any>;
-    getInvitationByStatusAndGroupId(status: string, groupId: number, isExpired: boolean): Promise<InvitationModel | null>;
+    getInvitationByStatusAndGroupId(status: string, groupId: number): Promise<InvitationModel | null>;
     save(invitation: InvitationModel): Promise<boolean>;
 }

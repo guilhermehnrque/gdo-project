@@ -72,7 +72,6 @@ export class GetInvitationUseCase {
         return new InvitationDTO(
             invitation.code,
             invitation.status,
-            invitation.is_expired,
             invitation.created_at,
             invitedId,
             invitation.groups_id,

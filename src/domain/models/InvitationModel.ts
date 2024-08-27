@@ -11,10 +11,9 @@ interface InvitationAttributes {
     updated_at?: Date;
     groups_id: number;
     inviting_user_id: number | undefined;
-    is_expired?: boolean;
 }
 
-type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at' | 'is_expired' >;
+type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at' >;
 
 class Invitation extends Model<InvitationAttributes, InvitationCreationAttributes> implements InvitationAttributes {
     public id!: number;
@@ -26,7 +25,6 @@ class Invitation extends Model<InvitationAttributes, InvitationCreationAttribute
     public updated_at!: Date;
     public groups_id!: number;
     public inviting_user_id!: number;
-    public is_expired!: boolean;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -72,11 +70,6 @@ Invitation.init(
         inviting_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-        is_expired: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
         },
     },
     {
