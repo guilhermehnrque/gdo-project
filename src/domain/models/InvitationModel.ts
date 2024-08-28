@@ -2,27 +2,29 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 
 interface InvitationAttributes {
-    id?: number;
+    id: number;
     code: string;
     status: string;
-    users_id: number;
-    expires_at: Date;
-    created_at: Date;
-    updated_at: Date;
+    invited_user_id: number;
+    expires_at: Date | undefined;
+    created_at?: Date;
+    updated_at?: Date;
     groups_id: number;
+    inviting_user_id: number | undefined;
 }
 
-type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at'>;
+type InvitationCreationAttributes = Omit<InvitationAttributes, 'id' | 'created_at' | 'updated_at' >;
 
 class Invitation extends Model<InvitationAttributes, InvitationCreationAttributes> implements InvitationAttributes {
     public id!: number;
     public code!: string;
     public status!: string;
-    public users_id!: number;
+    public invited_user_id!: number;
     public expires_at!: Date;
     public created_at!: Date;
     public updated_at!: Date;
     public groups_id!: number;
+    public inviting_user_id!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -43,7 +45,7 @@ Invitation.init(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        users_id: {
+        invited_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -62,6 +64,10 @@ Invitation.init(
             field: 'updated_at',
         },
         groups_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        inviting_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

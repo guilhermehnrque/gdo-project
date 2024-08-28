@@ -17,7 +17,7 @@ export class GetGroupDetailsUseCase {
     async execute(groupId: number, userId: string): Promise<GroupDTO> {
         const user = await this.getUserByUserId(userId);
 
-        const group = await this.groupRepository.getGroupById(groupId, user?.id!);
+        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, user?.id!);
 
         if (group == null) { 
             logger.warn(`Group not found for user ${userId} and group ${groupId}`);
