@@ -5,6 +5,9 @@ import { User } from "../../../domain/models/UserModel";
 // DTOs
 import { InvitationDTO } from "../../dto/invitation/InvitationDTO";
 
+// Mappers
+import { mapInvitationToDTO } from "../../mappers/InvitationMapper";
+
 // Repositories
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
 import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
@@ -38,8 +41,8 @@ export class GetInvitationUseCase {
 
         this.validateUserPermissions(invitation!, invitationUser?.id!, invitedUser?.id!);
 
-        return this.toInvitationDTO(invitation!, invitedUser?.user_id!, invitationUser?.user_id!)
-                .toResponse();
+        const toInvitationDTO = await this.toInvitationDTO(invitation!, invitedUser!, invitationUser!);
+        return toInvitationDTO.toResponse();
     }
 
     private validateUserPermissions(invitation: InvitationModel, invitationUserId: number, invitedUserId: number): void {
@@ -68,15 +71,11 @@ export class GetInvitationUseCase {
         return this.userRepository.getUserByUserId(id);
     }
 
-    private toInvitationDTO(invitation: InvitationModel, invitedId: string, invitationUser: string): InvitationDTO {
-        return new InvitationDTO(
-            invitation.code,
-            invitation.status,
-            invitation.created_at,
-            invitedId,
-            invitation.groups_id,
-            invitationUser,
-            invitation.expires_at
+    private async toInvitationDTO(invitation: InvitationModel, invitedUser: User, invitingUser: User): Promise<InvitationDTO> {
+        return mapInvitationToDTO(
+            invitation,
+            invitedUser,
+            invitingUser
         );
     }
 

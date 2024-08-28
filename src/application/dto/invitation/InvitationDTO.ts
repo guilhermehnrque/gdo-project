@@ -1,49 +1,51 @@
+import { InvitationUserDTO } from "./InvitationUserDTO"
+
 export class InvitationDTO {
-    private id?: string
-    private code: string
-    private status: string
-    private createdAt: Date
-    private updatedAt?: Date
-    private expiresAt: Date
-    private invitingUserId: string
-    private groupId: number
-    private invitedUserId: string
+    public id?: number
+    public code: string
+    public status: string
+    public createdAt: Date
+    public updatedAt?: Date
+    public expiresAt: Date
+    public groupId: number
+    public invited_user?: InvitationUserDTO
+    public inviting_user?: InvitationUserDTO
 
     constructor(
         code: string, 
         status: string, 
-        createdAt: Date, 
-        invitingUserId: string, 
         groupId: number, 
-        invitedUserId: string,
-        expiresAt: Date,
-        updatedAt?: Date, 
-        id?: string
+        created_at: Date, 
+        expires_at: Date,
+        updated_at?: Date, 
+        id?: number,
+        invited_user?: InvitationUserDTO,
+        inviting_user?: InvitationUserDTO
     ) {
         this.code = code
         this.status = status
-        this.createdAt = createdAt;
-        this.invitingUserId = invitingUserId;
         this.groupId = groupId;
-        this.invitedUserId = invitedUserId;
-        this.expiresAt = expiresAt;
+        this.createdAt = created_at;
+        this.expiresAt = expires_at;
+        this.updatedAt = updated_at;
+        this.id = id;
+        this.invited_user = invited_user;
+        this.inviting_user = inviting_user;
     }
 
-    public setId(id: string) { this.id = id }
+    public setId(id: number) { this.id = id }
     public setUpdatedAt(updatedAt: Date) { this.updatedAt = updatedAt } 
 
     toResponse() {
         return {
-            id: this.id,
             code: this.code,
             status: this.status,
             created_at: this.createdAt,
             updated_at: this.updatedAt,
             expires_at: this.expiresAt,
-            inviting_user_id: this.invitingUserId,
             group_id: this.groupId,
-            invited_user_id: this.invitedUserId,
+            invited_user: this.invited_user,
+            inviting_user: this.inviting_user
         }
     }
-
 }
