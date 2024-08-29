@@ -48,7 +48,8 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
             const latestToken = await JwtToken.findOne({
                 where: {
                     revoked: false,
-                    id: userIdPk
+                    users_id: userIdPk,
+                    revoked_at: null
                 },
                 order: [
                     ['id', 'DESC']
@@ -57,6 +58,7 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
 
             if (latestToken) {
                 latestToken.revoked = true;
+                latestToken.revoked_at = new Date();
                 await latestToken.save();
             }
         } catch (error) {

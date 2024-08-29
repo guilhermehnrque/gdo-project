@@ -4,9 +4,9 @@ import { User as UserModel } from "../../domain/models/UserModel";
 import { Op } from "sequelize";
 import CustomError from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
-import JwtToken from "../../domain/models/JwtTokenModel";
 
 class UserRepositoryImpl implements AuthRepositoryInterface {
+
     async create(userEntity: UserEntity): Promise<UserModel> {
         try {
             const user = UserModel.build(userEntity);
@@ -14,6 +14,23 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[UserRepository] Create -> Error creating group: ${customError.message}`);
+        }
+    }
+
+    async getUserByLoginEmailOrPhone(login: string, email: string, phoneNumber: number): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    [Op.or]: [
+                        { login },
+                        { email },
+                        { phone_number: phoneNumber },
+                    ],
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Get user by login, email or phone -> Error getting user by login, email or phone: ${customError.message}`);
         }
     }
 

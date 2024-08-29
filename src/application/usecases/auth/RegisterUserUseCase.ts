@@ -14,8 +14,7 @@ export class RegisterUserUseCase {
     }
 
     async execute(payload: RegisterUserRequest): Promise<void> {
-        const userExists = await this.checkIfUserExists(payload.login);
-
+        const userExists = await this.checkIfUserExists(payload.login, payload.email, payload.phone_number);
 
         if (userExists) {
             this.logAndThrowError(new UserAlreadyExistsError(), "[RegisterUserUseCase] Usuário já registrado");
@@ -28,8 +27,8 @@ export class RegisterUserUseCase {
 
     }
 
-    private async checkIfUserExists(login: string): Promise<boolean> {
-        const user = await this.authRepository.getUserByLogin(login);
+    private async checkIfUserExists(login: string, email: string, phoneNumber: number): Promise<boolean> {
+        const user = await this.authRepository.getUserByLoginEmailOrPhone(login, email, phoneNumber);
         return user !== null;
     }
 
