@@ -20,6 +20,8 @@ interface UserAttributes {
     deleted_at?: Date;
     reset_password_token?: string | null;
     reset_password_expires?: Date | null;
+    jwt_tokens?: JwtToken;
+
 }
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
@@ -40,10 +42,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public deleted_at?: Date;
     public reset_password_token?: string | null;
     public reset_password_expires?: Date | null;
+    public jwt_tokens?: JwtToken;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
     public readonly deletedAt?: Date;
+    public readonly jwtTokens?: JwtToken;
 }
 
 User.init({

@@ -8,5 +8,6 @@ export interface JwtTokensRepositoryInterface {
     isTokenRevoked(token: string): Promise<boolean>;
     deleteToken(token: string): Promise<boolean>;
     deleteTokensByUserId(userId: number): Promise<boolean>;
-    deleteExpiredTokens(): Promise<boolean>;
+    expireLatestToken(userIdPk: number): Promise<void>;
+    getLatestValidToken(userIdPk: number): Promise<string | null | undefined>
 }

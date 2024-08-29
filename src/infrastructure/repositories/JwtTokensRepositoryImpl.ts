@@ -43,8 +43,46 @@ export class JwtTokensRepositoryImpl implements JwtTokensRepositoryInterface {
         throw new Error("Method not implemented.");
     }
 
-    deleteExpiredTokens(): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async expireLatestToken(userIdPk: number): Promise<void> {
+        try {
+            const latestToken = await JwtToken.findOne({
+                where: {
+                    revoked: false,
+                    id: userIdPk
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
+
+            if (latestToken) {
+                latestToken.revoked = true;
+                await latestToken.save();
+            }
+        } catch (error) {
+            const { message } = error as Error
+            this.logAndThrow(new DatabaseError("Error expiring latest token"), `[JwtTokensRepositoryImpl] ${message}`);
+        }
+    }
+
+    async getLatestValidToken(userIdPk: number): Promise<string | null | undefined> {
+        try {
+            const latestToken = await JwtToken.findOne({
+                where: {
+                    revoked: false,
+                    users_id: userIdPk,
+                    revoked_at: null
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
+
+            return latestToken?.token ?? null;
+        } catch (error) {
+            const { message } = error as Error
+            this.logAndThrow(new DatabaseError("Error expiring latest token"), `[JwtTokensRepositoryImpl] ${message}`);
+        }
     }
 
     logAndThrow(error: Error, context: string) {

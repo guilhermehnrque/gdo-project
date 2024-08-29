@@ -1,17 +1,20 @@
 import logger from '../../../infrastructure/configs/LoggerConfig';
 import CustomError from "../../erros/CustomError";
 import { User } from "../../../domain/models/UserModel";
-import AuthRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
 import HashPassword from "../../../infrastructure/configs/HashPassword";
 import { ResetPasswordRequest } from '../../../infrastructure/requests/auth/ResetPasswordRequest';
 import InvalidTokenError from '../../erros/InvalidTokenError';
+import UserService from '../../services/UserService';
+import { JwtService } from '../../services/JwtService';
 
 export class ResetPasswordUseCase {
 
-    private authRepository: AuthRepositoryImpl;
+    private userService: UserService;
+    private jwtService: JwtService;
 
     constructor() {
-        this.authRepository = new AuthRepositoryImpl();
+        this.userService = new UserService();
+        this.jwtService = new JwtService();
     }
 
     async execute(payload: ResetPasswordRequest, token: string): Promise<void> {
@@ -28,16 +31,13 @@ export class ResetPasswordUseCase {
         user!.reset_password_token = null;
         user!.reset_password_expires = null;
 
-        try {
-            await this.authRepository.save(user!);
-        } catch (error) {
-            const { message } = error as Error;
-            this.logAndThrowError(new CustomError("Erro ao salvar nova senha"), `[ResetPasswordUseCase] Erro no banco de dados -> ${message}`);
-        }
+        await this.userService.save(user!);
+
+        await this.jwtService.expireLatestToken(user!.id);
     }
 
     private async getUserIfExists(userToken: string): Promise<User | null> {
-        return await this.authRepository.getUserByToken(userToken);
+        return await this.userService.getUserByResetToken(userToken);
     }
 
     private logAndThrowError(error: CustomError, context: string): void {
