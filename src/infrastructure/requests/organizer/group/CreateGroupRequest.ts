@@ -1,7 +1,9 @@
 export interface CreateGroupRequest {
     group: {
         description: string;
+        visibility: string;
     };
+    
     local: {
         country: string;
         state: string;

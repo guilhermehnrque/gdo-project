@@ -7,12 +7,20 @@ export default class GroupEntity {
     description: string;
     is_active: boolean;
     users_id: number;
+    visibility: string;
 
-    constructor(id: number | null, description: string, is_active: boolean, users_id: number) {
+    constructor(
+        id: number | null,
+        description: string,
+        is_active: boolean,
+        users_id: number,
+        visibility: string,
+    ) {
         this.id = id;
         this.description = description;
         this.is_active = is_active;
         this.users_id = users_id;
+        this.visibility = visibility;
     }
 
     static async createFromDTO(payload: CreateGroupDTO, userId: number): Promise<GroupEntity> {
@@ -20,25 +28,24 @@ export default class GroupEntity {
             null,
             payload.description,
             true,
-            userId
+            userId,
+            payload.visibility
         );
     }
 
-    static async createFromPayloadUpdate(groupId: number, userId: number, description: string, status: boolean): Promise<GroupEntity> {
+    static async createFromPayloadUpdate(
+        groupId: number,
+        userId: number,
+        description: string,
+        status: boolean,
+        visibility: string
+    ): Promise<GroupEntity> {
         return new GroupEntity(
             groupId,
             description,
             status,
-            userId
-        )
-    }
-
-    static async createFromChangeStatus() {
-        return new GroupEntity(
-            null,
-            '',
-            false,
-            0
+            userId,
+            visibility
         )
     }
 
@@ -46,7 +53,8 @@ export default class GroupEntity {
         return {
             description: this.description,
             is_active: booleanToTinyInt(this.is_active),
-            users_id: this.users_id
+            users_id: this.users_id,
+            visibility: this.visibility
         };
     }
 
@@ -55,7 +63,8 @@ export default class GroupEntity {
             id: this.id!,
             description: this.description,
             is_active: booleanToTinyInt(this.is_active),
-            users_id: this.users_id
+            users_id: this.users_id,
+            visibility: this.visibility
         };
     }
 

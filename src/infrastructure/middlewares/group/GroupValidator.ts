@@ -1,11 +1,22 @@
 import { body, param, query } from 'express-validator';
 import handleValidationErrors from '../HandleValidationErrors';
+import { allowedGroupVisibility } from '../../../domain/enums/GroupVisibilityEnum';
 
 const schemas = {
     register: [
         body('group.description')
             .notEmpty().withMessage('A descrição é obrigatório')
             .isString().withMessage('Descrição deve ser uma string'),
+
+        body('group.visibility')
+            .notEmpty().withMessage('Visibilidade é obrigatório')
+            .custom((value) => {
+                if (!allowedGroupVisibility().includes(value.toUpperCase())) {
+                    throw new Error('Tipo de visibilidade do grupo inválido');
+                }
+                return true;
+            }),
+
 
         body('local.country')
             .notEmpty().withMessage('País é obrigatório')
@@ -34,6 +45,7 @@ const schemas = {
         body('local.description')
             .notEmpty().withMessage('Descrição é obrigatório')
             .isString().withMessage('Descrição deve ser uma string'),
+
     ],
 
     detail: [
@@ -53,7 +65,17 @@ const schemas = {
 
         body('status')
             .notEmpty().withMessage('Status é obrigatório')
-            .isBoolean().withMessage('Status deve ser um booleano')
+            .isBoolean().withMessage('Status deve ser um booleano'),
+
+        body('visibility')
+            .notEmpty().withMessage('Visibilidade é obrigatório')
+            .custom((value) => {
+                if (!allowedGroupVisibility().includes(value.toUpperCase())) {
+                    throw new Error('Tipo de visibilidade do grupo inválido');
+                }
+                return true;
+            }),
+
     ],
 
     updateStatus: [

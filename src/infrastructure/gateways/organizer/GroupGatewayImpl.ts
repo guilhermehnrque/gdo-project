@@ -27,6 +27,10 @@ import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 import sequelize from "../../database";
 import { DeleteGroupUseCase } from "../../../application/usecases/organizer/group/DeleteGroupUseCase";
 
+// Enum
+import { getGroupVisibility } from '../../../domain/enums/GroupVisibilityEnum';
+
+
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -90,9 +94,9 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     async updateGroupById(request: Request): Promise<number> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
-        const { description, status } = request.body as UpdateGroupRequest
+        const { description, status, visibility } = request.body as UpdateGroupRequest
 
-        return await this.updateGroupUseCase.execute(groupId, userId, description, status);
+        return await this.updateGroupUseCase.execute(groupId, userId, description, status, getGroupVisibility(visibility));
     }
 
     async changeGroupStatus(request: Request): Promise<number> {

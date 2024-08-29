@@ -1,7 +1,7 @@
 export enum UserTypes {
     ADMIN = 'ADMIN',
     PLAYER = 'PLAYER',
-    ORGANIZER = 'organizer',
+    ORGANIZER = 'ORGANIZER',
     GUEST = 'GUEST',
 }
 

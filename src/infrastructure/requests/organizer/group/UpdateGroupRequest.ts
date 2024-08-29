@@ -1,4 +1,5 @@
 export interface UpdateGroupRequest {
     description: string;
-    status: boolean
+    status: boolean;
+    visibility: string;
 }

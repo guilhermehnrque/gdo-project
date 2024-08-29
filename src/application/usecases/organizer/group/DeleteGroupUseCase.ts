@@ -17,7 +17,7 @@ export class DeleteGroupUseCase {
     async execute(groupId: number, userId: string): Promise<void> {
         const user = await this.getUserByUserId(userId);
         const group = await this.getUserGroup(user?.id!, groupId);
-        const groupEntity = await GroupEntity.createFromPayloadUpdate(group.id, user?.id!, group?.description, false)
+        const groupEntity = await GroupEntity.createFromPayloadUpdate(group.id, user?.id!, group?.description, false, group.visibility)
 
         await this.groupRepository.changeGroupStatus(groupEntity);
 
