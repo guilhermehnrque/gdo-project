@@ -14,5 +14,6 @@ router.patch('/:groupId/status', schemas.updateStatus, handleValidationErrors, a
 router.delete('/:groupId', schemas.delete, handleValidationErrors, async (req: Request, res: Response) => { groupController.deleteGroupById(req, res); });
 router.post('/members', schemas.addOrRemoverMember, handleValidationErrors, async (req: Request, res: Response) => { groupController.addUserToGroup(req, res); });
 router.delete('/members/removal', schemas.addOrRemoverMember, handleValidationErrors, async (req: Request, res: Response) => { groupController.removeUserFromGroup(req, res); });
+router.get('/members/:groupId', schemas.detail, handleValidationErrors, async (req: Request, res: Response) => { groupController.getGroupMembers(req, res); });
 
 export default router;
