@@ -4,7 +4,7 @@ import { Group } from './GroupModel';
 
 interface ScheduleAttributes {
     id: number;
-    date: Date;
+    day_of_week: Date;
     active: boolean;
     start: string;
     finish: string;
@@ -17,7 +17,7 @@ interface ScheduleCreationAttributes extends Omit<Schedule, 'id' | 'created_at' 
 
 class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> implements ScheduleAttributes {
     public id!: number;
-    public date!: Date;
+    public day_of_week!: Date;
     public active!: boolean;
     public start!: string;
     public finish!: string;
@@ -35,7 +35,7 @@ Schedule.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    date: {
+    day_of_week: {
         type: DataTypes.DATE,
         allowNull: false,
     },

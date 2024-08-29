@@ -25,7 +25,6 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
     }
 
     async getUserGroupsByUserId(id: number): Promise<Group[]> {
-
         try {
             return await Group.findAll({
                 where: { users_id: id },
@@ -42,7 +41,6 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupRepositoryImpl] Error creating group: ${customError.message}`);
         }
-
     }
 
     async getOwnerGroupByIdAndUserId(groupId: number, userId: number): Promise<Group | null> {
