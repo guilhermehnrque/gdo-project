@@ -1,18 +1,30 @@
+// Importações de repositórios da infraestrutura
 import AuthRepositoryImpl from '../../../infrastructure/repositories/UserRepositoryImpl';
+
+// Importações de configurações da infraestrutura
 import HashPassword from '../../../infrastructure/configs/HashPassword';
 import logger from '../../../infrastructure/configs/LoggerConfig';
+
+// Importações de solicitações de infraestrutura
 import { LoginUserRequest } from '../../../infrastructure/requests/auth/LoginUserRequest';
-import Jwt from '../../../infrastructure/configs/Jwt';
+
+// Importações de erros da aplicação
 import LoginError from '../../erros/LoginError';
+
+// Importações de modelos do domínio
 import { User } from '../../../domain/models/UserModel';
+import { JwtService } from '../../../domain/services/JwtService';
 
 export class LoginUserUseCase {
 
     private authRepository: AuthRepositoryImpl;
-    private errorMessage: string = '[LoginUserUseCase] Usuário ou senha inválidos ->';
+    private jwtService: JwtService
+
+    private readonly errorMessage: string = '[LoginUserUseCase] Usuário ou senha inválidos ->';
 
     constructor() {
         this.authRepository = new AuthRepositoryImpl();
+        this.jwtService = new JwtService();
     }
 
     async execute(loginUserRequest: LoginUserRequest): Promise<string> {
@@ -22,7 +34,11 @@ export class LoginUserUseCase {
             await this.validatePassword(loginUserRequest.password, user.password, user.login);
         }
 
-        return Jwt.generateToken(user!.toJSON());
+        const jwtToken = await this.jwtService.createToken(user!);
+
+        await this.jwtService.saveToken(user!.id, jwtToken.toString());
+
+        return jwtToken.toString();
     }
 
     private async checkAndGetUser(userLogin: string): Promise<User | null> {
