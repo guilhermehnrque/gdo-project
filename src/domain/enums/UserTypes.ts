@@ -1,14 +1,14 @@
 export enum UserTypes {
     ADMIN = 'ADMIN',
     PLAYER = 'PLAYER',
-    STAFF = 'STAFF',
+    ORGANIZER = 'organizer',
     GUEST = 'GUEST',
 }
 
 export function allowedUserTypes(): UserTypes[] {
-   return [UserTypes.PLAYER, UserTypes.STAFF, UserTypes.GUEST];
+   return [UserTypes.PLAYER, UserTypes.ORGANIZER, UserTypes.GUEST];
 }   
 
 export function allowUserToCreateGroup (userType: string): boolean {
-    return userType === UserTypes.STAFF.toString();
+    return userType === UserTypes.ORGANIZER.toString();
 }

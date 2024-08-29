@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../../infrastructure/database/index'; 
+import sequelize from '../../infrastructure/database/index';
 import Group from './GroupModel';
 import InvitationModel from './InvitationModel';
 import JwtToken from './JwtTokenModel';
@@ -127,9 +127,9 @@ User.init({
     paranoid: true,
 });
 
-User.hasMany(Group, { foreignKey: 'users_id' });
 User.hasMany(InvitationModel, { foreignKey: 'invited_user_id' });
 User.hasMany(InvitationModel, { foreignKey: 'inviting_user_id' });
 User.hasMany(JwtToken, { foreignKey: 'users_id' });
+User.hasMany(Group, { foreignKey: 'users_id' });
 
 export { User, UserCreationAttributes };

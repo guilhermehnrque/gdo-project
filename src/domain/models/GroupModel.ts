@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
-import { User } from './UserModel'; 
+import { User } from './UserModel';
 import Local from './LocalModel';
-import sequelize from '../../infrastructure/database/index'; 
+import sequelize from '../../infrastructure/database/index';
 import Invitation from './InvitationModel';
 
 interface GroupAttributes {
@@ -71,7 +71,7 @@ Group.init({
     },
 }, {
     sequelize,
-    modelName: 'group',
+    modelName: 'Group',
     tableName: 'groups',
     timestamps: true,
     createdAt: 'created_at',
@@ -83,4 +83,4 @@ Group.init({
 Group.hasOne(Local, { foreignKey: 'groups_id', as: 'local' });
 Group.hasMany(Invitation, { foreignKey: 'groups_id' });
 
-export default Group;
+export { Group };
