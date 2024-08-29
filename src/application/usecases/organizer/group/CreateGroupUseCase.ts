@@ -2,7 +2,7 @@ import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRe
 import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
 import { User } from "../../../../domain/models/UserModel";
 import GroupEntity from "../../../../domain/entity/GroupEntity";
-import Group from "../../../../domain/models/GroupModel";
+import { Group } from "../../../../domain/models/GroupModel";
 import CustomError from "../../../erros/CustomError";
 import logger from "../../../../infrastructure/configs/LoggerConfig";
 import UserNotStaffError from "../../../erros/groups/UserNotStaffError";
@@ -37,7 +37,7 @@ export default class CreateGroupUseCase {
     private async userValidateIsStaffAndExists(userId: string): Promise<User> {
         const user = await this.userRepository.getUserByUserId(userId);
 
-        if (!user || user.type != UserTypes.STAFF) {
+        if (!user || user.type != UserTypes.ORGANIZER) {
             throw new UserNotStaffError("[CreateGroupUseCase] Usuário não permitido para executar essa operação");
         }
 

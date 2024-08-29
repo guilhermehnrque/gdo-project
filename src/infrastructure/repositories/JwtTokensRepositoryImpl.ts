@@ -3,7 +3,7 @@ import logger from "../configs/LoggerConfig";
 
 // Importações de entidades e modelos do domínio
 import { JwtTokenEntity } from "../../domain/entity/JwtTokenEntity";
-import JwtToken from "../../domain/models/JwtTokenModel";
+import { JwtToken } from "../../domain/models/JwtTokenModel";
 
 // Importações de interfaces de repositório do domínio
 import { JwtTokensRepositoryInterface } from "../../domain/repositories/JwtTokensRepositoryInterface";

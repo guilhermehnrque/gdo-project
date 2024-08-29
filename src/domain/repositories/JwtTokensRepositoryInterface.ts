@@ -1,9 +1,9 @@
 import { JwtTokenEntity } from "../entity/JwtTokenEntity";
-import JwtTokenModel from "../models/JwtTokenModel";
+import { JwtToken } from "../models/JwtTokenModel";
 
 export interface JwtTokensRepositoryInterface {
     saveToken(jwtTokenEntity: JwtTokenEntity): Promise<boolean>;
-    getTokenByToken(token: string): Promise<JwtTokenModel | null>;
+    getTokenByToken(token: string): Promise<JwtToken | null>;
     revokeToken(token: string): Promise<boolean>;
     isTokenRevoked(token: string): Promise<boolean>;
     deleteToken(token: string): Promise<boolean>;

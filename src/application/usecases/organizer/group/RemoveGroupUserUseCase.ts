@@ -1,4 +1,4 @@
-import Group from "../../../../domain/models/GroupModel";
+import { Group } from "../../../../domain/models/GroupModel";
 import { User } from "../../../../domain/models/UserModel";
 import logger from "../../../../infrastructure/configs/LoggerConfig";
 import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
@@ -71,7 +71,7 @@ export class RemoveGroupUserUseCase {
                 throw new UserNotFoundError(`Usuário ${user} não encontrado`);
             }
         });
-    
+
         await Promise.all(userValidationPromises);
     }
 

@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../infrastructure/database/index'; 
-import Group from './GroupModel'; 
+import sequelize from '../../infrastructure/database/index';
+import { Group } from './GroupModel';
 
 interface LocalAttributes {
     id?: number;
@@ -61,7 +61,7 @@ Local.init({
     },
     number: {
         type: DataTypes.INTEGER,
-        allowNull: true, 
+        allowNull: true,
     },
     description: {
         type: DataTypes.STRING(255),
@@ -95,4 +95,4 @@ Local.init({
 });
 
 
-export default Local;
+export { Local };

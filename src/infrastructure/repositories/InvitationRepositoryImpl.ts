@@ -1,6 +1,6 @@
 import { InvitationEntity } from "../../domain/entity/InvitationEntity";
 import { InvitationRepositoryInterface } from "../../domain/repositories/InvitationRepositoryInterface";
-import InvitationModel from "../../domain/models/InvitationModel";
+import { Invitation } from "../../domain/models/InvitationModel";
 import CustomError from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 import logger from "../configs/LoggerConfig";
@@ -10,7 +10,7 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
 
     async createInvitation(invitationEntity: InvitationEntity): Promise<boolean> {
         try {
-            await InvitationModel.create(invitationEntity.toRegister());
+            await Invitation.create(invitationEntity.toRegister());
             return true;
         } catch (error) {
             const customError = error as CustomError;
@@ -18,7 +18,7 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         }
     }
 
-    async save(invitation: InvitationModel): Promise<boolean> {
+    async save(invitation: Invitation): Promise<boolean> {
 
         const updateData = {
             status: invitation.status,
@@ -30,7 +30,7 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         };
 
         try {
-            const [affectedCount] = await InvitationModel.update(updateData, {
+            const [affectedCount] = await Invitation.update(updateData, {
                 where: {
                     code: invitation.code
                 },
@@ -43,9 +43,9 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         }
     }
 
-    async getInvitationByCodeAndUserId(invitationCode: string, userIdPk: number): Promise<InvitationModel | null> {
+    async getInvitationByCodeAndUserId(invitationCode: string, userIdPk: number): Promise<Invitation | null> {
         try {
-            return await InvitationModel.findOne({
+            return await Invitation.findOne({
                 where: {
                     [Op.or]: [
                         {
@@ -73,9 +73,9 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         throw new Error("Method not implemented.");
     }
 
-    async getInvitationByStatusAndGroupId(status: string, groupId: number): Promise<InvitationModel | null> {
+    async getInvitationByStatusAndGroupId(status: string, groupId: number): Promise<Invitation | null> {
         try {
-            return await InvitationModel.findOne({
+            return await Invitation.findOne({
                 where: {
                     status: status,
                     groups_id: groupId

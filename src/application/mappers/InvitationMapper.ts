@@ -1,4 +1,4 @@
-import Invitation from "../../domain/models/InvitationModel";
+import { Invitation } from "../../domain/models/InvitationModel";
 import { User } from "../../domain/models/UserModel";
 import { InvitationDTO } from "../dto/invitation/InvitationDTO";
 import { InvitationUserDTO } from "../dto/invitation/InvitationUserDTO";

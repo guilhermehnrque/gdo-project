@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
-import { User } from './UserModel'; 
-import sequelize from '../../infrastructure/database/index'; 
-import Group from './GroupModel'; 
+import { User } from './UserModel';
+import sequelize from '../../infrastructure/database/index';
+import { Group } from './GroupModel';
 
 interface GroupsUsersAttributes {
     id?: number;
@@ -47,7 +47,7 @@ GroupsUsers.init({
     timestamps: false,
 });
 
-GroupsUsers.belongsTo(User, { foreignKey : 'users_id'});
-GroupsUsers.belongsTo(Group, { foreignKey : 'groups_id'});
+GroupsUsers.belongsTo(User, { foreignKey: 'users_id' });
+GroupsUsers.belongsTo(Group, { foreignKey: 'groups_id' });
 
-export default GroupsUsers;
+export { GroupsUsers };

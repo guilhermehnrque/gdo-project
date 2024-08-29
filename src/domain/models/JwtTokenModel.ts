@@ -79,4 +79,4 @@ JwtToken.init(
     }
 );
 
-export default JwtToken;
+export { JwtToken };

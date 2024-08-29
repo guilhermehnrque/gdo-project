@@ -4,7 +4,6 @@ import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepo
 import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
 import GroupEntity from '../../../../domain/entity/GroupEntity';
 
-
 export class DeleteGroupUseCase {
 
     private groupRepository: GroupRepositoryImpl;
