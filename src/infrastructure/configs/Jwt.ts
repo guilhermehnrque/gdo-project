@@ -2,8 +2,10 @@ import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import logger from './LoggerConfig';
 
 const secretKey = process.env.PROJECT_GDB_SECRET_KEY;
+const DAYS_TO_EXPIRE_AS_HOUR = process.env.DAYS_TO_EXPIRE_IN_HOUR;
 
 export default class JwtUtils {
+
     
     static async generateToken(payload: any) {
         const secrets = { 
@@ -11,7 +13,7 @@ export default class JwtUtils {
             type: payload.type
         }
 
-        return jwt.sign(secrets, secretKey!, { expiresIn: '1000h' })
+        return jwt.sign(secrets, secretKey!, { expiresIn: DAYS_TO_EXPIRE_AS_HOUR! })
     }
 
     static async verifyToken(token: string): Promise<jwt.JwtPayload | boolean>{

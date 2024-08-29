@@ -9,7 +9,7 @@ export class JwtTokenEntity {
     public created_at?: Date;
     public updated_at?: Date;
 
-    private readonly DAYS_TO_EXPIRE = 7;
+    private readonly DAYS_TO_EXPIRE = +process.env.DAYS_TO_EXPIRE_DAY!;
 
     constructor() {
         this.revoked = false;
