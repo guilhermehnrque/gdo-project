@@ -10,8 +10,7 @@ interface UserAttributes {
     surname: string;
     email: string;
     type: string;
-    status: number;
-    is_staff: number;
+    status: boolean;
     login: string;
     password: string;
     phone_number: number;
@@ -31,8 +30,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public surname!: string;
     public email!: string;
     public type!: string;
-    public status!: number;
-    public is_staff!: number;
+    public status!: boolean;
     public login!: string;
     public password!: string;
     public phone_number!: number;
@@ -75,11 +73,7 @@ User.init({
         allowNull: false,
     },
     status: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-    },
-    is_staff: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
     login: {

@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 import handleValidationErrors from '../HandleValidationErrors';
+import { allowedUserTypes } from '../../../domain/enums/UserTypes';
 
 const schemas = {
     register: [
@@ -17,13 +18,13 @@ const schemas = {
 
         body('type')
             .notEmpty().withMessage('Tipo é obrigatório')
-            .isString().withMessage('Tipo deve ser uma string'),
+            .custom((value) => {
+                if (!allowedUserTypes().includes(value.toUpperCase())) {
+                    throw new Error('Tipo de usuário inválido');
+                }
 
-        body('status')
-            .optional().isBoolean().withMessage('Status deve ser um valor booleano'),
-
-        body('is_staff')
-            .optional().isBoolean().withMessage('is_staff deve ser um valor booleano'),
+                return true;
+            }),
 
         body('login')
             .notEmpty().withMessage('Login é obrigatório')

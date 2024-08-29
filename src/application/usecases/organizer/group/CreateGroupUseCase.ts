@@ -9,6 +9,7 @@ import DatabaseError from "../../../erros/DatabaseError";
 import UserNotStaffError from "../../../erros/groups/UserNotStaffError";
 import GroupAlreadyExistsError from "../../../erros/groups/GroupAlreadyExistsError";
 import CreateGroupDTO from "../../../dto/group/CreateGroupDTO";
+import { UserTypes } from "../../../../domain/enums/UserTypes";
 
 export default class CreateGroupUseCase {
 
@@ -39,7 +40,7 @@ export default class CreateGroupUseCase {
     private async userValidateIsStaffAndExists(userId: string): Promise<User> {
         const user = await this.userRepository.getUserByUserId(userId);
     
-        if (!user || user.is_staff === 0) {
+        if (!user || user.type === UserTypes.STAFF) {
             throw new UserNotStaffError("[CreateGroupUseCase] Usuário não permitido para executar essa operação");
         }
     
