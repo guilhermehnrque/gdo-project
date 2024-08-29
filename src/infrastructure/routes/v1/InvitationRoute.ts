@@ -9,14 +9,6 @@ const invitationController = new InvitationController();
 router.post('/', [...schemas.register], handleValidationErrors, (req: Request, res: Response) => { invitationController.createInvitation(req, res); });
 router.get('/:invitationCode', [...schemas.getInvite], handleValidationErrors, (req: Request, res: Response) => { invitationController.getInvitationByCode(req, res); });
 router.patch('/:invitationCode/status/:status', [...schemas.getInvite], handleValidationErrors, (req: Request, res: Response) => { invitationController.acceptOrRecuseInvitationByCode(req, res); });
-
-
 router.put('/:id', (req: Request, res: Response) => { res.send(`PUT /v1/invitation/${req.params.id}`); });
-
-// DELETE /v1/invitation/:id
-router.delete('/:id', (req: Request, res: Response) => {
-    // TODO: Implement logic to delete an invitation
-    res.send(`DELETE /v1/invitation/${req.params.id}`);
-});
 
 export default router;

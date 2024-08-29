@@ -1,32 +1,49 @@
-import AuthRepositoryImpl from '../../../infrastructure/repositories/UserRepositoryImpl';
-import HashPassword from '../../../infrastructure/configs/HashPassword';
+// Importações de configurações da infraestrutura
 import logger from '../../../infrastructure/configs/LoggerConfig';
+
+// Importações de solicitações de infraestrutura
 import { LoginUserRequest } from '../../../infrastructure/requests/auth/LoginUserRequest';
-import Jwt from '../../../infrastructure/configs/Jwt';
+
+// Importações de erros da aplicação
 import LoginError from '../../erros/LoginError';
+
+// Importações de modelos do domínio
 import { User } from '../../../domain/models/UserModel';
+import { JwtService } from '../../../application/services/JwtService';
+import UserService from '../../services/UserService';
 
 export class LoginUserUseCase {
 
-    private authRepository: AuthRepositoryImpl;
-    private errorMessage: string = '[LoginUserUseCase] Usuário ou senha inválidos ->';
+    private jwtService: JwtService
+    private userService: UserService
+
+    private readonly errorMessage: string = '[LoginUserUseCase] Usuário ou senha inválidos ->';
 
     constructor() {
-        this.authRepository = new AuthRepositoryImpl();
+        this.jwtService = new JwtService();
+        this.userService = new UserService();
     }
 
     async execute(loginUserRequest: LoginUserRequest): Promise<string> {
         const user = await this.checkAndGetUser(loginUserRequest.login);
 
-        if (user) {
-            await this.validatePassword(loginUserRequest.password, user.password, user.login);
+        await this.validatePassword(loginUserRequest.password, user!.password, user!.login);
+
+        const latesToken = await this.getLasteValidTokenIfIsActive(user!.id);
+
+        if (latesToken != null || latesToken != undefined) {
+            return latesToken;
         }
 
-        return Jwt.generateToken(user!.toJSON());
+        const jwtToken = await this.jwtService.createToken(user!);
+
+        await this.jwtService.saveToken(user!.id, jwtToken.toString());
+
+        return jwtToken.toString();
     }
 
     private async checkAndGetUser(userLogin: string): Promise<User | null> {
-        const user = await this.authRepository.getUserByLogin(userLogin);
+        const user = await this.userService.getUserByLogin(userLogin);
 
         if (!user) {
             this.logAndThrow(new LoginError(), `${this.errorMessage} ${userLogin}`);
@@ -36,13 +53,18 @@ export class LoginUserUseCase {
     }
 
     private async validatePassword(password: string, hash: string, login: string) {
-        const isValid = await HashPassword.comparePassword(password, hash);
+        const isValid = await this.jwtService.checkPassword(password, hash, login);
 
         if (!isValid) {
             this.logAndThrow(new LoginError(), `${this.errorMessage} ${login} `);
         }
 
     }
+
+    private async getLasteValidTokenIfIsActive(userId: number): Promise<string | null | undefined> {
+        return await this.jwtService.getLatestValidToken(userId);
+    }
+
 
     logAndThrow(error: Error, context: string) {
         logger.error(`${context}`);

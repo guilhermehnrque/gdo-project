@@ -1,8 +1,10 @@
+import { UserTypes } from "../../../domain/enums/UserTypes";
+
 export interface RegisterUserRequest {
     name: string;
     surname: string;
     email: string;
-    type: string;
+    type: UserTypes;
     status: number;
     is_staff: boolean;
     login: string;

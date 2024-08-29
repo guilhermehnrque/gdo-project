@@ -2,19 +2,50 @@ import { AuthRepositoryInterface } from "../../domain/repositories/UserRepositor
 import UserEntity from "../../domain/entity/UserEntity";
 import { User as UserModel } from "../../domain/models/UserModel";
 import { Op } from "sequelize";
+import CustomError from "../../application/erros/CustomError";
+import DatabaseError from "../../application/erros/DatabaseError";
 
 class UserRepositoryImpl implements AuthRepositoryInterface {
-    create(userEntity: UserEntity): Promise<UserModel> {
-        const user = UserModel.build(userEntity);
-        return user.save();
+
+    async create(userEntity: UserEntity): Promise<UserModel> {
+        try {
+            const user = UserModel.build(userEntity);
+            return await user.save();
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Create -> Error creating group: ${customError.message}`);
+        }
     }
 
-    getUserByLogin(login: string): Promise<UserModel | null> {
-        return UserModel.findOne({
-            where: {
-                login,
-            },
-        });
+    async getUserByLoginEmailOrPhone(login: string, email: string, phoneNumber: number): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    [Op.or]: [
+                        { login },
+                        { email },
+                        { phone_number: phoneNumber },
+                    ],
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Get user by login, email or phone -> Error getting user by login, email or phone: ${customError.message}`);
+        }
+    }
+
+    async getUserByLogin(login: string): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    login,
+                },
+            });
+        }
+        catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Get user by login -> Error getting user by login: ${customError.message}`);
+        }
     }
 
     getUserByUserId(userId: string): Promise<UserModel | null> {
@@ -33,17 +64,29 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
         });
     }
 
-    getUserByToken(token: string): Promise<UserModel | null> {
-        return UserModel.findOne({
-            where: {
-                reset_password_token: token,
-                reset_password_expires: { [Op.gt]: new Date() }
-            },
-        });
+    async getUserByResetPasswordToken(token: string): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    reset_password_token: token,
+                    reset_password_expires: { [Op.gt]: new Date() }
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Get user by token -> Error getting user by token: ${customError.message}`);
+        }
+
     }
 
     save(user: UserModel): Promise<UserModel> {
-        return user.save();
+        try {
+            return user.save();
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] Save -> Error saving user: ${customError.message}`);
+        }
+
     }
 
     getUserByPK(userId: number): Promise<UserModel | null> {

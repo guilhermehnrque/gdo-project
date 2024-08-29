@@ -29,8 +29,6 @@ class Group extends Model<GroupAttributes, GroupCreationAttributes> implements G
     public readonly updatedAt!: Date;
     public readonly local?: Local;
     public readonly deletedAt?: Date;
-
-
 }
 
 Group.init({

@@ -7,6 +7,7 @@ export interface AuthRepositoryInterface {
     getUserByUserId(user_id: string): Promise<UserModel | null>;
     getUserByEmail(email: string): Promise<UserModel | null>;
     save(user: UserModel): Promise<UserModel>;
-    getUserByToken(token: string): Promise<UserModel | null>;
-    getUserByPK(userId: number): Promise<UserModel | null>
+    getUserByResetPasswordToken(token: string): Promise<UserModel | null>;
+    getUserByPK(userId: number): Promise<UserModel | null>;
+    getUserByLoginEmailOrPhone(login: string, email: string, phoneNumber: number): Promise<UserModel | null>
 }

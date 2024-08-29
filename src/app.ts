@@ -4,6 +4,7 @@ import bearerToken from "./infrastructure/middlewares/BearerToken"
 import AuthRoute from './infrastructure/routes/v1/AuthRoute'
 import GroupRoute from  './infrastructure/routes/v1/organizer/GroupRoute'
 import InvitationRoute from './infrastructure/routes/v1/InvitationRoute'
+import jwt from 'jsonwebtoken';
 
 const app: Application = express()
 
@@ -17,5 +18,21 @@ app.use('/api/v1/invitations', bearerToken.validate, InvitationRoute)
 app.get('/api/v1/protected', bearerToken.validate, (request: Request, response: Response) => {
     response.json({ message: 'You have access to this protected route!', userId: request.userId, userType: request.userType });
 })
+app.use('/api/v1/decode-token', (request: Request, response: Response) => {
+    const bearerToken = request.headers.authorization;
+    console.log(bearerToken);
+    if (!bearerToken) {
+        return response.status(401).json({ message: 'Bearer token is missing' });
+    }
+
+    const token = bearerToken.split(' ')[1];
+    
+    try {
+        const decodedToken = jwt.verify(token, process.env.PROJECT_GDB_SECRET_KEY!);
+        response.json({ decodedToken });
+    } catch (error) {
+        response.status(401).json({ message: 'Invalid token' });
+    }
+});
 
 export default app

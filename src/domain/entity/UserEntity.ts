@@ -9,8 +9,7 @@ class UserEntity {
     surname: string;
     email: string;
     type: string;
-    status: number;
-    is_staff: number;
+    status: boolean;
     phone_number: number;
     login: string;
     password: string;
@@ -24,8 +23,7 @@ class UserEntity {
         surname: string,
         email: string,
         type: string,
-        status: number,
-        is_staff: number,
+        status: boolean,
         phone_number: number,
         login: string,
         password: string,
@@ -39,7 +37,6 @@ class UserEntity {
         this.email = email;
         this.type = type;
         this.status = status;
-        this.is_staff = is_staff;
         this.phone_number = phone_number;
         this.login = login;
         this.password = password;
@@ -48,19 +45,17 @@ class UserEntity {
         this.deleted_at = deleted_at;
     }
 
-    static async createFromPayload(payload: RegisterUserRequest): Promise<UserEntity> {
+    static async createFromPayload(payload: RegisterUserRequest, status: boolean): Promise<UserEntity> {
         const password = await HashPassword.hashPassword(payload.password);
         const userId = uuidv4(); 
-        const isStaff = booleanToTinyInt(payload.is_staff);
 
         return new UserEntity(
             userId,
             payload.name,
             payload.surname,
             payload.email,
-            payload.type,
-            payload.status,
-            isStaff,
+            payload.type.toString(),
+            status,
             payload.phone_number,
             payload.login,
             password
