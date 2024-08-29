@@ -11,6 +11,8 @@ export class InvitationEntity {
     public updated_at?: Date;
     public inviting_user_id?: number;
 
+    private readonly EXPIRATION_INVITE_DAYS = +process.env.EXPIRATION_INVITE_DATE_DAYS!;
+
     constructor(
         group_id: number,
         invited_user_id: number,
@@ -39,12 +41,12 @@ export class InvitationEntity {
 
     private generateExpirationDate(): Date {
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 3);
+        expirationDate.setDate(expirationDate.getDate() + this.EXPIRATION_INVITE_DAYS);
         return expirationDate;
     }
 
     private generateCreationCode(): string {
-        return Math.random().toString(36).substring(2, 6);
+        return Math.random().toString(36).substring(2, 14);
     }
 
     toRegister() {

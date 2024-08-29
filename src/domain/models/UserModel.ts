@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../infrastructure/database/index'; 
 import Group from './GroupModel';
 import InvitationModel from './InvitationModel';
+import JwtToken from './JwtTokenModel';
 
 interface UserAttributes {
     id: number;
@@ -10,8 +11,7 @@ interface UserAttributes {
     surname: string;
     email: string;
     type: string;
-    status: number;
-    is_staff: number;
+    status: boolean;
     login: string;
     password: string;
     phone_number: number;
@@ -20,6 +20,8 @@ interface UserAttributes {
     deleted_at?: Date;
     reset_password_token?: string | null;
     reset_password_expires?: Date | null;
+    jwt_tokens?: JwtToken;
+
 }
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
@@ -31,8 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public surname!: string;
     public email!: string;
     public type!: string;
-    public status!: number;
-    public is_staff!: number;
+    public status!: boolean;
     public login!: string;
     public password!: string;
     public phone_number!: number;
@@ -41,10 +42,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public deleted_at?: Date;
     public reset_password_token?: string | null;
     public reset_password_expires?: Date | null;
+    public jwt_tokens?: JwtToken;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
     public readonly deletedAt?: Date;
+    public readonly jwtTokens?: JwtToken;
 }
 
 User.init({
@@ -75,11 +78,7 @@ User.init({
         allowNull: false,
     },
     status: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-    },
-    is_staff: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
     login: {
@@ -131,5 +130,6 @@ User.init({
 User.hasMany(Group, { foreignKey: 'users_id' });
 User.hasMany(InvitationModel, { foreignKey: 'invited_user_id' });
 User.hasMany(InvitationModel, { foreignKey: 'inviting_user_id' });
+User.hasMany(JwtToken, { foreignKey: 'users_id' });
 
 export { User, UserCreationAttributes };
