@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
-import Group from './GroupModel';
-import InvitationModel from './InvitationModel';
-import JwtToken from './JwtTokenModel';
+import { Group } from './GroupModel';
+import { Invitation as InvitationModel } from './InvitationModel';
+import { JwtToken } from './JwtTokenModel';
 
 interface UserAttributes {
     id: number;

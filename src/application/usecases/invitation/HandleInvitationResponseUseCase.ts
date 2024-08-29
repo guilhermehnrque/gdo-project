@@ -3,7 +3,7 @@ import { InvitationStatus } from "../../../domain/enums/InvitationStatus";
 
 // Models
 import { User } from "../../../domain/models/UserModel";
-import InvitationModel from "../../../domain/models/InvitationModel";
+import { Invitation as InvitationModel } from "../../../domain/models/InvitationModel";
 
 // Repositories
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";

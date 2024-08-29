@@ -1,5 +1,5 @@
-import Group from '../../domain/models/GroupModel';
-import Local from '../../domain/models/LocalModel';
+import { Group } from '../../domain/models/GroupModel';
+import { Local } from '../../domain/models/LocalModel';
 import { LocalDTO } from '../dto/local/LocalDTO';
 import { GroupDTO } from '../dto/group/GroupDTO';
 

@@ -1,5 +1,5 @@
-import Group from "../../../../domain/models/GroupModel";
-import GroupsUsers from "../../../../domain/models/GroupUserModel";
+import { Group } from "../../../../domain/models/GroupModel";
+import { GroupsUsers } from "../../../../domain/models/GroupUserModel";
 import { User } from "../../../../domain/models/UserModel";
 import logger from "../../../../infrastructure/configs/LoggerConfig";
 import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
@@ -54,12 +54,12 @@ export class RegisterGroupUserUseCase {
     }
 
     async validateIsGroupEmpty(usersArray: Array<number>) {
-        if(usersArray.length === 0) {
+        if (usersArray.length === 0) {
             logger.error("[RegisterGroupUserUseCase] Array de usuários vazio");
             throw new GroupUsersEmptyError("[RegisterGroupUserUseCase] Usuários devem ser informados");
         }
     }
-    
+
     async removeMembers(usersArray: Array<number>, userId: number): Promise<Array<number>> {
         return usersArray.filter(user => user !== userId);
     }
@@ -72,7 +72,7 @@ export class RegisterGroupUserUseCase {
                 throw new UserNotFoundError(`Usuário ${user} não encontrado`);
             }
         });
-    
+
         await Promise.all(userValidationPromises);
     }
 }

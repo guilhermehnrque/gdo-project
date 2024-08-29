@@ -1,5 +1,5 @@
 // Models
-import InvitationModel from "../../../domain/models/InvitationModel";
+import { Invitation as InvitationModel } from "../../../domain/models/InvitationModel";
 import { User } from "../../../domain/models/UserModel";
 
 // DTOs

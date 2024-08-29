@@ -4,7 +4,6 @@ import GroupEntity from '../../../../domain/entity/GroupEntity';
 import logger from '../../../../infrastructure/configs/LoggerConfig';
 import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
 
-
 export class UpdateGroupStatusUseCase {
 
     private groupRepository: GroupRepositoryImpl;

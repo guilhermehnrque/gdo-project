@@ -5,7 +5,7 @@ import { InvitationEntity } from "../../../domain/entity/InvitationEntity";
 import { InvitationStatus } from "../../../domain/enums/InvitationStatus";
 
 // Models
-import Group from "../../../domain/models/GroupModel";
+import { Group } from "../../../domain/models/GroupModel";
 import { User } from "../../../domain/models/UserModel";
 
 // Adapters
@@ -51,11 +51,11 @@ export class CreateInvitationUseCase {
         }
 
         const invitationEntity = await InvitationEntity.createFromPayload(group.id, user.id, InvitationStatus.PENDING, userOwner.id);
-        
+
         await this.invitationRepository.createInvitation(invitationEntity);
 
         this.prepareEmail(user, group, invitationEntity.code);
-        
+
         return invitationEntity.code;
     }
 
