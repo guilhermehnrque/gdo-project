@@ -5,8 +5,8 @@ import GroupEntity from "../../domain/entity/GroupEntity";
 import { GroupRepositoryInterface } from "../../domain/repositories/GroupRepositoryInterface";
 
 // Models
-import Group from "../../domain/models/GroupModel";
-import Local from "../../domain/models/LocalModel";
+import { Group } from "../../domain/models/GroupModel";
+import { Local } from "../../domain/models/LocalModel";
 
 // Errors
 import DatabaseError from "../../application/erros/DatabaseError";

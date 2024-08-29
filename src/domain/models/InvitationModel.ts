@@ -82,4 +82,4 @@ Invitation.init(
     }
 );
 
-export default Invitation;
+export { Invitation };

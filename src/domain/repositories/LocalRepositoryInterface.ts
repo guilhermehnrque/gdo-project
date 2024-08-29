@@ -1,5 +1,5 @@
 import LocalEntity from "../entity/LocalEntity";
-import Local from "../models/LocalModel";
+import { Local } from "../models/LocalModel";
 
 export default interface LocalRepositoryInterface {
     createLocal(localEntity: LocalEntity, options: any): Promise<Local>;

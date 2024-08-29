@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import { User } from './UserModel';
-import Local from './LocalModel';
+import { Local } from './LocalModel';
+import { Invitation } from './InvitationModel';
 import sequelize from '../../infrastructure/database/index';
-import Invitation from './InvitationModel';
 
 interface GroupAttributes {
     id: number;
