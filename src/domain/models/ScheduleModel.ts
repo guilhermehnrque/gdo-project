@@ -4,26 +4,31 @@ import { Group } from './GroupModel';
 
 interface ScheduleAttributes {
     id: number;
-    day_of_week: Date;
+    day_of_week: string;
     active: boolean;
     start: string;
     finish: string;
     created_at: Date;
-    updated_at: Date | null;
     groups_id: number;
+    scheduling: boolean;
+    execute_before_days?: number | null;
+    execute_in_hour?: string | null;
+    updated_at?: Date | null;
 }
-
-interface ScheduleCreationAttributes extends Omit<Schedule, 'id' | 'created_at' | 'updated_at'> { }
+type ScheduleCreationAttributes = Omit<ScheduleAttributes, 'id' | 'created_at' | 'updated_at'>;
 
 class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> implements ScheduleAttributes {
     public id!: number;
-    public day_of_week!: Date;
+    public day_of_week!: string;
     public active!: boolean;
     public start!: string;
     public finish!: string;
     public created_at!: Date;
-    public updated_at!: Date | null;
     public groups_id!: number;
+    public scheduling!: boolean;
+    public execute_before_days?: number | null;
+    public execute_in_hour?: string | null;
+    public updated_at?: Date | null;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date | null;
@@ -36,7 +41,7 @@ Schedule.init({
         primaryKey: true,
     },
     day_of_week: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     active: {
@@ -68,6 +73,18 @@ Schedule.init({
             model: Group,
             key: 'id',
         }
+    },
+    scheduling: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    execute_before_days: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    execute_in_hour: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 }, {
     sequelize,

@@ -3,3 +3,8 @@ export interface ScheduleUpdateRequest {
     startTime: string;
     endTime: string;
 }
+
+export interface ScheduleUpdateParams {
+    scheduleId: number;
+    groupId: number;
+}

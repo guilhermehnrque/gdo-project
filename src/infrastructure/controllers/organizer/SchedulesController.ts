@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CustomError from "../../../application/erros/CustomError";
 import { SchedulesFacade } from "../../../application/facade/organizer/SchedulesFacade";
-import { ScheduleCreateParams, ScheduleCreateRequest } from "../../requests/organizer/schedules/ScheduleCreateRequest";
+import { ScheduleCreateRequest } from "../../requests/organizer/schedules/ScheduleCreateRequest";
 
 export class SchedulesController {
 
@@ -13,10 +13,9 @@ export class SchedulesController {
     public async createSchedule(request: Request, response: Response): Promise<Response> {
         try {
             const body = request.body as ScheduleCreateRequest;
-            const params = request.params as unknown as ScheduleCreateParams;
 
-            await this.scheduleFacade.createSchedule(body, params);
-            return response.status(201).json({ message: "O horário foi criado" });
+            await this.scheduleFacade.createSchedule(body);
+            return response.status(201).json({ message: "O horário do grupo foi criado" });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;

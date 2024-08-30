@@ -1,17 +1,16 @@
 export interface ScheduleCreateRequest {
+
+    groupId: number;
+
     schedule: {
         dayOfWeek: string;
         startTime: string;
         endTime: string;
     };
 
-    schedling: {
-        scheduling: boolean;
+    scheduling: {
+        isSchedulingActive: boolean;
         executeBeforeDays: number;
         executeInHour: string;
     }
-}
-
-export interface ScheduleCreateParams {
-    groupId: number;
 }

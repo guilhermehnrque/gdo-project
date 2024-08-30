@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import HashPassword from '../../infrastructure/configs/HashPassword';
-import { booleanToTinyInt } from '../../application/utils/BooleanUtils';
 import { RegisterUserRequest } from '../../infrastructure/requests/auth/RegisterUserRequest';
 
 class UserEntity {

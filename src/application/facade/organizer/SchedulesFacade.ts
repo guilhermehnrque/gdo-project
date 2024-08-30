@@ -1,4 +1,4 @@
-import { ScheduleCreateParams, ScheduleCreateRequest } from '../../../infrastructure/requests/organizer/schedules/ScheduleCreateRequest';
+import { ScheduleCreateRequest } from '../../../infrastructure/requests/organizer/schedules/ScheduleCreateRequest';
 import { CreateScheduleUseCase } from '../../usecases/schedules/CreateScheduleUseCase';
 
 export class SchedulesFacade {
@@ -9,20 +9,21 @@ export class SchedulesFacade {
         this.createScheduleUseCase = new CreateScheduleUseCase();
     }
 
-    public async createSchedule(payload: ScheduleCreateRequest, param: ScheduleCreateParams): Promise<void> {
+    public async createSchedule(payload: ScheduleCreateRequest,): Promise<boolean> {
+        const { groupId } = payload;
         const { dayOfWeek, startTime, endTime } = payload.schedule;
-        const { scheduling, executeBeforeDays, executeInHour } = payload.schedling;
-        const { groupId } = param;
+        const { isSchedulingActive, executeBeforeDays, executeInHour } = payload.scheduling;
 
         const schedule = await this.createScheduleUseCase.execute(
             dayOfWeek,
             startTime,
             endTime,
             groupId,
-            scheduling,
-            executeBeforeDays,
-            executeInHour
+            isSchedulingActive,
+            executeBeforeDays ?? null,
+            executeInHour ?? null
         );
 
+        return schedule;
     }
 }
