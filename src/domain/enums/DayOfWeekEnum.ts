@@ -8,7 +8,7 @@ export enum DayOfWeekEnum {
     SATURDAY = 6
 }
 
-export function validDaysOfWeek(): DayOfWeekEnum[] {
+export function allowedDaysOfWeek(): DayOfWeekEnum[] {
     return [
         DayOfWeekEnum.SUNDAY,
         DayOfWeekEnum.MONDAY,
