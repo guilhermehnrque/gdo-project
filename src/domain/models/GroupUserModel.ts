@@ -15,6 +15,8 @@ class GroupsUsers extends Model<GroupsUsersAttributes, GroupsUsersCreationAttrib
     public id!: number;
     public groups_id!: number;
     public users_id!: number;
+
+    public readonly player?: User;
 }
 
 GroupsUsers.init({
@@ -47,7 +49,7 @@ GroupsUsers.init({
     timestamps: false,
 });
 
-GroupsUsers.belongsTo(User, { foreignKey: 'users_id' });
-GroupsUsers.belongsTo(Group, { foreignKey: 'groups_id' });
+GroupsUsers.belongsTo(User, { foreignKey: 'users_id', as: 'player' });
+GroupsUsers.belongsTo(Group, { foreignKey: 'groups_id', as: 'group' });
 
 export { GroupsUsers };

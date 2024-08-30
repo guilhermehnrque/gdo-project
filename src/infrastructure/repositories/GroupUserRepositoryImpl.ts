@@ -1,6 +1,7 @@
 import CustomError from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 import { GroupsUsers } from "../../domain/models/GroupUserModel";
+import { User } from "../../domain/models/UserModel";
 import { GroupUserInterface } from "../../domain/repositories/GroupUserInterface";
 
 export class GroupUserRepositoryImpl implements GroupUserInterface {
@@ -31,6 +32,23 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[GroupUserRepository] Error removing group user: ${customError.message}`);
+        }
+    }
+
+    async getAllGroupMembers(groupId: number): Promise<GroupsUsers[]> {
+        try {
+            return await GroupsUsers.findAll({
+                where: {
+                    groups_id: groupId,
+                },
+                include: {
+                    model: User,
+                    as: 'player',
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupUserRepository] Error getting all group members: ${customError.message}`);
         }
     }
 

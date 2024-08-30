@@ -9,6 +9,7 @@ interface GroupAttributes {
     description: string;
     is_active: number;
     users_id: number;
+    visibility: string;
     created_at: Date;
     updated_at?: Date;
     deleted_at?: Date;
@@ -22,6 +23,7 @@ class Group extends Model<GroupAttributes, GroupCreationAttributes> implements G
     public is_active!: number;
     public users_id!: number;
     public created_at!: Date;
+    public visibility!: string;
     public updated_at?: Date;
     public deleted_at?: Date;
 
@@ -53,6 +55,10 @@ Group.init({
             model: User,
             key: 'id',
         },
+    },
+    visibility: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
     },
     created_at: {
         type: DataTypes.DATE,

@@ -1,4 +1,5 @@
 import { Request } from "express";
+import GroupMemberDTO from "../dto/groupMember/GroupMemberDTO";
 
 export default interface GroupGatewayInterface {
 
@@ -17,5 +18,7 @@ export default interface GroupGatewayInterface {
     addUserToGroup(request: Request): Promise<any>;
 
     removeUsersFromGroup(request: Request): Promise<void>;
+
+    getGroupMembers(request: Request): Promise<GroupMemberDTO[]>;
 
 }

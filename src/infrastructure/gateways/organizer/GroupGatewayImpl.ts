@@ -27,6 +27,10 @@ import { GroupDTO } from "../../../application/dto/group/GroupDTO";
 import sequelize from "../../database";
 import { DeleteGroupUseCase } from "../../../application/usecases/organizer/group/DeleteGroupUseCase";
 
+// Enum
+import { getGroupVisibility } from '../../../domain/enums/GroupVisibilityEnum';
+import { GetGroupMembersUseCase } from "../../../application/usecases/organizer/group/GetGroupMembersUseCase";
+import GroupMemberDTO from "../../../application/dto/groupMember/GroupMemberDTO";
 
 export default class GroupGatewayImpl implements GroupGatewayInterface {
 
@@ -38,7 +42,8 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     private updateGroupStatusUseCase: UpdateGroupStatusUseCase;
     private registerGroupUserUseCase: RegisterGroupUserUseCase;
     private removeGroupUserUseCase: RemoveGroupUserUseCase;
-    private deleteGroupUseCase: DeleteGroupUseCase
+    private deleteGroupUseCase: DeleteGroupUseCase;
+    private getGroupMembersUseCase: GetGroupMembersUseCase;
 
     constructor() {
         this.createGroupUseCase = new CreateGroupUseCase();
@@ -50,6 +55,7 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         this.registerGroupUserUseCase = new RegisterGroupUserUseCase();
         this.removeGroupUserUseCase = new RemoveGroupUserUseCase();
         this.deleteGroupUseCase = new DeleteGroupUseCase();
+        this.getGroupMembersUseCase = new GetGroupMembersUseCase();
     }
 
     async createGroup(request: Request): Promise<boolean> {
@@ -90,9 +96,9 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
     async updateGroupById(request: Request): Promise<number> {
         const userId = request.userId as string;
         const groupId = parseInt(request.params.groupId);
-        const { description, status } = request.body as UpdateGroupRequest
+        const { description, status, visibility } = request.body as UpdateGroupRequest
 
-        return await this.updateGroupUseCase.execute(groupId, userId, description, status);
+        return await this.updateGroupUseCase.execute(groupId, userId, description, status, getGroupVisibility(visibility));
     }
 
     async changeGroupStatus(request: Request): Promise<number> {
@@ -137,6 +143,12 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
             await transaction.rollback();
             throw error;
         }
+    }
+
+    async getGroupMembers(request: Request): Promise<GroupMemberDTO[]> {
+        const { userId, groupId } = request.params;
+
+        return await this.getGroupMembersUseCase.execute(parseInt(groupId), userId);
     }
 
     private prepareData(request: Request) {

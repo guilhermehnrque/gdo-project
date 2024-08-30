@@ -94,4 +94,15 @@ export default class GroupController {
         }
     }
 
+    async getGroupMembers(request: Request, response: Response) {
+        try {
+            const members = await this.groupGateway.getGroupMembers(request);
+            return response.status(200).json(members);
+        }
+        catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
 }
