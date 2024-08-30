@@ -36,16 +36,18 @@ export class ScheduleEntity {
         this.updated_at = new Date();
 
         this.validations();
+        this.start = this.addSecondsToHour(this.start);
+        this.finish = this.addSecondsToHour(this.finish);
     }
 
     static async fromRepository(
-        dayOfWeek: string, 
-        active: boolean, 
-        start: string, 
-        finish: string, 
-        group_id: number, 
-        scheduling: boolean, 
-        executeBeforeDays: number | null, 
+        dayOfWeek: string,
+        active: boolean,
+        start: string,
+        finish: string,
+        group_id: number,
+        scheduling: boolean,
+        executeBeforeDays: number | null,
         executeInHour: string | null,
     ): Promise<ScheduleEntity> {
         return new ScheduleEntity(
@@ -63,7 +65,7 @@ export class ScheduleEntity {
     public validations(): void {
         const validateHour = this.validateIfHourString(this.start) && this.validateIfHourString(this.finish);
 
-        if (validateHour) {
+        if (!validateHour) {
             throw new Error('Invalid hour format');
         }
     }
@@ -75,6 +77,14 @@ export class ScheduleEntity {
     private validateIfHourString(hour: string): boolean {
         const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
         return regex.test(hour);
+    }
+
+    private addSecondsToHour(hour: string): string {
+        if (/^\d{2}:\d{2}:\d{2}$/.test(hour)) {
+            return hour;
+        }
+
+        return `${hour}:00`;
     }
 
 }

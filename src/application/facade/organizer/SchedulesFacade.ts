@@ -9,7 +9,7 @@ export class SchedulesFacade {
         this.createScheduleUseCase = new CreateScheduleUseCase();
     }
 
-    public async createSchedule(payload: ScheduleCreateRequest,): Promise<boolean> {
+    public async createSchedule(payload: ScheduleCreateRequest): Promise<boolean> {
         const { groupId } = payload;
         const { dayOfWeek, startTime, endTime } = payload.schedule;
         const { isSchedulingActive, executeBeforeDays, executeInHour } = payload.scheduling;

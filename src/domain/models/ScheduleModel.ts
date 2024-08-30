@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 import { Group } from './GroupModel';
 
@@ -15,7 +15,8 @@ interface ScheduleAttributes {
     execute_in_hour?: string | null;
     updated_at?: Date | null;
 }
-type ScheduleCreationAttributes = Omit<ScheduleAttributes, 'id' | 'created_at' | 'updated_at'>;
+
+type ScheduleCreationAttributes = Optional<ScheduleAttributes, 'id' | 'created_at' | 'updated_at'>;
 
 class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> implements ScheduleAttributes {
     public id!: number;
@@ -39,6 +40,7 @@ Schedule.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
     },
     day_of_week: {
         type: DataTypes.TEXT,
@@ -60,11 +62,13 @@ Schedule.init({
         type: DataTypes.DATE,
         allowNull: false,
         field: 'created_at',
+        defaultValue: DataTypes.NOW,
     },
     updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
         field: 'updated_at',
+        defaultValue: null,
     },
     groups_id: {
         type: DataTypes.INTEGER,
@@ -72,7 +76,7 @@ Schedule.init({
         references: {
             model: Group,
             key: 'id',
-        }
+        },
     },
     scheduling: {
         type: DataTypes.BOOLEAN,
@@ -81,15 +85,18 @@ Schedule.init({
     execute_before_days: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: null,
     },
     execute_in_hour: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
     },
 }, {
     sequelize,
     tableName: 'schedules',
     modelName: 'Schedule',
+    timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
