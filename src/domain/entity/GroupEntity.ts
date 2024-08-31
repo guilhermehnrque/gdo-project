@@ -1,4 +1,3 @@
-import { booleanToTinyInt } from "../../application/utils/BooleanUtils";
 import CreateGroupDTO from "../../application/dto/group/CreateGroupDTO";
 
 export default class GroupEntity {
@@ -52,7 +51,7 @@ export default class GroupEntity {
     toCreatePayload() {
         return {
             description: this.description,
-            is_active: booleanToTinyInt(this.is_active),
+            is_active: this.is_active,
             users_id: this.users_id,
             visibility: this.visibility
         };
@@ -62,7 +61,7 @@ export default class GroupEntity {
         return {
             id: this.id!,
             description: this.description,
-            is_active: booleanToTinyInt(this.is_active),
+            is_active: this.is_active,
             users_id: this.users_id,
             visibility: this.visibility
         };

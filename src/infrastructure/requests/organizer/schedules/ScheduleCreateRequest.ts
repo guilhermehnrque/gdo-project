@@ -1,7 +1,17 @@
 export interface ScheduleCreateRequest {
+
+    groupId: number;
+    localId: number;
+
     schedule: {
-        dateOfWeek: number;
+        dayOfWeek: string;
         startTime: string;
         endTime: string;
     };
+
+    scheduling: {
+        isSchedulingActive: boolean;
+        executeBeforeDays: number;
+        executeInHour: string;
+    }
 }

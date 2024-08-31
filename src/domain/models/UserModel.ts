@@ -21,7 +21,6 @@ interface UserAttributes {
     reset_password_token?: string | null;
     reset_password_expires?: Date | null;
     jwt_tokens?: JwtToken;
-
 }
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;

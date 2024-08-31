@@ -22,4 +22,15 @@ export class GroupService {
         return group;
     }
 
+    async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<Group[]> {
+        const groups = await this.groupRepository.getUserGroupsByUserId(userIdPk);
+
+        if (!groups) {
+            logger.error(`[GroupService] Grupos não encontrados -> userIdPk: ${userIdPk}`);
+            throw new GroupNotFoundError('[GroupService] Grupos não encontrados');
+        }
+
+        return groups;
+    }
+
 }
