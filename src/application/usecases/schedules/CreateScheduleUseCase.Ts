@@ -1,15 +1,18 @@
 import { ScheduleEntity } from "../../../domain/entity/ScheduleEntity";
 import { ScheduleRepositoryImpl } from "../../../infrastructure/repositories/ScheduleRepositoryImpl";
+import { LocalService } from "../../services/LocalService";
 import { SchedulesService } from "../../services/SchedulesService";
 
 export class CreateScheduleUseCase {
 
     private scheduleRepository: ScheduleRepositoryImpl;
     private scheduleService: SchedulesService;
+    private localService: LocalService;
 
     constructor() {
         this.scheduleRepository = new ScheduleRepositoryImpl();
         this.scheduleService = new SchedulesService();
+        this.localService = new LocalService();
     }
 
     public async execute(
@@ -17,6 +20,7 @@ export class CreateScheduleUseCase {
         startTime: string,
         endTime: string,
         groupId: number,
+        localId: number,
         isSchedulingActive: boolean,
         executeBeforeDays: number | null,
         executeInHour: string | null,
@@ -30,9 +34,9 @@ export class CreateScheduleUseCase {
             execInHour = null;
         }
 
-        await this.validations(groupId, dayOfWeek, startTime, endTime);
+        await this.validations(groupId, dayOfWeek, startTime, endTime, localId);
 
-        const schedule = await ScheduleEntity.fromRepository(
+        const schedule = await ScheduleEntity.fromUseCase(
             dayOfWeek,
             registerStatus,
             startTime,
@@ -41,14 +45,16 @@ export class CreateScheduleUseCase {
             isSchedulingActive,
             execBeforeDays,
             execInHour,
+            localId
         );
 
         return this.save(schedule);
     }
 
-    private async validations(groupId: number, dayOfWeek: string, startTime: string, endTime: string) {
+    private async validations(groupId: number, dayOfWeek: string, startTime: string, endTime: string, localId: number) {
         await this.scheduleService.checkGroupScheduleConflict(groupId, dayOfWeek, startTime, endTime);
         await this.scheduleService.verifyGroupSchedule(dayOfWeek, startTime, endTime);
+        await this.localService.ensureLocalDoesNotExist(localId);
     }
 
     private async save(schedule: ScheduleEntity) {

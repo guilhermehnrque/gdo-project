@@ -36,7 +36,11 @@ const schemas = {
 
         body('groupId')
             .isNumeric().withMessage('GroupId deve ser tdo tipo Inteiro')
-            .notEmpty().withMessage('GroupId deve ser declarado no body')
+            .notEmpty().withMessage('GroupId deve ser declarado no body'),
+        
+        body('localId')
+            .isNumeric().withMessage('LocalId deve ser tdo tipo Inteiro')
+            .notEmpty().withMessage('LocalId deve ser declarado no body'),
 
     ]
 }

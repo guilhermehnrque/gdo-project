@@ -1,6 +1,7 @@
 export interface ScheduleCreateRequest {
 
     groupId: number;
+    localId: number;
 
     schedule: {
         dayOfWeek: string;

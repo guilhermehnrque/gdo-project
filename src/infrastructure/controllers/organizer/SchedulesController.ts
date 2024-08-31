@@ -6,6 +6,7 @@ import { ScheduleCreateRequest } from "../../requests/organizer/schedules/Schedu
 export class SchedulesController {
 
     private scheduleFacade: SchedulesFacade;
+    
     constructor() {
         this.scheduleFacade = new SchedulesFacade();
     }

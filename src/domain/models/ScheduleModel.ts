@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 import { Group } from './GroupModel';
+import { Local } from './LocalModel';
 
 interface ScheduleAttributes {
     id: number;
@@ -14,6 +15,7 @@ interface ScheduleAttributes {
     execute_before_days?: number | null;
     execute_in_hour?: string | null;
     updated_at?: Date | null;
+    locals_id?: number | null;
 }
 
 type ScheduleCreationAttributes = Optional<ScheduleAttributes, 'id' | 'created_at' | 'updated_at'>;
@@ -30,6 +32,7 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
     public execute_before_days?: number | null;
     public execute_in_hour?: string | null;
     public updated_at?: Date | null;
+    public locals_id?: number | null;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date | null;
@@ -78,6 +81,15 @@ Schedule.init({
             key: 'id',
         },
     },
+    locals_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        references: {
+            model: Local,
+            key: 'id',
+        }
+    },
     scheduling: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -100,5 +112,7 @@ Schedule.init({
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
+
+Schedule.belongsTo(Local, {foreignKey: 'locals_id', as: 'local'});
 
 export { Schedule };

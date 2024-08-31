@@ -10,7 +10,7 @@ export class SchedulesFacade {
     }
 
     public async createSchedule(payload: ScheduleCreateRequest): Promise<boolean> {
-        const { groupId } = payload;
+        const { groupId, localId } = payload;
         const { dayOfWeek, startTime, endTime } = payload.schedule;
         const { isSchedulingActive, executeBeforeDays, executeInHour } = payload.scheduling;
 
@@ -19,6 +19,7 @@ export class SchedulesFacade {
             startTime,
             endTime,
             groupId,
+            localId,
             isSchedulingActive,
             executeBeforeDays ?? null,
             executeInHour ?? null

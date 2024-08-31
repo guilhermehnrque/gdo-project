@@ -51,6 +51,5 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
     logAndThrowError(error: CustomError, context: string): void {
         logger.error(`${context} error message -> ${error.message}`);
         throw new Error(`${context}Database error`);
-
     }
 }

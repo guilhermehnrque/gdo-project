@@ -12,6 +12,7 @@ export class ScheduleEntity {
     scheduling: boolean;
     execute_before_days?: number | null;
     execute_in_hour?: string | null;
+    locals_id?: number | null;
 
     constructor(
         dayOfWeek: string,
@@ -23,6 +24,8 @@ export class ScheduleEntity {
         executeBeforeDays?: number | null,
         executeInHour?: string | null,
         id?: number,
+        updated_at?: Date | null,
+        locals_id?: number | null
     ) {
         this.day_of_week = this.dayOfWeekByString(dayOfWeek);
         this.active = active;
@@ -34,13 +37,14 @@ export class ScheduleEntity {
         this.execute_in_hour = executeInHour ?? null;
         this.created_at = new Date();
         this.updated_at = new Date();
+        this.locals_id = locals_id ?? null;
 
         this.validations();
         this.start = this.addSecondsToHour(this.start);
         this.finish = this.addSecondsToHour(this.finish);
     }
 
-    static async fromRepository(
+    static async fromUseCase(
         dayOfWeek: string,
         active: boolean,
         start: string,
@@ -49,6 +53,8 @@ export class ScheduleEntity {
         scheduling: boolean,
         executeBeforeDays: number | null,
         executeInHour: string | null,
+        locals_id: number | null
+
     ): Promise<ScheduleEntity> {
         return new ScheduleEntity(
             dayOfWeek,
