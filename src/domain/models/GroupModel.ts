@@ -7,7 +7,7 @@ import sequelize from '../../infrastructure/database/index';
 interface GroupAttributes {
     id: number;
     description: string;
-    is_active: number;
+    is_active: boolean;
     users_id: number;
     visibility: string;
     created_at: Date;
@@ -20,7 +20,7 @@ type GroupCreationAttributes = Omit<GroupAttributes, 'id' | 'created_at' | 'upda
 class Group extends Model<GroupAttributes, GroupCreationAttributes> implements GroupAttributes {
     public id!: number;
     public description!: string;
-    public is_active!: number;
+    public is_active!: boolean;
     public users_id!: number;
     public created_at!: Date;
     public visibility!: string;
@@ -87,6 +87,6 @@ Group.init({
 });
 
 Group.hasOne(Local, { foreignKey: 'groups_id', as: 'local' });
-Group.hasMany(Invitation, { foreignKey: 'groups_id' });
+Group.hasMany(Invitation, { foreignKey: 'groups_id', as: 'invitations' });
 
 export { Group };

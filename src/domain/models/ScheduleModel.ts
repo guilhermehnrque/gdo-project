@@ -36,6 +36,8 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date | null;
+    public readonly group?: Group;
+    public readonly local?: Local;
 }
 
 Schedule.init({
@@ -114,5 +116,6 @@ Schedule.init({
 });
 
 Schedule.belongsTo(Local, {foreignKey: 'locals_id', as: 'local'});
+Schedule.belongsTo(Group, {foreignKey: 'groups_id', as: 'group'});
 
 export { Schedule };

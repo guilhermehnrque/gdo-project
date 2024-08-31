@@ -1,12 +1,16 @@
 import { ScheduleCreateRequest } from '../../../infrastructure/requests/organizer/schedules/ScheduleCreateRequest';
-import { CreateScheduleUseCase } from '../../usecases/schedules/CreateScheduleUseCase';
+import { GetSchedulesUseCase } from '../../usecases/organizer/schedules/GetSchedulesUseCase';
+import { CreateScheduleUseCase } from '../../usecases/organizer/schedules/CreateScheduleUseCase';
+import { ScheduleDTO } from '../../dto/organizer/schedules/SchedulesDTO';
 
 export class SchedulesFacade {
 
     private createScheduleUseCase: CreateScheduleUseCase;
+    private getSchedulesUseCase: GetSchedulesUseCase;
 
     constructor() {
         this.createScheduleUseCase = new CreateScheduleUseCase();
+        this.getSchedulesUseCase = new GetSchedulesUseCase();
     }
 
     public async createSchedule(payload: ScheduleCreateRequest): Promise<boolean> {
@@ -26,5 +30,9 @@ export class SchedulesFacade {
         );
 
         return schedule;
+    }
+
+    public async getAllSchedulesByOrganizerId(organizerId: string): Promise<ScheduleDTO[]> {
+        return await this.getSchedulesUseCase.execute(organizerId);
     }
 }

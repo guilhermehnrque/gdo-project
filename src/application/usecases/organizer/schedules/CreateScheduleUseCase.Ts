@@ -1,7 +1,7 @@
-import { ScheduleEntity } from "../../../domain/entity/ScheduleEntity";
-import { ScheduleRepositoryImpl } from "../../../infrastructure/repositories/ScheduleRepositoryImpl";
-import { LocalService } from "../../services/LocalService";
-import { SchedulesService } from "../../services/SchedulesService";
+import { ScheduleEntity } from "../../../../domain/entity/ScheduleEntity";
+import { ScheduleRepositoryImpl } from "../../../../infrastructure/repositories/ScheduleRepositoryImpl";
+import { LocalService } from "../../../services/LocalService";
+import { SchedulesService } from "../../../services/SchedulesService";
 
 export class CreateScheduleUseCase {
 

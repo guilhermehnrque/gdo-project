@@ -13,3 +13,5 @@ export class LocalDTO {
         public updated_at: string
     ) { }
 }
+
+// TODO: Refactor this class to use the new DTO pattern
