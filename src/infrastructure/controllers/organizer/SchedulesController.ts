@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import CustomError from "../../../application/erros/CustomError";
 import { SchedulesFacade } from "../../../application/facade/organizer/SchedulesFacade";
 import { ScheduleCreateRequest } from "../../requests/organizer/schedules/ScheduleCreateRequest";
+import { ScheduleUpdateRequest } from "../../requests/organizer/schedules/ScheduleUpdateRequest";
 
 export class SchedulesController {
 
@@ -54,7 +55,17 @@ export class SchedulesController {
 
     public async updateScheduleById(request: Request, response: Response) {
         try {
-            return response.status(201).json({ message: "O horário foi criado" });
+            const body = request.body as ScheduleUpdateRequest;
+            const scheduleId = parseInt(request.params.scheduleId);
+
+            const updatePayload = {
+                ...body,
+                scheduleId
+            }
+
+            await this.scheduleFacade.updateScheduleById(updatePayload);
+
+            return response.status(204).json();
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;

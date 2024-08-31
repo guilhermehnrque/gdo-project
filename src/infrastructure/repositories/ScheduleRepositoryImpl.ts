@@ -93,6 +93,46 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         }
     }
 
+    async getScheduleByScheduleIdPkAndGroupIdPk(scheduleId: number, groupId: number): Promise<ScheduleModel | null | undefined> {
+        try {
+            return await ScheduleModel.findOne({
+                where: {
+                    id: scheduleId,
+                    groups_id: groupId
+                },
+                include: [{
+                    model: Group,
+                    as: 'group'
+                },
+                {
+                    model: Local,
+                    as: 'local'
+                }]
+            });
+        } catch (error) {
+            const err = error as CustomError;
+            this.logAndThrowError(err, "[ScheduleRepositoryImpl] getScheduleByScheduleIdPkAndGroupIdPk");
+        }
+    }
+
+    async updateSchedule(scheduleEntity: ScheduleEntity): Promise<number | null | undefined> {
+        const updatePayload = scheduleEntity.updatePayload();
+        try {
+            const [affectedCount] = await ScheduleModel.update(updatePayload, {
+                where: {
+                    id: updatePayload.id,
+                    groups_id: updatePayload.groups_id
+                }
+            });
+
+            return affectedCount || null;
+
+        } catch (error) {
+            const err = error as CustomError;
+            this.logAndThrowError(err, "[ScheduleRepositoryImpl] updateSchedule");
+        }
+    }
+
     logAndThrowError(error: CustomError, context: string): void {
         logger.error(`${context} error message -> ${error.message}`);
         throw new Error(`${context} Database error`);

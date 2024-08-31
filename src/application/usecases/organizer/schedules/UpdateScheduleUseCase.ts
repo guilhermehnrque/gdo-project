@@ -3,7 +3,7 @@ import { ScheduleRepositoryImpl } from "../../../../infrastructure/repositories/
 import { LocalService } from "../../../services/LocalService";
 import { SchedulesService } from "../../../services/SchedulesService";
 
-export class CreateScheduleUseCase {
+export class UpdateScheduleUseCase {
 
     private scheduleRepository: ScheduleRepositoryImpl;
     private scheduleService: SchedulesService;
@@ -24,6 +24,7 @@ export class CreateScheduleUseCase {
         isSchedulingActive: boolean,
         executeBeforeDays: number | null,
         executeInHour: string | null,
+        scheduleId: number
     ): Promise<boolean> {
         const registerStatus = true;
         let execBeforeDays = executeBeforeDays;
@@ -35,8 +36,8 @@ export class CreateScheduleUseCase {
         }
 
         await this.validations(groupId, dayOfWeek, startTime, endTime, localId);
-        
-        const schedule = await ScheduleEntity.fromUseCase({
+
+        const scheduleEntity = await ScheduleEntity.fromUpdateUseCase({
             day_of_week: dayOfWeek,
             active: registerStatus,
             start: startTime,
@@ -46,24 +47,30 @@ export class CreateScheduleUseCase {
             execute_before_days: execBeforeDays,
             execute_in_hour: execInHour,
             locals_id: localId,
+            id: scheduleId,
         });
-        
 
-        return this.save(schedule);
+
+        return this.update(scheduleEntity);
     }
 
     private async validations(groupId: number, dayOfWeek: string, startTime: string, endTime: string, localId: number) {
-        await this.scheduleService.checkGroupScheduleConflict(dayOfWeek, startTime, endTime);
+        await this.checkGroupScheduleConflicts(dayOfWeek, startTime, endTime, groupId);
         await this.localService.ensureLocalDoesNotExist(localId);
     }
 
-    private async save(schedule: ScheduleEntity) {
-        const response = await this.scheduleRepository.createSchedule(schedule);
+    private async checkGroupScheduleConflicts(dayOfWeek: string, startTime: string, endTime: string, groupIdPk: number): Promise<void> {
+        const groupSchedule = await this.scheduleRepository.getScheduleDayOfWeekAndHour(dayOfWeek, startTime, endTime);
 
-        if (!response || response === undefined) {
-            return false;
+        if (groupSchedule && groupSchedule.groups_id !== groupIdPk) {
+            return;
         }
 
-        return true;
+        await this.scheduleService.checkGroupScheduleConflict(dayOfWeek, startTime, endTime);
+    }
+
+    private async update(schedule: ScheduleEntity): Promise<boolean> {
+        const response = await this.scheduleRepository.updateSchedule(schedule);
+        return !!response;
     }
 }

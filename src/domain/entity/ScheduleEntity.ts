@@ -14,58 +14,37 @@ export class ScheduleEntity {
     execute_in_hour?: string | null;
     locals_id?: number | null;
 
-    constructor(
-        dayOfWeek: string,
-        active: boolean,
-        start: string,
-        finish: string,
-        group_id: number,
-        scheduling: boolean,
-        executeBeforeDays?: number | null,
-        executeInHour?: string | null,
-        id?: number,
-        updated_at?: Date | null,
-        locals_id?: number | null
-    ) {
-        this.day_of_week = this.dayOfWeekByString(dayOfWeek);
-        this.active = active;
-        this.start = start;
-        this.finish = finish;
-        this.groups_id = group_id;
-        this.scheduling = scheduling;
-        this.execute_before_days = executeBeforeDays ?? null;
-        this.execute_in_hour = executeInHour ?? null;
-        this.created_at = new Date();
-        this.updated_at = new Date();
-        this.locals_id = locals_id ?? null;
+    constructor(payload: Partial<ScheduleEntity>) {
+        this.day_of_week = this.dayOfWeekByString(payload.day_of_week!);
+        this.active = payload.active!;
+        this.start = payload.start!;
+        this.finish = payload.finish!;
+        this.groups_id = payload.groups_id!;
+        this.scheduling = payload.scheduling!;
+        this.execute_before_days = payload.execute_before_days ?? null;
+        this.execute_in_hour = payload.execute_in_hour ?? null;
+        this.created_at = payload.created_at ?? new Date();
+        this.updated_at = payload.updated_at ?? new Date();
+        this.locals_id = payload.locals_id ?? null;
+        this.id = payload.id;
 
         this.validations();
         this.start = this.addSecondsToHour(this.start);
         this.finish = this.addSecondsToHour(this.finish);
     }
 
-    static async fromUseCase(
-        dayOfWeek: string,
-        active: boolean,
-        start: string,
-        finish: string,
-        group_id: number,
-        scheduling: boolean,
-        executeBeforeDays: number | null,
-        executeInHour: string | null,
-        locals_id: number | null
+    static async fromUseCase(payload: Partial<ScheduleEntity>): Promise<ScheduleEntity> {
+        return new ScheduleEntity({
+            ...payload,
+            created_at: new Date(),
+        });
+    }
 
-    ): Promise<ScheduleEntity> {
-        return new ScheduleEntity(
-            dayOfWeek,
-            active,
-            start,
-            finish,
-            group_id,
-            scheduling,
-            executeBeforeDays,
-            executeInHour,
-        );
+    static async fromUpdateUseCase(payload: Partial<ScheduleEntity>): Promise<ScheduleEntity> {
+        return new ScheduleEntity({
+            ...payload,
+            updated_at: new Date(),
+        });
     }
 
     public validations(): void {
@@ -93,4 +72,18 @@ export class ScheduleEntity {
         return `${hour}:00`;
     }
 
+    updatePayload(): Partial<ScheduleEntity> {
+        return {
+            id: this.id,
+            day_of_week: this.day_of_week,
+            active: this.active,
+            start: this.start,
+            finish: this.finish,
+            groups_id: this.groups_id,
+            scheduling: this.scheduling,
+            execute_before_days: this.execute_before_days,
+            execute_in_hour: this.execute_in_hour,
+            locals_id: this.locals_id
+        };
+    }
 }

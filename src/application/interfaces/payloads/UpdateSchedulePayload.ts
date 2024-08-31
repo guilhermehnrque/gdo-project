@@ -1,5 +1,4 @@
-export interface ScheduleUpdateRequest {
-
+export interface UpdateSchedulePayload {
     groupId: number;
     localId: number;
 
@@ -15,7 +14,5 @@ export interface ScheduleUpdateRequest {
         executeInHour: string;
     }
 
-}
-export interface ScheduleUpdateParams {
     scheduleId: number;
 }
