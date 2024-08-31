@@ -63,13 +63,33 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
                 {
                     model: Local,
                     as: 'local'
-                }
-            ],
-            
+                }],
             });
         } catch (error) {
             const err = error as CustomError;
             this.logAndThrowError(err, "[ScheduleRepositoryImpl] getAllSchedulesByGroupsId");
+        }
+    }
+
+    async getScheduleGroupId(groupId: number): Promise<ScheduleModel | null | undefined> {
+        try {
+            return await ScheduleModel.findOne({
+                where: {
+                    groups_id: groupId
+                },
+                include: [{
+                    model: Group,
+                    as: 'group'
+                },
+                {
+                    model: Local,
+                    as: 'local'
+
+                }]
+            });
+        } catch (error) {
+            const err = error as CustomError;
+            this.logAndThrowError(err, "[ScheduleRepositoryImpl] getScheduleGroupId");
         }
     }
 

@@ -38,4 +38,14 @@ export class SchedulesService {
         return schedules;
     }
 
+    async getScheduleByGroupId(groupId: number): Promise<Schedule> {
+        const schedule = await this.scheduleRepository.getScheduleGroupId(groupId);
+
+        if (!schedule) {
+            throw new ScheduleNotFoundError();
+        }
+
+        return schedule;
+    }
+
 }

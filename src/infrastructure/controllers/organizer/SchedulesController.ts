@@ -39,7 +39,11 @@ export class SchedulesController {
 
     public async getScheduleByGroupId(request: Request, response: Response) {
         try {
-            return response.status(201).json({ message: "O horário foi criado" });
+            const userId = request.userId as string;
+            const groupId = parseInt(request.params.groupId);
+
+            const res = await this.scheduleFacade.getScheduleByGroupId(userId, groupId);
+            return response.status(200).json({ data: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
