@@ -1,4 +1,4 @@
-export interface ListCreateRequest {
+export interface ListCreatePayload {
     description: string;
     status: boolean;
     scheduleId: number;
