@@ -9,4 +9,5 @@ export interface ScheduleRepositoryInterface {
     getScheduleGroupId(groupId: number): Promise<Schedule | null | undefined>;
     getScheduleByScheduleIdPkAndGroupIdPk(scheduleId: number, groupId: number): Promise<Schedule | null | undefined>;
     updateSchedule(scheduleEntity: ScheduleEntity): Promise<number | null | undefined>;
+    getScheduleById(scheduleId: number): Promise<Schedule | null | undefined>;
 }

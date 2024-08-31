@@ -5,6 +5,8 @@ import { ScheduleDTO } from '../../dto/organizer/schedules/SchedulesDTO';
 import { GetScheduleUseCase } from '../../usecases/organizer/schedules/GetScheduleUseCase';
 import { UpdateScheduleUseCase } from '../../usecases/organizer/schedules/UpdateScheduleUseCase';
 import { UpdateSchedulePayload } from '../../interfaces/payloads/UpdateSchedulePayload';
+import { UpdateStatusSchedulePayload } from '../../interfaces/payloads/UpdateScheduleStatusPayload';
+import { UpdateStatusScheduleUseCase } from '../../usecases/organizer/schedules/UpdateStatusScheduleUseCase';
 
 export class SchedulesFacade {
 
@@ -12,12 +14,14 @@ export class SchedulesFacade {
     private getSchedulesUseCase: GetSchedulesUseCase;
     private getScheduleUseCase: GetScheduleUseCase;
     private updateScheduleUseCase: UpdateScheduleUseCase;
+    private updateStatusScheduleUseCase: UpdateStatusScheduleUseCase;
 
     constructor() {
         this.createScheduleUseCase = new CreateScheduleUseCase();
         this.getSchedulesUseCase = new GetSchedulesUseCase();
         this.getScheduleUseCase = new GetScheduleUseCase();
         this.updateScheduleUseCase = new UpdateScheduleUseCase();
+        this.updateStatusScheduleUseCase = new UpdateStatusScheduleUseCase();
     }
 
     public async createSchedule(payload: ScheduleCreateRequest): Promise<boolean> {
@@ -59,5 +63,9 @@ export class SchedulesFacade {
             payload.scheduling.executeInHour,
             payload.scheduleId
         );
+    }
+
+    public async updateStatusByScheduleId(payload: UpdateStatusSchedulePayload, scheduleId: number): Promise<boolean> {
+        return await this.updateStatusScheduleUseCase.execute(payload.active, scheduleId);
     }
 }

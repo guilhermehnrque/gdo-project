@@ -28,9 +28,10 @@ export class ScheduleEntity {
         this.locals_id = payload.locals_id ?? null;
         this.id = payload.id;
 
-        this.validations();
         this.start = this.addSecondsToHour(this.start);
         this.finish = this.addSecondsToHour(this.finish);
+
+        this.validations();
     }
 
     static async fromUseCase(payload: Partial<ScheduleEntity>): Promise<ScheduleEntity> {
@@ -48,7 +49,7 @@ export class ScheduleEntity {
     }
 
     public validations(): void {
-        const validateHour = this.validateIfHourString(this.start) && this.validateIfHourString(this.finish);
+        const validateHour = this.validateTimeFormat(this.start) && this.validateTimeFormat(this.finish);
 
         if (!validateHour) {
             throw new Error('Invalid hour format');
@@ -59,8 +60,8 @@ export class ScheduleEntity {
         return getDayOfWeekByString(dayOfWeek)!.toString().toUpperCase();
     }
 
-    private validateIfHourString(hour: string): boolean {
-        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+    private validateTimeFormat(hour: string): boolean {
+        const regex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
         return regex.test(hour);
     }
 

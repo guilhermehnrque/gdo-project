@@ -120,8 +120,7 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         try {
             const [affectedCount] = await ScheduleModel.update(updatePayload, {
                 where: {
-                    id: updatePayload.id,
-                    groups_id: updatePayload.groups_id
+                    id: updatePayload.id
                 }
             });
 
@@ -130,6 +129,15 @@ export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
         } catch (error) {
             const err = error as CustomError;
             this.logAndThrowError(err, "[ScheduleRepositoryImpl] updateSchedule");
+        }
+    }
+
+    async getScheduleById(scheduleId: number): Promise<ScheduleModel | null | undefined> {
+        try {
+            return await ScheduleModel.findByPk(scheduleId);
+        } catch (error) {
+            const err = error as CustomError;
+            this.logAndThrowError(err, "[ScheduleRepositoryImpl] getScheduleById");
         }
     }
 

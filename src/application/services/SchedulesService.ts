@@ -12,6 +12,17 @@ export class SchedulesService {
         this.scheduleRepository = new ScheduleRepositoryImpl();
     }
 
+    async getScheduleById(scheduleId: number): Promise<Schedule> {
+        const schedule = await this.scheduleRepository.getScheduleById(scheduleId);
+
+        if (!schedule) {
+            logger.error(`[SchedulesService] getScheduleById: Schedule not found -> ${scheduleId}`);
+            throw new ScheduleNotFoundError();
+        }
+
+        return schedule;
+    }
+
     async checkGroupScheduleConflict(dayOfWeek: string, startTime: string, endTime: string): Promise<void> {
         const hasSchedule = await this.scheduleRepository.getScheduleDayOfWeekAndHour(dayOfWeek, startTime, endTime);
 
