@@ -43,7 +43,7 @@ export class ListController {
         try {
             const listId = parseInt(request.params.listId);
 
-            await this.listFacade.deleteListById(listId);
+            await this.listFacade.updateListStatusById(listId);
             return response.status(204);
         }
         catch (error) {
