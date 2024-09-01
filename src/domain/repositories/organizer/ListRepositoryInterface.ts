@@ -6,7 +6,7 @@ export interface ListRepositoryInterface {
     updateList(listEntity: ListEntity): Promise<number>;
     updateListStatus(idPk: number, status: boolean): Promise<number>;
     getList(idPk: number): Promise<List | null>;
-    getLists(scheduleId: number): Promise<List[]>;
+    getLists(scheduleId: number[]): Promise<List[]>;
     getListDetail(idPk: number): Promise<List | null>;
     getListsByScheduleId(scheduleId: number): Promise<List | null>
 }

@@ -16,7 +16,7 @@ export class ListService {
 
         await this.checkExistenceOfList(list!);
 
-        return this.parseModelToEntity(list!);
+        return this.mapToEntity(list!);
     }
 
     public async getListDetail(listId: number): Promise<ListEntity> {
@@ -24,17 +24,17 @@ export class ListService {
 
         await this.checkExistenceOfList(list!);
 
-        return this.parseModelToEntity(list!)
+        return this.mapToEntity(list!)
     }
 
-    public async getAllLists(scheduleId: number): Promise<List[]> {
+    public async getAllLists(scheduleId: number[]): Promise<ListEntity[]> {
         const lists = await this.listRepository.getLists(scheduleId);
 
         if (lists.length <= 0) {
             throw new ListNotFoundError();
         }
 
-        return lists;
+        return this.mapListEntity(lists);
     }
 
     public async checkListConflit(schedulesId: number): Promise<void> {
@@ -48,8 +48,12 @@ export class ListService {
         }
     }
 
-    private async parseModelToEntity(local: List) {
+    private async mapToEntity(local: List) {
         return new ListEntity(local);
+    }
+
+    private async mapListEntity(list: List[]): Promise<ListEntity[]> {
+        return list.map(local => new ListEntity(local));
     }
 
 }

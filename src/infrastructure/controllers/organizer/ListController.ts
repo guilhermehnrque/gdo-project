@@ -69,9 +69,8 @@ export class ListController {
     public async getAllListsByOrganizerId(request: Request, response: Response) {
         try {
             const userId = request.userId as string;
-            const scheduleId = parseInt(request.params.scheduleId);
 
-            const res = await this.listFacade.getAllListsByOrganizerId(scheduleId, userId);
+            const res = await this.listFacade.getAllListsByOrganizerId(userId);
             return response.status(201).json({ data: res });
         }
         catch (error) {

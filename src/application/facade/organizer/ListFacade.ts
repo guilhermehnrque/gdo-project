@@ -1,3 +1,4 @@
+import { ListDTO } from "../../dto/organizer/list/ListDTO";
 import { ListCreatePayload } from "../../interfaces/payloads/list/ListCreatePayload";
 import { ListUpdatePayload } from "../../interfaces/payloads/list/ListUpdatePayload";
 import { CreateListUseCase } from "../../usecases/organizer/list/CreateListUseCase";
@@ -36,11 +37,11 @@ export class ListFacade {
        return await this.updateListStatusUseCase.execute(listId, status);
     }
 
-    public async getListById(listId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async getListById(listId: number): Promise<ListDTO> {
+        return await this.getListDetailsUseCase.execute(listId);
     }
 
-    public async getAllListsByOrganizerId(scheduleId: number, userId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async getAllListsByOrganizerId(userId: string): Promise<ListDTO[]> {
+        return await this.getListsUseCase.execute(userId);
     }
 }

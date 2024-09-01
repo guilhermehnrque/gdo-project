@@ -1,17 +1,19 @@
-import { ListRepositoryImpl } from "../../../../infrastructure/repositories/organizer/ListRepositoryImpl";
+import { ListDTO } from "../../../dto/organizer/list/ListDTO";
+import { mapListDTO } from "../../../mappers/organizer/ListDetailMapper";
 import { ListService } from "../../../services/organizer/ListService";
 
 export class GetListDetailsUseCase {
 
-    private listRepository: ListRepositoryImpl;
     private listService: ListService;
 
     constructor() {
-        this.listRepository = new ListRepositoryImpl();
         this.listService = new ListService();
     }
 
-    public async execute(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async execute(listIdPk: number): Promise<ListDTO> {
+        const listDetail = await this.listService.getListDetail(listIdPk);
+
+        return await mapListDTO(listDetail);
     }
+    
 }

@@ -37,4 +37,5 @@ export class ListEntity {
             schedules_id: this.schedules_id
         };
     }
+
 }

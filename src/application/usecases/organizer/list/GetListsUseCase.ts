@@ -1,17 +1,36 @@
-import { ListRepositoryImpl } from "../../../../infrastructure/repositories/organizer/ListRepositoryImpl";
+import { ListDTO } from "../../../dto/organizer/list/ListDTO";
+import { mapListDTO } from "../../../mappers/organizer/ListDetailMapper";
+import { GroupService } from "../../../services/GroupService";
 import { ListService } from "../../../services/organizer/ListService";
+import { SchedulesService } from "../../../services/SchedulesService";
+import UserService from "../../../services/UserService";
 
 export class GetListsUseCase {
 
-    private listRepository: ListRepositoryImpl;
     private listService: ListService;
+    private scheduleService: SchedulesService;
+    private groupService: GroupService; 
+    private userService: UserService;
 
     constructor() {
-        this.listRepository = new ListRepositoryImpl();
+        this.groupService = new GroupService();
+        this.scheduleService = new SchedulesService();
         this.listService = new ListService();
+        this.userService = new UserService();
     }
 
-    public async execute(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async execute(userId: string): Promise<ListDTO[]> {
+        const user = await this.userService.getUserById(userId);
+
+        const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user!.id);
+        const groupsId = groups.map(group => group.id);
+
+        const schedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);
+        const schedulesId = schedules.map(schedule => schedule.id);
+
+        const lists = await this.listService.getAllLists(schedulesId);
+
+        return await Promise.all(lists.map(list => mapListDTO(list)));
     }
+    
 }

@@ -12,7 +12,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             return await List.create(listEntity.toCreatePayload());
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] createList error creating group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] createList error creating lists -> ${customError.message}`);
         }
     }
 
@@ -25,7 +25,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] updateList error updating group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] updateList error updating lists -> ${customError.message}`);
         }
     }
 
@@ -38,7 +38,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] updateListStatus error updating group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] updateListStatus error updating lists -> ${customError.message}`);
         }
     }
 
@@ -51,7 +51,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             })
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getList error getting group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getList error getting lists -> ${customError.message}`);
         }
     }
 
@@ -70,11 +70,11 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             })
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getListDetail error getting group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getListDetail error getting lists -> ${customError.message}`);
         }
     }
 
-    async getLists(scheduleId: number): Promise<List[]> {
+    async getLists(scheduleId: number[]): Promise<List[]> {
         try {
             return await List.findAll({
                 where: {
@@ -83,7 +83,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getLists error getting group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getLists error getting lists -> ${customError.message}`);
         }
     }
 
@@ -96,7 +96,7 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupRepositoryImpl] getListsByScheduleId error getting group -> ${customError.message}`);
+            throw new DatabaseError(`[GroupRepositoryImpl] getListsByScheduleId error getting lists -> ${customError.message}`);
         }
     }
 
