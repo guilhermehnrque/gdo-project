@@ -2,9 +2,10 @@ import { Router, Request, Response } from 'express';
 import { schemas, handleValidationErrors } from '../../../middlewares/lists/ListValidator';
 import { ListController } from '../../../controllers/organizer/ListController';
 
+const router = Router();
+
 const listController = new ListController();
 
-const router = Router();
 router.post('/', [...schemas.register, handleValidationErrors], async (req: Request, res: Response) => { listController.createList(req, res) });
 router.get('/', async (req: Request, res: Response) => { listController.getAllListsByOrganizerId(req, res) });
 router.get('/:listId', [...schemas.get, handleValidationErrors], async (req: Request, res: Response) => { listController.getDetailsListById(req, res) });
