@@ -1,20 +1,90 @@
 import { ListRepositoryInterface } from "../../../domain/repositories/organizer/ListRepositoryInterface";
 import { List } from "../../../domain/models/ListModel";
+import { ListEntity } from "../../../domain/entity/organizer/ListEntity";
+import CustomError from "../../../application/erros/CustomError";
+import DatabaseError from "../../../application/erros/DatabaseError";
+import { Schedule } from "../../../domain/models/ScheduleModel";
 
 export class ListRepositoryImpl implements ListRepositoryInterface {
-    createList(): void {
-        throw new Error("Method not implemented.");
+
+    async createList(listEntity: ListEntity): Promise<List> {
+        try {
+            return await List.create(listEntity.toCreatePayload());
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] createList error creating group -> ${customError.message}`);
+        }
     }
-    updateList(): void {
-        throw new Error("Method not implemented.");
+
+    async updateList(listEntity: ListEntity): Promise<number> {
+        try {
+            const [affectedCount] = await List.update(listEntity.toUpdatePayload(), {
+                where: { id: listEntity.id }
+            });
+
+            return affectedCount;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] updateList error updating group -> ${customError.message}`);
+        }
     }
-    updateListStatus(): void {
-        throw new Error("Method not implemented.");
+
+    async updateListStatus(idPk: number, status: boolean): Promise<number> {
+        try {
+            const [affectedCount] = await List.update({ id: idPk }, {
+                where: { status: true }
+            });
+
+            return affectedCount;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] updateListStatus error updating group -> ${customError.message}`);
+        }
     }
-    getList(): void {
-        throw new Error("Method not implemented.");
+
+    async getList(idPk: number): Promise<List | null> {
+        try {
+            return await List.findOne({
+                where: {
+                    id: idPk
+                }
+            })
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getList error getting group -> ${customError.message}`);
+        }
     }
-    getLists(): void {
-        throw new Error("Method not implemented.");
+
+    async getListDetail(idPk: number): Promise<List | null> {
+        try {
+            return await List.findOne({
+                where: {
+                    id: idPk
+                },
+                include: [
+                    {
+                        model: Schedule,
+                        as: 'schedule',
+                    }
+                ]
+            })
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getListDetail error getting group -> ${customError.message}`);
+        }
     }
+
+    async getLists(scheduleId: number): Promise<List[]> {
+        try {
+            return await List.findAll({
+                where: {
+                    schedules_id: scheduleId
+                },
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getLists error getting group -> ${customError.message}`);
+        }
+    }
+
 }
