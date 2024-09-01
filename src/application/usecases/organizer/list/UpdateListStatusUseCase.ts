@@ -13,8 +13,7 @@ export class UpdateListStatusUseCase {
 
     public async execute(listIdPk: number, status: boolean): Promise<number> {
         const list = await this.listService.getListById(listIdPk);
-        list.status = status;
-
+        
         return await this.listRepository.updateListStatus(list?.id!, status);
     }
 }

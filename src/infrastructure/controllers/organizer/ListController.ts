@@ -31,7 +31,7 @@ export class ListController {
             const listId = parseInt(request.params.listId);
 
             const res = await this.listFacade.updateListById(listId, body);
-            return response.status(204);
+            return response.status(204).json({updated: res});
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -45,7 +45,7 @@ export class ListController {
             const status = request.body.status;
 
             const res = await this.listFacade.updateListStatusById(listId, status);
-            return response.status(204);
+            return response.status(204).json({updated: res});
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;

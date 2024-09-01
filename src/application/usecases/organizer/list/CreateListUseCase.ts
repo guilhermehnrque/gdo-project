@@ -13,14 +13,14 @@ export class CreateListUseCase {
     }
 
     public async execute(description: string, status: boolean, scheduleId: number): Promise<void> {
-        this.validations(scheduleId);
+        await this.validations(scheduleId);
 
-        const listEntity = new ListEntity({ description, status, schedules_id: scheduleId });
+        const listEntity = new ListEntity({ description, status, schedules_id: scheduleId, created_at: new Date(), updated_at: new Date() });
 
         await this.listRepository.createList(listEntity);
     }
 
     private async validations(scheduleId: number) {
-        await this.listService.checkListConflit(scheduleId);
+        await this.listService.checkListConflict(scheduleId);
     }
 }

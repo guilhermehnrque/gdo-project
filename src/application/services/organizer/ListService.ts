@@ -37,9 +37,13 @@ export class ListService {
         return this.mapListEntity(lists);
     }
 
-    public async checkListConflit(schedulesId: number): Promise<void> {
+    public async checkListConflict(schedulesId: number): Promise<void> {
         const list = await this.listRepository.getListsByScheduleId(schedulesId);
-        await this.checkExistenceOfList(list!);
+
+        if (list) {
+            throw new ListNotFoundError();
+        }
+        
     }
 
     private async checkExistenceOfList(list: List): Promise<void> {

@@ -31,8 +31,8 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
 
     async updateListStatus(idPk: number, status: boolean): Promise<number> {
         try {
-            const [affectedCount] = await List.update({ id: idPk }, {
-                where: { status: true }
+            const [affectedCount] = await List.update({ status: status }, {
+                where: { id: idPk }
             });
 
             return affectedCount;
@@ -80,6 +80,12 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
                 where: {
                     schedules_id: scheduleId
                 },
+                include: [
+                    {
+                        model: Schedule,
+                        as: 'schedule',
+                    }
+                ]
             });
         } catch (error) {
             const customError = error as CustomError;

@@ -26,6 +26,8 @@ export class ListEntity {
             description: this.description,
             status: this.status,
             schedules_id: this.schedules_id,
+            created_at: this.created_at,
+            updated_at: this.updated_at
         };
     }
 

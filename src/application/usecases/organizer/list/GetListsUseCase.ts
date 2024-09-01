@@ -1,5 +1,5 @@
 import { ListDTO } from "../../../dto/organizer/list/ListDTO";
-import { mapListDTO } from "../../../mappers/organizer/ListDetailMapper";
+import { mapListWithDTO } from "../../../mappers/organizer/ListDetailMapper";
 import { GroupService } from "../../../services/GroupService";
 import { ListService } from "../../../services/organizer/ListService";
 import { SchedulesService } from "../../../services/SchedulesService";
@@ -30,7 +30,7 @@ export class GetListsUseCase {
 
         const lists = await this.listService.getAllLists(schedulesId);
 
-        return await Promise.all(lists.map(list => mapListDTO(list)));
+        return await Promise.all(lists.map(list => mapListWithDTO(list)));
     }
     
 }
