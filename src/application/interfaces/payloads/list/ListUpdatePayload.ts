@@ -1,4 +1,4 @@
-export interface ListUpdateRequest {
+export interface ListUpdatePayload {
     status: boolean;
     description: string;
 }

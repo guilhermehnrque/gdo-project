@@ -1,14 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
+import { Schedule } from './ScheduleModel';
 
 interface ListAttributes {
     id: number;
     description: string | null;
-    status: number;
+    status: boolean;
     schedules_id: number;
     created_at: Date;
     updated_at: Date;
-    scheduled_data: Date | null;
 }
 
 type ListCreationAttributes = Omit<ListAttributes, 'id' | 'created_at' | 'updated_at'>;
@@ -16,14 +16,14 @@ type ListCreationAttributes = Omit<ListAttributes, 'id' | 'created_at' | 'update
 class List extends Model<ListAttributes, ListCreationAttributes> implements ListAttributes {
     public id!: number;
     public description!: string | null;
-    public status!: number;
+    public status!: boolean;
     public schedules_id!: number;
     public created_at!: Date;
     public updated_at!: Date;
-    public scheduled_data!: Date | null;
 
-    public readonly createdAt!: Date;
+    public readonly createdAd!: Date;
     public readonly updatedAt!: Date;
+    public readonly schedule!: Schedule;
 }
 
 List.init({
@@ -38,14 +38,14 @@ List.init({
         allowNull: true,
     },
     status: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
     schedules_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Schedule',
+            model: Schedule,
             key: 'id',
         }
     },
@@ -58,11 +58,7 @@ List.init({
         type: DataTypes.DATE,
         allowNull: false,
         field: 'updated_at',
-    },
-    scheduled_data: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    },
+    }
 }, {
     tableName: 'lists',
     sequelize,
@@ -70,5 +66,7 @@ List.init({
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
+
+List.belongsTo(Schedule, { foreignKey: 'schedules_id', as: 'schedule' });
 
 export { List };
