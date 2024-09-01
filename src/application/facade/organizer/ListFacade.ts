@@ -27,12 +27,13 @@ export class ListFacade {
         await this.createListUseCase.execute(description, status, scheduleId);
     }
 
-    public async updateListById(listId: number, listUpdateRequest: ListUpdatePayload): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async updateListById(listId: number, listUpdateRequest: ListUpdatePayload): Promise<number> {
+        const { description, status } = listUpdateRequest
+        return await this.updateListUseCase.execute(listId, description, status);
     }
 
-    public async updateListStatusById(listId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async updateListStatusById(listId: number, status: boolean): Promise<number> {
+       return await this.updateListStatusUseCase.execute(listId, status);
     }
 
     public async getListById(listId: number): Promise<void> {

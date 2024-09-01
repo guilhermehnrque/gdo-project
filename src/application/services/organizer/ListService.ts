@@ -1,3 +1,4 @@
+import { ListEntity } from "../../../domain/entity/organizer/ListEntity";
 import { List } from "../../../domain/models/ListModel";
 import { ListRepositoryImpl } from "../../../infrastructure/repositories/organizer/ListRepositoryImpl";
 import { ListNotFoundError } from "../../erros/organizer/list/ListErrors";
@@ -10,20 +11,20 @@ export class ListService {
         this.listRepository = new ListRepositoryImpl();
     }
 
-    public async getListById(listId: number): Promise<List | null> {
+    public async getListById(listId: number): Promise<ListEntity> {
         const list = await this.listRepository.getList(listId);
 
         await this.checkExistenceOfList(list!);
 
-        return list;
+        return this.parseModelToEntity(list!);
     }
 
-    public async getListDetail(listId: number): Promise<List | null> {
+    public async getListDetail(listId: number): Promise<ListEntity> {
         const list = await this.listRepository.getListDetail(listId);
 
         await this.checkExistenceOfList(list!);
 
-        return list
+        return this.parseModelToEntity(list!)
     }
 
     public async getAllLists(scheduleId: number): Promise<List[]> {
@@ -36,18 +37,19 @@ export class ListService {
         return lists;
     }
 
-    public async checkListConflit(schedulesId: number): Promise<List | null> {
+    public async checkListConflit(schedulesId: number): Promise<void> {
         const list = await this.listRepository.getListsByScheduleId(schedulesId);
-
         await this.checkExistenceOfList(list!);
-
-        return list;
     }
 
     private async checkExistenceOfList(list: List): Promise<void> {
         if (!list || list === null) {
             throw new ListNotFoundError();
         }
+    }
+
+    private async parseModelToEntity(local: List) {
+        return new ListEntity(local);
     }
 
 }

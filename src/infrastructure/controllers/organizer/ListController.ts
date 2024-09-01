@@ -30,7 +30,7 @@ export class ListController {
             const body = request.body as ListUpdateRequest;
             const listId = parseInt(request.params.listId);
 
-            await this.listFacade.updateListById(listId, body);
+            const res = await this.listFacade.updateListById(listId, body);
             return response.status(204);
         }
         catch (error) {
@@ -42,8 +42,9 @@ export class ListController {
     public async updateListStatusById(request: Request, response: Response) {
         try {
             const listId = parseInt(request.params.listId);
+            const status = request.body.status;
 
-            await this.listFacade.updateListStatusById(listId);
+            const res = await this.listFacade.updateListStatusById(listId, status);
             return response.status(204);
         }
         catch (error) {

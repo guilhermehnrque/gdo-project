@@ -1,3 +1,5 @@
+import { Schedule } from "../../models/ScheduleModel";
+
 export class ListEntity {
 
     public id?: number;
@@ -7,6 +9,8 @@ export class ListEntity {
     public created_at?: Date;
     public updated_at?: Date;
 
+    public readonly schedule: Schedule;
+
     constructor(data: Partial<ListEntity>) {
         this.description = data.description!;
         this.status = data.status!;
@@ -14,8 +18,8 @@ export class ListEntity {
         this.created_at = data.created_at;
         this.updated_at = data.updated_at;
         this.id = data.id;
+        this.schedule = data.schedule!;
     }
-
 
     public toCreatePayload() {
         return {

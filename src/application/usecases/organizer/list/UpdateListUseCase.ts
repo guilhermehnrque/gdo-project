@@ -11,7 +11,12 @@ export class UpdateListUseCase {
         this.listService = new ListService();
     }
 
-    public async execute(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async execute(listIdPk: number, description: string, status: boolean): Promise<number> {
+        const list = await this.listService.getListById(listIdPk);
+        list.description = description;
+        list.status = status;
+
+        return await this.listRepository.updateList(list);
     }
+
 }
