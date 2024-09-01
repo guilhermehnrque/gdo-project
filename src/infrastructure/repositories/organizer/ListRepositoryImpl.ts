@@ -87,4 +87,17 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
         }
     }
 
+    async getListsByScheduleId(scheduleId: number): Promise<List | null> {
+        try {
+            return await List.findOne({
+                where: {
+                    schedules_id: scheduleId
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getListsByScheduleId error getting group -> ${customError.message}`);
+        }
+    }
+
 }

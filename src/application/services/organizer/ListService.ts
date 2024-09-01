@@ -36,6 +36,14 @@ export class ListService {
         return lists;
     }
 
+    public async checkListConflit(schedulesId: number): Promise<List | null> {
+        const list = await this.listRepository.getListsByScheduleId(schedulesId);
+
+        await this.checkExistenceOfList(list!);
+
+        return list;
+    }
+
     private async checkExistenceOfList(list: List): Promise<void> {
         if (!list || list === null) {
             throw new ListNotFoundError();

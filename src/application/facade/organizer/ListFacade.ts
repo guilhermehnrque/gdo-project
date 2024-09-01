@@ -23,7 +23,8 @@ export class ListFacade {
     }
 
     public async createList(payload: ListCreatePayload): Promise<void> {
-        throw new Error("Method not implemented.");
+        const { description, status, scheduleId } = payload
+        await this.createListUseCase.execute(description, status, scheduleId);
     }
 
     public async updateListById(listId: number, listUpdateRequest: ListUpdatePayload): Promise<void> {
