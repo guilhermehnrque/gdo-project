@@ -52,13 +52,14 @@ export class PlayersListsController {
 
     public async getPlayerList(request: Request, response: Response): Promise<Response> {
         try {
-            const { playerId, listId } = request.body as PlayersListGetRequest;
+            const { playerId, listId } = request.params as PlayersListGetRequest;
 
             const res = await this.playersListFacade.getPlayerList(playerId, listId);
             return response.status(200).json({ data: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
+            console.error(error);
             return response.status(statusCode).json({ error: message });
         }
     }
@@ -66,13 +67,14 @@ export class PlayersListsController {
 
     public async getPlayerLists(request: Request, response: Response): Promise<Response> {
         try {
-            const { playerId} = request.body as PlayersListGetRequest;
+            const { playerId } = request.params as PlayersListGetRequest;
 
             const res = await this.playersListFacade.getPlayerLists(playerId);
             return response.status(200).json({ data: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
+
             return response.status(statusCode).json({ error: message });
         }
     }

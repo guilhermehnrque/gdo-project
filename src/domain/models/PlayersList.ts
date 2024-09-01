@@ -70,7 +70,7 @@ PlayersList.init({
     updatedAt: 'updated_at',
 });
 
-PlayersList.belongsTo(List, { foreignKey: 'lists_id' });
-PlayersList.belongsTo(User, { foreignKey: 'players_id' });
+PlayersList.belongsTo(List, { foreignKey: 'lists_id', as: 'list' });
+PlayersList.belongsTo(User, { foreignKey: 'players_id', as: 'user' });
 
 export { PlayersList };

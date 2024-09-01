@@ -25,6 +25,7 @@ class AuthController {
             const token = await this.authGateway.login(request);
             return response.status(200).json({ token });
         } catch (error) {
+            console.error(error)
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
         }

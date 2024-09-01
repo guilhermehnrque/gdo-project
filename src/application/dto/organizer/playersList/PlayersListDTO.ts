@@ -29,8 +29,8 @@ export class PlayersListDTO {
     public created_at: Date;
     public updated_at: Date;
 
-    public readonly player: PlayerDTO;
-    public readonly list: ListDTO;
+    public player: PlayerDTO | null;
+    public list: ListDTO | null;
 
 
     constructor(payload: Partial<PlayersListDTO>) {
@@ -38,17 +38,16 @@ export class PlayersListDTO {
         this.player_status = payload.player_status!;
         this.created_at = payload.created_at!;
         this.updated_at = payload.updated_at!;
-        this.player = new PlayerDTO(payload.player!);
-        this.list = new ListDTO(payload.list!);
+        this.player = payload.player ? new PlayerDTO(payload.player) : null;
+        this.list = payload.list ? new ListDTO(payload.list) : null;
     }
 
     toJSON() {
-        return {
-            id: this.id,
-            playerStatus: this.player_status,
-            createdAt: this.created_at,
-            player: this.player,
-            list: this.list
+        const obj: any = { ...this };
+
+        if (obj.schedule === null) {
+            delete obj.schedule;
         }
+        return obj;
     }
 }

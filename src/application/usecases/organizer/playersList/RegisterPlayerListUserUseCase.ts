@@ -20,16 +20,20 @@ export class RegisterPlayerListUserUseCase {
             return PlayersEntity.fromCreateUseCase({ lists_id: listId, players_id: playerId, player_status: playerStatus });
         }));
 
-        this.listService.checkListIsNotActive(listId);
+        await this.listService.checkListIsNotActive(listId);
         this.checkIsAnyPlayerInList(players);
 
         await this.playersListRepository.registerPlayer(players);
     }
 
-    private checkIsAnyPlayerInList(players: PlayersEntity[]): void {
-        Promise.all(players.map(player => {
-            this.playersListService.checkIsPlayerAlreadyInList(player)
-        }));
+    private async checkIsAnyPlayerInList(players: PlayersEntity[]): Promise<void> {
+        const promises = players.map(player => this.playersListService.checkIsPlayerAlreadyInList(player));
+        
+        try {
+            await Promise.all(promises);
+        } catch (error) {
+            throw error;
+        }
     }
 
 }

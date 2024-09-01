@@ -11,8 +11,11 @@ export interface PlayersListUpdateRequest {
 }
 
 export interface PlayersListGetRequest {
-    playerId: number;
-    listId: number;
+    params: {
+        playerId: number;
+        listId: number;
+    }[];
+    [key: string]: any; 
 }
 
 export interface PlayersListRemoveRequest {
