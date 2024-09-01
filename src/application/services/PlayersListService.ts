@@ -1,6 +1,6 @@
 import { PlayersEntity } from "../../domain/entity/PlayersListEntity";
 import { PlayersListRepositoryImpl } from "../../infrastructure/repositories/PlayersListRepositoryImpl";
-import { PlayerAlreadyInListError, PlayerNotFoundInListError } from "../erros/playersList/PlayersListError";
+import { PlayerAlreadyInListError, PlayerListNotFoundError, PlayerNotFoundInListError } from "../erros/playersList/PlayersListError";
 
 export class PlayersListService {
 
@@ -30,10 +30,14 @@ export class PlayersListService {
         return new PlayersEntity(list);
     }
 
-    private checkIsAnyPlayerInList(players: PlayersEntity[]): void {
-        if (players.length <= 0) {
-            throw new PlayerNotFoundInListError();
+    public async getPlayersList(): Promise<PlayersEntity[]> {
+        const playersList = await this.playersListRepository.getPlayersList();
+
+        if (playersList.length <= 0) {
+            throw new PlayerListNotFoundError();
         }
+
+        return playersList.map(player => new PlayersEntity(player));
     }
 
     public async checkIsPlayerAlreadyInList(playerEntity: PlayersEntity): Promise<void> {

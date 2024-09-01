@@ -2,7 +2,7 @@ import { PlayersListDTO } from "../../../dto/organizer/playersList/PlayersListDT
 import { mapPlayerLists } from "../../../mappers/organizer/PlayersListDetailMapper";
 import { PlayersListService } from "../../../services/PlayersListService";
 
-export class GetPlayersListsUseCase {
+export class GetPlayerListsUseCase {
 
     private playersListService: PlayersListService;
 

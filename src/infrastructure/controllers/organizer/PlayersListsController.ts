@@ -79,4 +79,16 @@ export class PlayersListsController {
         }
     }
 
+    public async getAllList(request: Request, response: Response): Promise<Response> {
+        try {
+            const res = await this.playersListFacade.getAllLists();
+            return response.status(200).json({ data: res });
+        }
+        catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
 }

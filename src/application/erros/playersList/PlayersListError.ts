@@ -20,3 +20,13 @@ export class PlayerNotFoundInListError extends newCustomError {
         this.name = "PlayerNotFoundInListError";
     }
 }
+
+export class PlayerListNotFoundError extends newCustomError {
+    constructor(
+        message: string = "Lista de jogadores não encontrada", 
+        public statusCode: number = 400
+    ) {
+        super(message, statusCode);
+        this.name = "PlayerListNotFoundError";
+    }
+}

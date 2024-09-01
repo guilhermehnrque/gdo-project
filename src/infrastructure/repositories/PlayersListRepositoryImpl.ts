@@ -87,4 +87,13 @@ export class PlayersListRepositoryImpl implements PlayersListInterface {
             throw new DatabaseError(`[PlayersListRepository] Get player in list by player id -> Error getting player in list by player id: ${customError.message}`);
         }
     }
+
+    async getPlayersList(): Promise<PlayersList[]> {
+        try {
+            return await PlayersList.findAll();
+        } catch (error) {
+            const customError = error as CustomError
+            throw new DatabaseError(`[PlayersListRepository] Get players list -> Error getting players list: ${customError.message}`);
+        }
+    }
 }

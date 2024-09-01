@@ -10,7 +10,6 @@ export function mapPlayerLists(playerListEntity: PlayersEntity[]): Promise<Playe
             updated_at: list.updated_at,
         })
     }));
-
 }
 
 export function mapPlayerList(player: PlayersEntity): Promise<PlayersListDTO> {
@@ -22,6 +21,23 @@ export function mapPlayerList(player: PlayersEntity): Promise<PlayersListDTO> {
             updated_at: player.updated_at,
             player: player.user,
             list: player.list,
+        })
+    );
+}
+export function mapAllPlayersList(playerListEntity: PlayersEntity[]): Promise<any[]> {
+    return Promise.resolve(
+        playerListEntity.map(list => {
+            const dto = new PlayersListDTO({
+                id: list.id,
+                player_status: list.player_status,
+                created_at: list.created_at,
+                updated_at: list.updated_at,
+                players_id: list.players_id,
+                lists_id: list.lists_id
+            });
+
+            // Chama o método toJSON() aqui
+            return dto.toJSON();
         })
     );
 }

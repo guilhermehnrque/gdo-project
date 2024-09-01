@@ -7,4 +7,5 @@ export interface PlayersListInterface {
     removePlayerFromList(player: PlayersEntity): Promise<number>;
     getPlayerListsByListId(listId: number): Promise<PlayersList[]>;
     getPlayerInListByPlayerId(playerId: number, listId: number): Promise<PlayersList | null>;
+    getPlayersList(): Promise<PlayersList[]>;
 }
