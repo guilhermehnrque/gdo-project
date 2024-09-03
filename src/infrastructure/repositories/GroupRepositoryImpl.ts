@@ -12,7 +12,6 @@ import { Local } from "../../domain/models/LocalModel";
 import DatabaseError from "../../application/erros/DatabaseError";
 import CustomError from "../../application/erros/CustomError";
 
-
 export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     async createGroup(groupEntity: GroupEntity, options: { transaction?: any }): Promise<Group> {
