@@ -2,15 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 import { User } from './UserModel';
 import { List } from './ListModel';
-
-interface PlayersListAttributes {
-    id: number;
-    lists_id: number;
-    players_id: number;
-    player_status: string;
-    created_at: Date;
-    updated_at: Date;
-}
+import { PlayersListAttributes } from '../interfaces/attributes/PlayersListAttributes';
 
 type PlayersListCreationAttributes = Omit<PlayersListAttributes, 'id' | 'created_at' | 'updated_at'>;
 
@@ -21,6 +13,9 @@ class PlayersList extends Model<PlayersListAttributes, PlayersListCreationAttrib
     public player_status!: string;
     public created_at!: Date;
     public updated_at!: Date;
+
+    public readonly list!: List;
+    public readonly user!: User;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -57,10 +52,13 @@ PlayersList.init({
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
+        field: 'created_at',
+        defaultValue: DataTypes.NOW,
     },
     updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
+        field: 'updated_at',
     },
 }, {
     sequelize,
@@ -71,5 +69,8 @@ PlayersList.init({
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
+
+PlayersList.belongsTo(List, { foreignKey: 'lists_id', as: 'list' });
+PlayersList.belongsTo(User, { foreignKey: 'players_id', as: 'user' });
 
 export { PlayersList };

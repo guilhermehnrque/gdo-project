@@ -43,6 +43,7 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
             });
         }
         catch (error) {
+            console.log(error);
             const customError = error as CustomError;
             throw new DatabaseError(`[UserRepository] Get user by login -> Error getting user by login: ${customError.message}`);
         }
