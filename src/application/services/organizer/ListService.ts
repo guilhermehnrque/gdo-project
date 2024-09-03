@@ -43,7 +43,6 @@ export class ListService {
         if (list) {
             throw new ListNotFoundError();
         }
-
     }
 
     public async checkListIsNotActive(listId: number): Promise<void> {
@@ -52,7 +51,6 @@ export class ListService {
         if (!list.status) {
             throw new Error('A lista está desativada');
         }
-
     }
 
     private async checkExistenceOfList(list: List): Promise<void> {

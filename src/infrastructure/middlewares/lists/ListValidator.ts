@@ -1,5 +1,6 @@
 import { body, param } from 'express-validator';
 import handleValidationErrors from '../HandleValidationErrors';
+import { isNull } from 'util';
 
 const schemas = {
     register: [

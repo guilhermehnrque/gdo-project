@@ -8,6 +8,7 @@ import InvitationRoute from './infrastructure/routes/v1/InvitationRoute'
 import ListRoute from './infrastructure/routes/v1/organizer/ListRoute'
 import PlayersRoute from './infrastructure/routes/v1/organizer/PlayersRoute'
 
+
 import jwt from 'jsonwebtoken';
 
 const app: Application = express()
