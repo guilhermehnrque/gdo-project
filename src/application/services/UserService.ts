@@ -25,17 +25,17 @@ export class UserService {
             this.logAndThrowError(new UserNotFoundError(), `[UserService] getUserByLogin -> User not found ${login}`);
         }
 
-        return UserEntity.createFromRepository(user!);
+        return await this.prepareEntity(user!);
     }
 
-    async getUserByEmail(email: string): Promise<UserEntity> { 
+    async getUserByEmail(email: string): Promise<UserEntity> {
         const user = await this.userRepository.getUserByEmail(email);
 
         if (!user) {
             this.logAndThrowError(new UserNotFoundError(), `[UserService] getUserByEmail -> User not found ${email}`);
         }
 
-        return await UserEntity.createFromRepository(user!);
+        return await this.prepareEntity(user!);
     }
 
     async getUserByResetToken(token: string): Promise<UserEntity> {
@@ -45,7 +45,7 @@ export class UserService {
             this.logAndThrowError(new UserNotFoundError(), `[UserService] getUserByResetToken -> Invalid token ${token}`);
         }
 
-        return await UserEntity.createFromRepository(user!);
+        return await this.prepareEntity(user!);
     }
 
     async updateUser(user: UserEntity): Promise<number> {
@@ -66,7 +66,7 @@ export class UserService {
     public async checkIfUserExists(login: string, email: string, phoneNumber: number): Promise<void> {
         const user = await this.userRepository.getUserByLoginEmailOrPhone(login, email, phoneNumber);
 
-        if (!user || user != null) {
+        if (user || user != null) {
             this.logAndThrowError(new UserAlreadyExistsError(), `[UserService] checkIfUserExists -> User already exists ${login}`);
         }
 
@@ -75,7 +75,7 @@ export class UserService {
     public async checkIfUserNotExists(login: string): Promise<void> {
         const user = await this.userRepository.getUserByLogin(login);
 
-        if (user) {
+        if (!user) {
             this.logAndThrowError(new UserAlreadyExistsError(), `[UserService] checkIfUserNotExists -> User do not exists ${login}`);
         }
 
@@ -93,6 +93,26 @@ export class UserService {
     private logAndThrowError(error: CustomError, context: string): void {
         logger.error(context, error);
         throw error;
+    }
+
+    private async prepareEntity(user: User): Promise<UserEntity> {
+        return await UserEntity.createFromRepository({
+            name: user!.name,
+            surname: user!.surname,
+            email: user!.email,
+            type: user!.type,
+            user_id: user!.user_id,
+            status: user!.status,
+            phone_number: user!.phone_number,
+            login: user!.login,
+            password: user!.password,
+            created_at: user!.created_at,
+            updated_at: user?.updated_at,
+            deleted_at: user?.deleted_at,
+            id: user!.id,
+            reset_password_expires: user?.reset_password_expires,
+            reset_password_token: user?.reset_password_token
+        });
     }
 
 }

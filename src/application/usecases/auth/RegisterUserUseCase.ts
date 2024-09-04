@@ -14,7 +14,7 @@ export class RegisterUserUseCase {
     }
 
     async execute(name: string, surname: string, email: string, type: UserTypes, login: string, password: string, phoneNumber: number): Promise<void> {
-        this.validations(login, email, phoneNumber);
+        await this.validations(login, email, phoneNumber);
         const isUserRegister = true;
 
         const userRegisterPayload = {
@@ -33,8 +33,8 @@ export class RegisterUserUseCase {
         await this.userRepository.create(userEntity);
     }
 
-    private validations(login: string, email: string, phoneNumber: number) {
-        this.userService.checkIfUserExists(login, email, phoneNumber);
+    private async validations(login: string, email: string, phoneNumber: number) {
+        await this.userService.checkIfUserExists(login, email, phoneNumber);
     }
 
 }
