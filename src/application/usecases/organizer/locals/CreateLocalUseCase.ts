@@ -1,9 +1,9 @@
 import LocalEntity from "../../../../domain/entity/LocalEntity";
 import { Local } from "../../../../domain/models/LocalModel";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
+import logger from "../../../utils/LoggerConfig";
 import LocalRepositoryImpl from "../../../../infrastructure/repositories/LocalRepositoryImpl";
 import CreateLocalDTO from "../../../dto/local/CreateLocalDTO";
-import CustomError from "../../../erros/CustomError";
+import { CustomError } from "../../../erros/CustomError";
 import DatabaseError from "../../../erros/DatabaseError";
 
 export default class CreateLocalUseCase {

@@ -1,5 +1,5 @@
 import { Schedule } from "../../domain/models/ScheduleModel";
-import logger from "../../infrastructure/configs/LoggerConfig";
+import logger from "../utils/LoggerConfig";
 import { ScheduleRepositoryImpl } from "../../infrastructure/repositories/ScheduleRepositoryImpl";
 import ScheduleAlreadyExistsError from "../erros/schedules/ScheduleAlreadyExistsError";
 import ScheduleNotFoundError from "../erros/schedules/ScheduleNotFoundError";

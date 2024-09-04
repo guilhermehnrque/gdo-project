@@ -1,13 +1,13 @@
 import { Group } from "../../../../domain/models/GroupModel";
 import { User } from "../../../../domain/models/UserModel";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
+import logger from "../../../utils/LoggerConfig";
 import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
 import { GroupUserRepositoryImpl } from "../../../../infrastructure/repositories/GroupUserRepositoryImpl";
-import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
+import { UserRepositoryImpl } from "../../../../infrastructure/repositories/UserRepositoryImpl";
 import { RegisterGroupUserDTO } from "../../../dto/group/RegisterGroupUserDTO";
 import GroupNotFoundError from "../../../erros/groups/GroupNotFoundError";
 import GroupUsersEmptyError from "../../../erros/groups/GroupUsersEmptyError";
-import UserNotFoundError from "../../../erros/UserNotFoundError";
+import { UserNotFoundError } from "../../../erros/UserNotFoundError";
 
 export class RemoveGroupUserUseCase {
 

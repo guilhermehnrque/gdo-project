@@ -1,6 +1,6 @@
 import { Group } from '../../../../domain/models/GroupModel';
 import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
 import { mapGroupToDTO } from '../../../../application/mappers/GroupMapper';
 import { GroupDTO } from '../../../dto/group/GroupDTO';
 

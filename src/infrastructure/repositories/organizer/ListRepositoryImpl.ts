@@ -1,7 +1,7 @@
 import { ListRepositoryInterface } from "../../../domain/repositories/organizer/ListRepositoryInterface";
 import { List } from "../../../domain/models/ListModel";
 import { ListEntity } from "../../../domain/entity/organizer/ListEntity";
-import CustomError from "../../../application/erros/CustomError";
+import { CustomError } from "../../../application/erros/CustomError";
 import DatabaseError from "../../../application/erros/DatabaseError";
 import { Schedule } from "../../../domain/models/ScheduleModel";
 

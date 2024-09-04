@@ -1,40 +1,40 @@
-import AuthRepositoryImpl from '../../../infrastructure/repositories/UserRepositoryImpl';
-import UserEntity from '../../../domain/entity/UserEntity';
-import UserAlreadyExistsError from '../../erros/UserAlreadyExistsError';
-import logger from '../../../infrastructure/configs/LoggerConfig';
-import { RegisterUserRequest } from '../../../infrastructure/requests/auth/RegisterUserRequest';
-import CustomError from '../../erros/CustomError';
+import { UserRepositoryImpl } from '../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserEntity } from '../../../domain/entity/UserEntity';
+import { UserService } from '../../services/UserService';
+import { UserTypes } from '../../../domain/enums/UserTypes';
 
 export class RegisterUserUseCase {
 
-    private authRepository: AuthRepositoryImpl;
+    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
 
     constructor() {
-        this.authRepository = new AuthRepositoryImpl();
+        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
     }
 
-    async execute(payload: RegisterUserRequest): Promise<void> {
-        const userExists = await this.checkIfUserExists(payload.login, payload.email, payload.phone_number);
-
-        if (userExists) {
-            this.logAndThrowError(new UserAlreadyExistsError(), "[RegisterUserUseCase] Usuário já registrado");
-        }
-        
+    async execute(name: string, surname: string, email: string, type: UserTypes, login: string, password: string, phoneNumber: number): Promise<void> {
+        this.validations(login, email, phoneNumber);
         const isUserRegister = true;
-        const userEntity = await UserEntity.createFromPayload(payload, isUserRegister);
 
-        await this.authRepository.create(userEntity);
+        const userRegisterPayload = {
+            name,
+            surname,
+            email,
+            type,
+            status: isUserRegister,
+            login,
+            password,
+            phone_number: phoneNumber,
+        }
 
+        const userEntity = await UserEntity.createFromUseCase(userRegisterPayload);
+
+        await this.userRepository.create(userEntity);
     }
 
-    private async checkIfUserExists(login: string, email: string, phoneNumber: number): Promise<boolean> {
-        const user = await this.authRepository.getUserByLoginEmailOrPhone(login, email, phoneNumber);
-        return user !== null;
-    }
-
-    private logAndThrowError(error: CustomError, context: string): void {
-        logger.error(context);
-        throw error;
+    private validations(login: string, email: string, phoneNumber: number) {
+        this.userService.checkIfUserExists(login, email, phoneNumber);
     }
 
 }

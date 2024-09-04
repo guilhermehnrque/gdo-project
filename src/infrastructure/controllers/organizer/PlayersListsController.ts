@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PlayersListFacade } from "../../../application/facade/organizer/PlayersListFacade";
-import CustomError from "../../../application/erros/CustomError";
+import { CustomError } from "../../../application/erros/CustomError";
 import { PlayersListCreateRequest, PlayersListRemoveRequest, PlayersListUpdateRequest, PlayersListGetRequest } from "../../requests/organizer/playersList/PlayersListRequests";
 
 export class PlayersListsController {

@@ -10,7 +10,7 @@ import { Local } from "../../domain/models/LocalModel";
 
 // Errors
 import DatabaseError from "../../application/erros/DatabaseError";
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 
 export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 

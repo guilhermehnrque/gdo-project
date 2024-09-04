@@ -1,19 +1,19 @@
 import { AuthRepositoryInterface } from "../../domain/repositories/UserRepositoryInterface";
-import UserEntity from "../../domain/entity/UserEntity";
+import { UserEntity } from "../../domain/entity/UserEntity";
 import { User as UserModel } from "../../domain/models/UserModel";
 import { Op } from "sequelize";
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 
-class UserRepositoryImpl implements AuthRepositoryInterface {
+export class UserRepositoryImpl implements AuthRepositoryInterface {
 
     async create(userEntity: UserEntity): Promise<UserModel> {
         try {
-            const user = UserModel.build(userEntity);
+            const user = UserModel.build(userEntity.toRegister());
             return await user.save();
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[UserRepository] Create -> Error creating group: ${customError.message}`);
+            throw new DatabaseError(`[UserRepository] create -> Error creating group: ${customError.message}`);
         }
     }
 
@@ -30,7 +30,7 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[UserRepository] Get user by login, email or phone -> Error getting user by login, email or phone: ${customError.message}`);
+            throw new DatabaseError(`[UserRepository] getUserByLoginEmailOrPhone -> Error getting user by login, email or phone: ${customError.message}`);
         }
     }
 
@@ -45,7 +45,7 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
         catch (error) {
             console.log(error);
             const customError = error as CustomError;
-            throw new DatabaseError(`[UserRepository] Get user by login -> Error getting user by login: ${customError.message}`);
+            throw new DatabaseError(`[UserRepository] getUserByLogin -> Error getting user by login: ${customError.message}`);
         }
     }
 
@@ -80,9 +80,15 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
 
     }
 
-    save(user: UserModel): Promise<UserModel> {
+    async updateUser(user: UserEntity): Promise<number> {
         try {
-            return user.save();
+            const [affectedCount] = await UserModel.update(user, {
+                where: {
+                    id: user.id,
+                }
+            });
+
+            return affectedCount;
         } catch (error) {
             const customError = error as CustomError;
             throw new DatabaseError(`[UserRepository] Save -> Error saving user: ${customError.message}`);
@@ -95,5 +101,3 @@ class UserRepositoryImpl implements AuthRepositoryInterface {
     }
 
 }
-
-export default UserRepositoryImpl;

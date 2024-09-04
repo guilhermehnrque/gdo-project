@@ -1,6 +1,6 @@
-import logger from "../../../../infrastructure/configs/LoggerConfig";
+import logger from "../../../utils/LoggerConfig";
 import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
 import { mapGroupToDTO } from '../../../../application/mappers/GroupMapper';
 import { GroupDTO } from "../../../dto/group/GroupDTO";
 import GroupNotFoundError from "../../../erros/groups/GroupNotFoundError";
@@ -19,7 +19,7 @@ export class GetGroupDetailsUseCase {
 
         const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, user?.id!);
 
-        if (group == null) { 
+        if (group == null) {
             logger.warn(`Group not found for user ${userId} and group ${groupId}`);
             throw new GroupNotFoundError();
         }

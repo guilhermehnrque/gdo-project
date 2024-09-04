@@ -1,6 +1,6 @@
-import { newCustomError } from "../CustomError";
+import { CustomError } from "../CustomError";
 
-export class PlayerAlreadyInListError extends newCustomError {
+export class PlayerAlreadyInListError extends CustomError {
     constructor(
         message: string = "O jogador já está resgistrado na lista", 
         public statusCode: number = 400
@@ -11,7 +11,7 @@ export class PlayerAlreadyInListError extends newCustomError {
 }
 
 
-export class PlayerNotFoundInListError extends newCustomError {
+export class PlayerNotFoundInListError extends CustomError {
     constructor(
         message: string = "O jogador não está na lista", 
         public statusCode: number = 400
@@ -21,7 +21,7 @@ export class PlayerNotFoundInListError extends newCustomError {
     }
 }
 
-export class PlayerListNotFoundError extends newCustomError {
+export class PlayerListNotFoundError extends CustomError {
     constructor(
         message: string = "Lista de jogadores não encontrada", 
         public statusCode: number = 400

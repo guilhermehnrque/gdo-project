@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ListFacade } from "../../../application/facade/organizer/ListFacade";
 import { ListUpdateRequest } from "../../requests/organizer/lists/ListUpdateRequest";
 import { ListCreateRequest } from "../../requests/organizer/lists/ListCreateRequest";
-import CustomError from "../../../application/erros/CustomError";
+import { CustomError } from "../../../application/erros/CustomError";
 
 export class ListController {
 
@@ -31,7 +31,7 @@ export class ListController {
             const listId = parseInt(request.params.listId);
 
             const res = await this.listFacade.updateListById(listId, body);
-            return response.status(204).json({updated: res});
+            return response.status(204).json({ updated: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -45,7 +45,7 @@ export class ListController {
             const status = request.body.status;
 
             const res = await this.listFacade.updateListStatusById(listId, status);
-            return response.status(204).json({updated: res});
+            return response.status(204).json({ updated: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;

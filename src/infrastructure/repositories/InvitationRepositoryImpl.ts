@@ -1,9 +1,10 @@
 import { InvitationEntity } from "../../domain/entity/InvitationEntity";
 import { InvitationRepositoryInterface } from "../../domain/repositories/InvitationRepositoryInterface";
 import { Invitation } from "../../domain/models/InvitationModel";
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
+
 import DatabaseError from "../../application/erros/DatabaseError";
-import logger from "../configs/LoggerConfig";
+import logger from "../../application/utils/LoggerConfig";
 import { Op } from "sequelize";
 
 export class InvitationRepositoryImpl implements InvitationRepositoryInterface {

@@ -3,13 +3,13 @@ import { mapListWithDTO } from "../../../mappers/organizer/ListDetailMapper";
 import { GroupService } from "../../../services/GroupService";
 import { ListService } from "../../../services/organizer/ListService";
 import { SchedulesService } from "../../../services/SchedulesService";
-import UserService from "../../../services/UserService";
+import { UserService } from "../../../services/UserService";
 
 export class GetListsUseCase {
 
     private listService: ListService;
     private scheduleService: SchedulesService;
-    private groupService: GroupService; 
+    private groupService: GroupService;
     private userService: UserService;
 
     constructor() {
@@ -32,5 +32,5 @@ export class GetListsUseCase {
 
         return await Promise.all(lists.map(list => mapListWithDTO(list)));
     }
-    
+
 }

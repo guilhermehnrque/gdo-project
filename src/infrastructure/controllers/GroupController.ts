@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import GroupGatewayImpl from "../gateways/organizer/GroupGatewayImpl";
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 
 export default class GroupController {
 

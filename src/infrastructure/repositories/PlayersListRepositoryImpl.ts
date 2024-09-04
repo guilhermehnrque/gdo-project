@@ -1,4 +1,4 @@
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 import { PlayersEntity } from "../../domain/entity/PlayersListEntity";
 import { List } from "../../domain/models/ListModel";

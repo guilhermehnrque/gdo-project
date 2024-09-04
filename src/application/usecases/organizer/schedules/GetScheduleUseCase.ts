@@ -1,7 +1,7 @@
 import { GroupService } from "../../../services/GroupService";
 import { SchedulesService } from "../../../services/SchedulesService";
 import { ScheduleDTO } from "../../../../application/dto/organizer/schedules/SchedulesDTO";
-import UserService from "../../../services/UserService";
+import { UserService } from "../../../services/UserService";
 import { scheduleMapper } from "../../../mappers/ScheduleMapper";
 
 export class GetScheduleUseCase {

@@ -3,25 +3,7 @@ import sequelize from '../../infrastructure/database/index';
 import { Group } from './GroupModel';
 import { Invitation as InvitationModel } from './InvitationModel';
 import { JwtToken } from './JwtTokenModel';
-
-interface UserAttributes {
-    id: number;
-    user_id: string;
-    name: string;
-    surname: string;
-    email: string;
-    type: string;
-    status: boolean;
-    login: string;
-    password: string;
-    phone_number: number;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at?: Date;
-    reset_password_token?: string | null;
-    reset_password_expires?: Date | null;
-    jwt_tokens?: JwtToken;
-}
+import { UserAttributes } from '../interfaces/attributes/UserAttributes';
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
 

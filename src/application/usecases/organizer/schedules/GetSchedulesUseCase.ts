@@ -2,7 +2,7 @@ import { schedulesMapper } from "../../../mappers/SchedulesMapper";
 import { GroupService } from "../../../services/GroupService";
 import { SchedulesService } from "../../../services/SchedulesService";
 import { ScheduleDTO } from "../../../../application/dto/organizer/schedules/SchedulesDTO";
-import UserService from "../../../services/UserService";
+import { UserService } from "../../../services/UserService";
 
 export class GetSchedulesUseCase {
 
@@ -23,7 +23,7 @@ export class GetSchedulesUseCase {
         const groupsId = groups.map(group => group.id);
 
         const groupsSchedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);
-        return schedulesMapper(groupsSchedules); 
+        return schedulesMapper(groupsSchedules);
     }
 
 }

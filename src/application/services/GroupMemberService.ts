@@ -1,5 +1,5 @@
 import { GroupsUsers } from "../../domain/models/GroupUserModel";
-import logger from "../../infrastructure/configs/LoggerConfig";
+import logger from "../utils/LoggerConfig";
 import { GroupUserRepositoryImpl } from "../../infrastructure/repositories/GroupUserRepositoryImpl";
 import GroupNotFoundError from "../erros/groups/GroupNotFoundError";
 

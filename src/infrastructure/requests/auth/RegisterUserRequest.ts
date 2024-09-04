@@ -5,9 +5,7 @@ export interface RegisterUserRequest {
     surname: string;
     email: string;
     type: UserTypes;
-    status: number;
-    is_staff: boolean;
     login: string;
     password: string;
-    phone_number: number;
+    phoneNumber: number;
 }

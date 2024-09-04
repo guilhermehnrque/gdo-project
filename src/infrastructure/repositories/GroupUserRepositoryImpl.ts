@@ -1,4 +1,4 @@
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 import { GroupsUsers } from "../../domain/models/GroupUserModel";
 import { User } from "../../domain/models/UserModel";

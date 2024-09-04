@@ -1,5 +1,5 @@
 // Importações de módulos internos e bibliotecas
-import logger from "../configs/LoggerConfig";
+import logger from "../../application/utils/LoggerConfig";
 
 // Importações de entidades e modelos do domínio
 import { JwtTokenEntity } from "../../domain/entity/JwtTokenEntity";

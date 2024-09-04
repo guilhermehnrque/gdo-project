@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
-import LoggerUtils from '../../application/utils/LoggerUtils';
 import { EmailAdapterInterface } from "../../application/interfaces/email/EmailAdapterInterface";
-import EmailAttributesInterface from '../../application/interfaces/email/EmailAttributesInterface';
+import { EmailAttributesInterface } from '../../application/interfaces/email/EmailAttributesInterface';
+import logger from '../../application/utils/LoggerConfig';
 
 export class EmailAdapterImpl implements EmailAdapterInterface {
 
@@ -19,9 +19,9 @@ export class EmailAdapterImpl implements EmailAdapterInterface {
                 subject: email.subject,
                 text: email.text
             });
-            LoggerUtils.log(`[NodeMailerService] Email foi enviado com sucesso -> ${email.to}, assunto -> ${email.subject}`);
+            logger.info(`[NodeMailerService] Email foi enviado com sucesso -> ${email.to}, assunto -> ${email.subject}`);
         } catch (error) {
-            LoggerUtils.log(`[NodeMailerService] Falha no envio de email: ${error}, para -> ${email.to}, assunto -> ${email.subject}`);
+            logger.error(`[NodeMailerService] Falha no envio de email: ${error}, para -> ${email.to}, assunto -> ${email.subject}`);
         }
 
     }

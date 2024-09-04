@@ -12,18 +12,18 @@ import { User } from "../../../domain/models/UserModel";
 import { EmailAdapterImpl } from "../../../infrastructure/adapters/EmailAdapterImpl";
 
 // Configs
-import logger from "../../../infrastructure/configs/LoggerConfig";
+import logger from "../../utils/LoggerConfig";
 
 // Repositories
 import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
-import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+import { UserRepositoryImpl } from "../../../infrastructure/repositories/UserRepositoryImpl";
 
 // Errors
-import CustomError from "../../erros/CustomError";
+import { CustomError } from "../../erros/CustomError";
 import GroupNotFoundError from "../../erros/groups/GroupNotFoundError";
 import InvitationPendingError from "../../erros/invitation/InvitationPendingError";
-import UserNotFoundError from "../../erros/UserNotFoundError";
+import { UserNotFoundError } from "../../erros/UserNotFoundError";
 
 
 export class CreateInvitationUseCase {

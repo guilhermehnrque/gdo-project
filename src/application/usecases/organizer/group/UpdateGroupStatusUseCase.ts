@@ -1,7 +1,7 @@
 import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
 import GroupEntity from '../../../../domain/entity/GroupEntity';
-import logger from '../../../../infrastructure/configs/LoggerConfig';
+import logger from '../../../utils/LoggerConfig';
 import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
 
 export class UpdateGroupStatusUseCase {
@@ -14,7 +14,7 @@ export class UpdateGroupStatusUseCase {
         this.userRepository = new UserRepositoryImpl();
     }
 
-    async execute(groupId: number, userId: string, status: boolean, ): Promise<number> {
+    async execute(groupId: number, userId: string, status: boolean,): Promise<number> {
         const user = await this.getUserByUserId(userId);
         const group = await this.getUserGroup(user?.id!, groupId);
 

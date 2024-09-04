@@ -1,8 +1,8 @@
 import GroupEntity from '../../../../domain/entity/GroupEntity';
 import { GroupVisibilityEnum } from '../../../../domain/enums/GroupVisibilityEnum';
-import logger from '../../../../infrastructure/configs/LoggerConfig';
+import logger from '../../../utils/LoggerConfig';
 import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
 import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
 
 export class UpdateGroupUseCase {

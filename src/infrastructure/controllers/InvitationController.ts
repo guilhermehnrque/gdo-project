@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { InvitationGatewayImpl } from "../gateways/organizer/InvitationGatewayImpl";
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 
 export class InvitationController {
 

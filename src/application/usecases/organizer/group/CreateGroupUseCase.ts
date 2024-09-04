@@ -1,10 +1,10 @@
 import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
-import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
+import { UserRepositoryImpl } from "../../../../infrastructure/repositories/UserRepositoryImpl";
 import { User } from "../../../../domain/models/UserModel";
 import GroupEntity from "../../../../domain/entity/GroupEntity";
 import { Group } from "../../../../domain/models/GroupModel";
-import CustomError from "../../../erros/CustomError";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
+import { CustomError } from "../../../erros/CustomError";
+import logger from "../../../utils/LoggerConfig";
 import UserNotStaffError from "../../../erros/groups/UserNotStaffError";
 import GroupAlreadyExistsError from "../../../erros/groups/GroupAlreadyExistsError";
 import CreateGroupDTO from "../../../dto/group/CreateGroupDTO";

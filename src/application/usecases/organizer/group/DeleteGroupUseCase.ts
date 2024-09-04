@@ -1,6 +1,6 @@
-import logger from '../../../../infrastructure/configs/LoggerConfig';
+import logger from '../../../utils/LoggerConfig';
 import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
 import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
 import GroupEntity from '../../../../domain/entity/GroupEntity';
 
