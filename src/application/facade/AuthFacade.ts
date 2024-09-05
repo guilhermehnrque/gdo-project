@@ -25,7 +25,7 @@ export class AuthFacade {
         type: UserTypes,
         login: string,
         password: string,
-        phoneNumber: number) {
+        phoneNumber: number): Promise<void> {
 
         return this.registerUserUseCase.execute(name, surname, email, type, login, password, phoneNumber);
     }

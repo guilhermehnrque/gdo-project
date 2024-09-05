@@ -1,7 +1,9 @@
 import { Group } from "../../domain/models/GroupModel";
+import { GroupRepositoryImpl } from "../../infrastructure/repositories/GroupRepositoryImpl";
+import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
+import { GroupEntity } from "../../domain/entity/GroupEntity";
 import logger from "../utils/LoggerConfig";
-import GroupRepositoryImpl from "../../infrastructure/repositories/GroupRepositoryImpl";
-import GroupNotFoundError from "../erros/groups/GroupNotFoundError";
+
 
 export class GroupService {
 
@@ -32,5 +34,35 @@ export class GroupService {
 
         return groups;
     }
+
+    async getGroupByDescription(description: string): Promise<Group | null> {
+        return await this.groupRepository.getGroupByDescription(description);
+    }
+
+    async ensureIsOwnerGroupAndReturnGroup(userIdPk: number, groupIdPk: number): Promise<GroupEntity> {
+        const group = await this.getGroupOwnerByUserIdPk(userIdPk, groupIdPk);
+
+        if (!group) {
+            logger.error(`[GroupService] Usuário não é dono do grupo -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`);
+            throw new GroupNotFoundError('[GroupService] Usuário não é dono do grupo');
+        }
+
+        return await GroupEntity.fromUseCase(group);
+    }
+
+    async validateIfGroupExists(group: Group | null): Promise<void> {
+        if (group) {
+            logger.error(`[GroupService] Grupo já registrado -> description: ${group.description}`);
+            throw new GroupNotFoundError('[GroupService] Grupo já registrado');
+        }
+    }
+
+    async validateIfAlreadyExistsAndGetGroupByDescription(description: string): Promise<GroupEntity | null> {
+        const group = await this.getGroupByDescription(description);
+        await this.validateIfGroupExists(group);
+
+        return await GroupEntity.fromUseCase(group!);
+    }
+
 
 }

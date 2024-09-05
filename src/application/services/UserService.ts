@@ -7,11 +7,12 @@ import { UserEntity } from '../../domain/entity/UserEntity';
 import { JwtService } from '../../application/services/JwtService';
 import { LoginError } from '../erros/LoginError';
 import logger from '../utils/LoggerConfig';
+import UserNotStaffError from '../erros/groups/UserNotStaffError';
 
 export class UserService {
 
     private userRepository: UserRepositoryImpl;
-    private jwtService: JwtService = new JwtService();
+    private jwtService: JwtService;
 
     constructor() {
         this.userRepository = new UserRepositoryImpl();
@@ -52,7 +53,7 @@ export class UserService {
         return await this.userRepository.updateUser(user);
     }
 
-    async getUserById(userId: string): Promise<User | null> {
+    async getUserByUserId(userId: string): Promise<User | null> {
         const user = await this.userRepository.getUserByUserId(userId);
 
         if (!user) {
@@ -89,6 +90,31 @@ export class UserService {
         }
 
     }
+    public async getUserAndCheckIfUserIsOrganizer(userId: string): Promise<UserEntity> {
+        const user = await this.getUserByUserId(userId);
+
+        if (!user || user.type != 'ORGANIZER') {
+            this.logAndThrowError(new UserNotStaffError('Usuário não permitido para executar essa operação', 401), '[UserService] getUserAndCheckIfUserIsOrganizer -> User is not an organizer');
+        }
+
+        return this.prepareEntity(user!);
+    }
+
+    public async validateArrayOfUsers(users: Array<number>): Promise<void> {
+        if (users.length === 0) {
+            this.logAndThrowError(new UserNotFoundError(), '[UserService] validateArrayOfUsers -> Empty array');
+        }
+
+        const usersPromises = users.map(async user => {
+            const usr = await this.getUserByUserId(user.toString());
+
+            if (!usr) {
+                this.logAndThrowError(new UserNotFoundError(), `[UserService] validateArrayOfUsers -> User not found ${user}`);
+            }
+        });
+
+        await Promise.all(usersPromises);
+    }
 
     private logAndThrowError(error: CustomError, context: string): void {
         logger.error(context, error);
@@ -97,19 +123,19 @@ export class UserService {
 
     private async prepareEntity(user: User): Promise<UserEntity> {
         return await UserEntity.createFromRepository({
-            name: user!.name,
-            surname: user!.surname,
-            email: user!.email,
-            type: user!.type,
-            user_id: user!.user_id,
-            status: user!.status,
-            phone_number: user!.phone_number,
-            login: user!.login,
-            password: user!.password,
-            created_at: user!.created_at,
+            name: user.name,
+            surname: user.surname,
+            email: user.email,
+            type: user.type,
+            user_id: user.user_id,
+            status: user.status,
+            phone_number: user.phone_number,
+            login: user.login,
+            password: user.password,
+            created_at: user.created_at,
             updated_at: user?.updated_at,
             deleted_at: user?.deleted_at,
-            id: user!.id,
+            id: user.id,
             reset_password_expires: user?.reset_password_expires,
             reset_password_token: user?.reset_password_token
         });

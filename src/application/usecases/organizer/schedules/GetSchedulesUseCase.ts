@@ -17,7 +17,7 @@ export class GetSchedulesUseCase {
     }
 
     public async execute(organizerId: string): Promise<ScheduleDTO[]> {
-        const user = await this.userService.getUserById(organizerId);
+        const user = await this.userService.getUserByUserId(organizerId);
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user!.id);
 
         const groupsId = groups.map(group => group.id);

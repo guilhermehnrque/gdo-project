@@ -1,53 +1,46 @@
-import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/group/CreateGroupRequest";
-
-export default class CreateLocalDTO {
+export class CreateLocalDTO {
     public country: string;
     public state: string;
     public city: string;
     public street: string;
     public number: number;
-    public zip_code: number;
+    public zipCode: number;
     public description: string;
+    public groupsId?: number;
 
-    constructor(
-        country: string,
-        state: string,
-        city: string,
-        street: string,
-        number: number,
-        zip_code: number,
-        description: string
-    ) {
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.street = street;
-        this.number = number;
-        this.zip_code = zip_code;
-        this.description = description;
+    constructor(payload: {
+        country: string;
+        state: string;
+        city: string;
+        street: string;
+        number: number;
+        zipCode: number;
+        description: string;
+    }) {
+        this.country = payload.country;
+        this.state = payload.state;
+        this.city = payload.city;
+        this.street = payload.street;
+        this.number = payload.number;
+        this.zipCode = payload.zipCode;
+        this.description = payload.description;
     }
 
-    static async createFromPayload(payload: CreateGroupRequest): Promise<CreateLocalDTO> {
-        return new CreateLocalDTO(
-            payload.local.country,
-            payload.local.state,
-            payload.local.city,
-            payload.local.street,
-            payload.local.number,
-            payload.local.zip_code,
-            payload.local.description
-        );
+    public setGroupsId(groupsId: number) {
+        this.groupsId = groupsId;
     }
 
-    payloadToCreate() {
+
+    public payloadToCreate() {
         return {
             country: this.country,
             state: this.state,
             city: this.city,
             street: this.street,
             number: this.number,
-            zip_code: this.zip_code,
-            description: this.description
+            zip_code: this.zipCode,
+            description: this.description,
+            groups_id: this.groupsId
         };
     }
 }

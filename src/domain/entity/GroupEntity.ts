@@ -1,51 +1,46 @@
-import CreateGroupDTO from "../../application/dto/group/CreateGroupDTO";
+import { GroupAttributes } from "../interfaces/attributes/GroupAttributes";
 
-export default class GroupEntity {
+export class GroupEntity implements GroupAttributes {
 
-    id: number | null;
-    description: string;
-    is_active: boolean;
-    users_id: number;
-    visibility: string;
+    public id?: number;
+    public description: string;
+    public is_active: boolean;
+    public users_id: number;
+    public visibility: string;
+    public created_at: Date;
+    public updated_at: Date | undefined;
+    public deleted_at: Date | undefined;
 
-    constructor(
-        id: number | null,
-        description: string,
-        is_active: boolean,
-        users_id: number,
-        visibility: string,
-    ) {
-        this.id = id;
-        this.description = description;
-        this.is_active = is_active;
-        this.users_id = users_id;
-        this.visibility = visibility;
+    constructor(payload: Partial<GroupEntity>) {
+        this.description = payload.description!;
+        this.is_active = payload.is_active!;
+        this.users_id = payload.users_id!;
+        this.visibility = payload.visibility!;
+        this.created_at = payload.created_at!;
+        this.updated_at = payload.updated_at;
+        this.deleted_at = payload.deleted_at;
+        this.id = payload.id;
     }
 
-    static async createFromDTO(payload: CreateGroupDTO, userId: number): Promise<GroupEntity> {
-        return new GroupEntity(
-            null,
-            payload.description,
-            true,
-            userId,
-            payload.visibility
-        );
+    static async createFromDTO(payload: Partial<GroupEntity>, user_id: number): Promise<GroupEntity> {
+        return new GroupEntity({
+            ...payload,
+            users_id: user_id,
+            created_at: new Date(),
+        });
     }
 
-    static async createFromPayloadUpdate(
-        groupId: number,
-        userId: number,
-        description: string,
-        status: boolean,
-        visibility: string
-    ): Promise<GroupEntity> {
-        return new GroupEntity(
-            groupId,
-            description,
-            status,
-            userId,
-            visibility
-        )
+    static async createFromPayloadUpdate(payload: Partial<GroupEntity>): Promise<GroupEntity> {
+        return new GroupEntity({
+            ...payload,
+            updated_at: new Date(),
+        });
+    }
+
+    static async fromUseCase(payload: Partial<GroupEntity>): Promise<GroupEntity> {
+        return new GroupEntity({
+            ...payload,
+        });
     }
 
     toCreatePayload() {
@@ -53,7 +48,8 @@ export default class GroupEntity {
             description: this.description,
             is_active: this.is_active,
             users_id: this.users_id,
-            visibility: this.visibility
+            visibility: this.visibility,
+            created_at: this.created_at
         };
     }
 
@@ -63,7 +59,8 @@ export default class GroupEntity {
             description: this.description,
             is_active: this.is_active,
             users_id: this.users_id,
-            visibility: this.visibility
+            visibility: this.visibility,
+            updated_at: this.updated_at
         };
     }
 

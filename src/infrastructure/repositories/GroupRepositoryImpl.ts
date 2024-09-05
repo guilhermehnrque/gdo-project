@@ -1,5 +1,5 @@
 // Entities
-import GroupEntity from "../../domain/entity/GroupEntity";
+import { GroupEntity } from "../../domain/entity/GroupEntity";
 
 // Interfaces
 import { GroupRepositoryInterface } from "../../domain/repositories/GroupRepositoryInterface";
@@ -12,7 +12,7 @@ import { Local } from "../../domain/models/LocalModel";
 import DatabaseError from "../../application/erros/DatabaseError";
 import { CustomError } from "../../application/erros/CustomError";
 
-export default class GroupRepositoryImpl implements GroupRepositoryInterface {
+export class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     async createGroup(groupEntity: GroupEntity, options: { transaction?: any }): Promise<Group> {
         try {
@@ -61,9 +61,13 @@ export default class GroupRepositoryImpl implements GroupRepositoryInterface {
 
     }
 
-    async getGroupByDescription(groupDescription: string): Promise<boolean> {
-        const group = await Group.findOne({ where: { description: groupDescription } });
-        return group !== null;
+    async getGroupByDescription(groupDescription: string): Promise<Group | null> {
+        try {
+            return await Group.findOne({ where: { description: groupDescription } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] Error getting group by description: ${customError.message}`);
+        }
     }
 
     async updateGroupById(groupEntity: GroupEntity): Promise<number> {

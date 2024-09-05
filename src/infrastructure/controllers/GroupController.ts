@@ -1,19 +1,40 @@
 import { Request, Response } from "express";
-import GroupGatewayImpl from "../gateways/organizer/GroupGatewayImpl";
 import { CustomError } from "../../application/erros/CustomError";
+import { GroupFacade } from "../../application/facade/organizer/GroupFacade";
+import { CreateGroupRequest } from "../requests/organizer/group/CreateGroupRequest";
+import { CreateGroupDTO } from "../../application/dto/group/CreateGroupDTO";
+import { CreateLocalDTO } from "../../application/dto/local/CreateLocalDTO";
 
-export default class GroupController {
 
-    private groupGateway: GroupGatewayImpl;
+export class GroupController {
 
+    private groupFacade: GroupFacade;
     constructor() {
-        this.groupGateway = new GroupGatewayImpl();
+        this.groupFacade = new GroupFacade();
     }
 
     async createGroup(request: Request, response: Response) {
         try {
-            await this.groupGateway.createGroup(request);
-            return response.status(201).json({ message: "O grupo foi criado :3" });
+            const { userId } = request;
+            const { group, local } = request.body as CreateGroupRequest;
+
+            const createGroupDTO = new CreateGroupDTO(group);
+            const createLocalDTO = new CreateLocalDTO(local);
+
+
+            await this.groupFacade.createGroup(createGroupDTO, createLocalDTO, userId!);
+            return response.status(201).json({ message: "Grupo e local registrado" });
+        } catch (error) {
+            const { statusCode = 500, message } = error as CustomError;
+            return response.status(statusCode).json({ error: message });
+        }
+    }
+
+
+    async updateGroupById(request: Request, response: Response) {
+        try {
+            const group = await this.groupFacade.updateGroupById(request);
+            return response.status(201).json(group);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
@@ -22,7 +43,7 @@ export default class GroupController {
 
     async getUserGroupsByUserId(request: Request, response: Response) {
         try {
-            const groups = await this.groupGateway.getUserGroupsByUserId(request);
+            const groups = await this.groupFacade.getUserGroupsByUserId(request);
             return response.status(200).json(groups);
         }
         catch (error) {
@@ -33,7 +54,7 @@ export default class GroupController {
 
     async getGroupById(request: Request, response: Response) {
         try {
-            const group = await this.groupGateway.getGroupById(request);
+            const group = await this.groupFacade.getGroupById(request);
             return response.status(200).json(group);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -41,19 +62,10 @@ export default class GroupController {
         }
     }
 
-    async updateGroupById(request: Request, response: Response) {
-        try {
-            const group = await this.groupGateway.updateGroupById(request);
-            return response.status(201).json(group);
-        } catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-            return response.status(statusCode).json({ error: message });
-        }
-    }
 
     async changeGroupStatus(request: Request, response: Response) {
         try {
-            const group = await this.groupGateway.changeGroupStatus(request);
+            const group = await this.groupFacade.changeGroupStatus(request);
             return response.status(204).json(group);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -63,7 +75,7 @@ export default class GroupController {
 
     async deleteGroupById(request: Request, response: Response) {
         try {
-            await this.groupGateway.deleteGroupById(request);
+            await this.groupFacade.deleteGroupById(request);
             return response.status(204).json();
         }
         catch (error) {
@@ -74,7 +86,7 @@ export default class GroupController {
 
     async addUserToGroup(request: Request, response: Response) {
         try {
-            await this.groupGateway.addUserToGroup(request);
+            await this.groupFacade.addUserToGroup(request);
             return response.status(201).json({ message: "Usuário adicionado ao grupo com sucesso!" });
         }
         catch (error) {
@@ -85,7 +97,7 @@ export default class GroupController {
 
     async removeUserFromGroup(request: Request, response: Response) {
         try {
-            await this.groupGateway.removeUsersFromGroup(request);
+            await this.groupFacade.removeUsersFromGroup(request);
             return response.status(201).json({ message: "Usuário(s) removido do grupo!" });
         }
         catch (error) {
@@ -96,7 +108,7 @@ export default class GroupController {
 
     async getGroupMembers(request: Request, response: Response) {
         try {
-            const members = await this.groupGateway.getGroupMembers(request);
+            const members = await this.groupFacade.getGroupMembers(request);
             return response.status(200).json(members);
         }
         catch (error) {

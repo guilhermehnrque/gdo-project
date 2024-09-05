@@ -1,29 +1,19 @@
 import { GroupVisibilityEnum, getGroupVisibility } from "../../../domain/enums/GroupVisibilityEnum";
-import { CreateGroupRequest } from "../../../infrastructure/requests/organizer/group/CreateGroupRequest";
 
-export default class CreateGroupDTO {
-    
+export class CreateGroupDTO {
+
     public description: string;
-    public visibility: GroupVisibilityEnum
+    public visibility: GroupVisibilityEnum;
 
-    constructor(
-        description: string,
-        visibility: GroupVisibilityEnum
-    ) {
-        this.description = description;
-        this.visibility = visibility;
+    constructor(payload: { description: string; visibility: string }) {
+        this.description = payload.description;
+        this.visibility = getGroupVisibility(payload.visibility)
     }
 
-    static async createFromPayload(payload: CreateGroupRequest): Promise<CreateGroupDTO> {
-        return new CreateGroupDTO(
-            payload.group.description,
-            getGroupVisibility(payload.group.visibility)
-        );
-    }
-
-    payloadToCreate() {
+    public payloadToCreate() {
         return {
             description: this.description,
+            visibility: this.visibility
         };
     }
 }

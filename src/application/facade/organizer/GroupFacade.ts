@@ -1,38 +1,23 @@
-import { Request } from "express";
+import sequelize from "../../../infrastructure/database/index";
+import { getGroupVisibility } from "../../../domain/enums/GroupVisibilityEnum";
+import { RegisterUserGroupRequest } from "../../../infrastructure/requests/organizer/group/RegisterUserGroupRequest";
+import { UpdateGroupRequest } from "../../../infrastructure/requests/organizer/group/UpdateGroupRequest";
+import { CreateGroupDTO } from "../../dto/group/CreateGroupDTO";
+import { GroupDTO } from "../../dto/group/GroupDTO";
+import GroupMemberDTO from "../../dto/groupMember/GroupMemberDTO";
+import { CreateLocalDTO } from "../../dto/local/CreateLocalDTO";
+import CreateGroupUseCase from "../../usecases/organizer/group/CreateGroupUseCase";
+import { DeleteGroupUseCase } from "../../usecases/organizer/group/DeleteGroupUseCase";
+import { GetGroupDetailsUseCase } from "../../usecases/organizer/group/GetGroupDetailsUseCase";
+import { GetGroupMembersUseCase } from "../../usecases/organizer/group/GetGroupMembersUseCase";
+import { GetGroupsUseCase } from "../../usecases/organizer/group/GetGroupsUseCase";
+import { RegisterGroupUserUseCase } from "../../usecases/organizer/group/RegisterGroupUserUseCase";
+import { RemoveGroupUserUseCase } from "../../usecases/organizer/group/RemoveGroupUserUseCase";
+import { UpdateGroupStatusUseCase } from "../../usecases/organizer/group/UpdateGroupStatusUseCase";
+import { UpdateGroupUseCase } from "../../usecases/organizer/group/UpdateGroupUseCase";
+import CreateLocalUseCase from "../../usecases/organizer/locals/CreateLocalUseCase";
 
-// Interfaces
-import GroupGatewayInterface from "../../../application/interfaces/GroupGatewayInterface";
-
-// Use Cases
-import CreateGroupUseCase from "../../../application/usecases/organizer/group/CreateGroupUseCase";
-import CreateLocalUseCase from "../../../application/usecases/organizer/locals/CreateLocalUseCase";
-import { GetGroupsUseCase } from "../../../application/usecases/organizer/group/GetGroupsUseCase";
-import { GetGroupDetailsUseCase } from "../../../application/usecases/organizer/group/GetGroupDetailsUseCase";
-import { UpdateGroupUseCase } from "../../../application/usecases/organizer/group/UpdateGroupUseCase";
-import { UpdateGroupStatusUseCase } from "../../../application/usecases/organizer/group/UpdateGroupStatusUseCase";
-import { RegisterGroupUserUseCase } from "../../../application/usecases/organizer/group/RegisterGroupUserUseCase";
-import { RegisterUserGroupRequest } from "../../requests/organizer/group/RegisterUserGroupRequest";
-import { RemoveGroupUserUseCase } from "../../../application/usecases/organizer/group/RemoveGroupUserUseCase";
-
-// Requests
-import { CreateGroupRequest } from "../../requests/organizer/group/CreateGroupRequest";
-import { UpdateGroupRequest } from "../../requests/organizer/group/UpdateGroupRequest";
-
-// DTOs
-import CreateGroupDTO from "../../../application/dto/group/CreateGroupDTO";
-import CreateLocalDTO from "../../../application/dto/local/CreateLocalDTO";
-import { GroupDTO } from "../../../application/dto/group/GroupDTO";
-
-// Mappers
-import sequelize from "../../database";
-import { DeleteGroupUseCase } from "../../../application/usecases/organizer/group/DeleteGroupUseCase";
-
-// Enum
-import { getGroupVisibility } from '../../../domain/enums/GroupVisibilityEnum';
-import { GetGroupMembersUseCase } from "../../../application/usecases/organizer/group/GetGroupMembersUseCase";
-import GroupMemberDTO from "../../../application/dto/groupMember/GroupMemberDTO";
-
-export default class GroupGatewayImpl implements GroupGatewayInterface {
+export class GroupFacade {
 
     private createGroupUseCase: CreateGroupUseCase;
     private createLocalUseCase: CreateLocalUseCase;
@@ -58,27 +43,22 @@ export default class GroupGatewayImpl implements GroupGatewayInterface {
         this.getGroupMembersUseCase = new GetGroupMembersUseCase();
     }
 
-    async createGroup(request: Request): Promise<boolean> {
-        const req = request.body as CreateGroupRequest;
-        const userId = request.userId as string;
-        const createGroupDTO = CreateGroupDTO.createFromPayload(req);
-        const createLocalDTO = CreateLocalDTO.createFromPayload(req);
-
+    async createGroup(createGroupDTO: CreateGroupDTO, createLocalDTO: CreateLocalDTO, userId: string): Promise<boolean> {
         const transaction = await sequelize.transaction();
-        let group: any = null;
+        let groupEntity;
 
         try {
-            group = await this.createGroupUseCase.execute(await createGroupDTO, userId, transaction);
-            await this.createLocalUseCase.execute(await createLocalDTO, group.id, transaction);
+            groupEntity = await this.createGroupUseCase.execute(createGroupDTO, userId, transaction);
 
-            await transaction.commit();
+            await this.createLocalUseCase.execute(createLocalDTO, groupEntity.id!, transaction);
+
+            await this.registerGroupUserUseCase.execute([groupEntity.users_id], userId, groupEntity.id!, transaction);
+
+            transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;
         }
-
-        await this.registerGroupUserUseCase.execute([group.users_id], userId, group.id, null);
-        return group !== null;
     }
 
     async getUserGroupsByUserId(request: Request): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {

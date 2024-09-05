@@ -1,8 +1,9 @@
-import CreateLocalDTO from "../../application/dto/local/CreateLocalDTO";
+import { CreateLocalDTO } from "../../application/dto/local/CreateLocalDTO";
+import { LocalAttributes } from "../interfaces/attributes/LocalAttributes";
 
-export default class LocalEntity {
+export class LocalEntity implements LocalAttributes {
 
-    public id?: number | null;
+    public id?: number;
     public description: string;
     public country: string;
     public state: string;
@@ -12,49 +13,37 @@ export default class LocalEntity {
     public number: number | null;
     public groups_id: number;
     public created_at: Date;
-    public updated_at?: Date | null;
+    public updated_at?: Date;
 
-    constructor(
-        description: string,
-        state: string,
-        country: string,
-        city: string,
-        street: string,
-        zip_code: number,
-        number: number | null,
-        groups_id: number,
-        created_at: Date,
-        id?: number | null,
-        updated_at?: Date | null
-    ) {
-        this.id = id;
-        this.description = description;
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.street = street;
-        this.zip_code = zip_code;
-        this.number = number;
-        this.groups_id = groups_id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+    constructor(payload: Partial<LocalEntity>) {
+        this.description = payload.description!;
+        this.country = payload.country!;
+        this.state = payload.state!;
+        this.city = payload.city!;
+        this.street = payload.street!;
+        this.zip_code = payload.zip_code!;
+        this.number = payload.number!;
+        this.groups_id = payload.groups_id!;
+        this.created_at = payload.created_at!;
+        this.updated_at = payload.updated_at;
+        this.id = payload.id;
     }
 
     static async createFromDTO(payload: CreateLocalDTO, groupId: number): Promise<LocalEntity> {
-        return new LocalEntity(
-            payload.description,
-            payload.state,
-            payload.country,
-            payload.city,
-            payload.street,
-            payload.zip_code,
-            payload.number,
-            groupId,
-            new Date(),
-        );
+        return new LocalEntity({
+            ...payload.payloadToCreate(),
+            groups_id: groupId,
+            created_at: new Date(),
+        });
     }
 
-    payloadToCreate() { 
+    static async fromService(payload: Partial<LocalEntity>): Promise<LocalEntity> {
+        return new LocalEntity({
+            ...payload,
+        });
+    }
+
+    public payloadToCreate() {
         return {
             description: this.description,
             country: this.country,
@@ -67,4 +56,18 @@ export default class LocalEntity {
         }
     }
 
+    public payloadToUpdate() {
+        return {
+            id: this.id!,
+            description: this.description,
+            country: this.country,
+            state: this.state,
+            city: this.city,
+            street: this.street,
+            zip_code: this.zip_code,
+            number: this.number,
+            groups_id: this.groups_id,
+            updated_at: new Date(),
+        }
+    }
 }
