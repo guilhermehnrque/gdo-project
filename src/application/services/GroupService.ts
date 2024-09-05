@@ -4,7 +4,6 @@ import { GroupNotFoundError } from "../erros/groups/GroupNotFoundError";
 import { GroupEntity } from "../../domain/entity/GroupEntity";
 import logger from "../utils/LoggerConfig";
 
-
 export class GroupService {
 
     private groupRepository: GroupRepositoryImpl;
