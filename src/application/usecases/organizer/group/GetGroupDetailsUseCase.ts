@@ -1,5 +1,5 @@
 import { mapGroupWithLocalToDTO } from '../../../../application/mappers/GroupMapper';
-import { GroupDTO } from "../../../dto/group/GroupDTO";
+import { GroupDTO } from '../../../../application/dto/group/GroupDTO';
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupService } from "../../../services/GroupService";
