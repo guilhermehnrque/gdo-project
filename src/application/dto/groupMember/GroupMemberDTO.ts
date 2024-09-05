@@ -1,4 +1,4 @@
-export default class GroupMemberDTO {
+export class GroupMemberDTO {
     
     public name: string;
     public surname: string;

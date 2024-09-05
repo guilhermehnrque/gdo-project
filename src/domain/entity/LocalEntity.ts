@@ -39,7 +39,7 @@ export class LocalEntity implements LocalAttributes {
 
     static async fromService(payload: Partial<LocalEntity>): Promise<LocalEntity> {
         return new LocalEntity({
-            ...payload,
+            ...payload
         });
     }
 

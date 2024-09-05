@@ -16,22 +16,34 @@ export class GroupService {
         const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupIdPk, userIdPk);
 
         if (!group) {
-            logger.error(`[GroupService] Grupo não encontrado -> userIdPk: ${userIdPk}`);
-            throw new GroupNotFoundError('[GroupService] Grupo não encontrado');
+            logger.error(`[GroupService] getGroupOwnerByUserIdPk Grupo não encontrado -> userIdPk: ${userIdPk}`);
+            throw new GroupNotFoundError('Grupo não encontrado');
         }
 
         return group;
     }
 
-    async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<Group[]> {
+    async getOrganizerGroupsByUserIdPk(userIdPk: number): Promise<GroupEntity[]> {
         const groups = await this.groupRepository.getUserGroupsByUserId(userIdPk);
 
-        if (!groups) {
-            logger.error(`[GroupService] Grupos não encontrados -> userIdPk: ${userIdPk}`);
-            throw new GroupNotFoundError('[GroupService] Grupos não encontrados');
+        if (!groups || groups.length === 0) {
+            logger.error(`[GroupService] getOrganizerGroupsByUserIdPk Grupos não encontrados -> userIdPk: ${userIdPk}`);
+            throw new GroupNotFoundError('Grupos não encontrados');
         }
 
-        return groups;
+        return await Promise.all(groups.map(group => {
+            return GroupEntity.fromService({
+                id: group.id,
+                description: group.description,
+                is_active: group.is_active,
+                users_id: group.users_id,
+                visibility: group.visibility,
+                created_at: group.created_at,
+                updated_at: group.updated_at,
+                deleted_at: group.deleted_at,
+            })
+        }));
+
     }
 
     async getGroupByDescription(description: string): Promise<Group | null> {
@@ -42,17 +54,27 @@ export class GroupService {
         const group = await this.getGroupOwnerByUserIdPk(userIdPk, groupIdPk);
 
         if (!group) {
-            logger.error(`[GroupService] Usuário não é dono do grupo -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`);
-            throw new GroupNotFoundError('[GroupService] Usuário não é dono do grupo');
+            logger.error(`[GroupService] ensureIsOwnerGroupAndReturnGroup Usuário não é dono do grupo -> userIdPk: ${userIdPk} -> groupIdPk: ${groupIdPk}`);
+            throw new GroupNotFoundError('Usuário não é dono do grupo');
         }
 
-        return await GroupEntity.fromUseCase(group);
+        return await GroupEntity.fromService({
+            id: group.id,
+            description: group.description,
+            is_active: group.is_active,
+            users_id: group.users_id,
+            visibility: group.visibility,
+            created_at: group.created_at,
+            updated_at: group.updated_at,
+            deleted_at: group.deleted_at,
+            local: group.local
+        });
     }
 
     async validateIfGroupExists(group: Group | null): Promise<void> {
         if (group) {
-            logger.error(`[GroupService] Grupo já registrado -> description: ${group.description}`);
-            throw new GroupNotFoundError('[GroupService] Grupo já registrado');
+            logger.error(`[GroupService] validateIfGroupExists group já registrado description: ${group.description}`);
+            throw new GroupNotFoundError('Grupo já registrado');
         }
     }
 
@@ -60,8 +82,7 @@ export class GroupService {
         const group = await this.getGroupByDescription(description);
         await this.validateIfGroupExists(group);
 
-        return await GroupEntity.fromUseCase(group!);
+        return await GroupEntity.fromService(group!);
     }
-
 
 }

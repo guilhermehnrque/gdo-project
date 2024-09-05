@@ -1,11 +1,13 @@
+import { Transaction } from "sequelize";
 import { CustomError } from "../../application/erros/CustomError";
-import DatabaseError from "../../application/erros/DatabaseError";
 import { GroupsUsers } from "../../domain/models/GroupUserModel";
 import { User } from "../../domain/models/UserModel";
 import { GroupUserInterface } from "../../domain/repositories/GroupUserInterface";
+import DatabaseError from "../../application/erros/DatabaseError";
+
 
 export class GroupUserRepositoryImpl implements GroupUserInterface {
-    async createGroupUser(groupId: number, usersId: Array<number>, options: any): Promise<GroupsUsers[]> {
+    async createGroupUser(groupId: number, usersId: Array<number>, options: { transaction?: Transaction }): Promise<GroupsUsers[]> {
         try {
             const groupUsers = usersId.map(userId => ({
                 groups_id: groupId,
@@ -16,11 +18,11 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
 
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupUserRepository] Error creating group user: ${customError.message}`);
+            throw new DatabaseError(`[GroupUserRepository] createGroupUser Error creating group user: ${customError.message}`);
         }
     }
 
-    async removeGroupUser(groupId: number, usersId: Array<number>, options: any): Promise<number> {
+    async removeGroupUser(groupId: number, usersId: Array<number>, options: { transaction?: Transaction }): Promise<number> {
         try {
             return await GroupsUsers.destroy({
                 where: {
@@ -31,7 +33,7 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupUserRepository] Error removing group user: ${customError.message}`);
+            throw new DatabaseError(`[GroupUserRepository] removeGroupUser Error removing group user: ${customError.message}`);
         }
     }
 
@@ -48,7 +50,7 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
             });
         } catch (error) {
             const customError = error as CustomError;
-            throw new DatabaseError(`[GroupUserRepository] Error getting all group members: ${customError.message}`);
+            throw new DatabaseError(`[GroupUserRepository] getAllGroupMembers Error getting all group members: ${customError.message}`);
         }
     }
 

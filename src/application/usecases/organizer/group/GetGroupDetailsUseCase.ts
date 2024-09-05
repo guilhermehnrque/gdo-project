@@ -1,34 +1,36 @@
-import logger from "../../../utils/LoggerConfig";
-import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
-import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
-import { mapGroupToDTO } from '../../../../application/mappers/GroupMapper';
+import { mapGroupWithLocalToDTO } from '../../../../application/mappers/GroupMapper';
 import { GroupDTO } from "../../../dto/group/GroupDTO";
-import GroupNotFoundError from "../../../erros/groups/GroupNotFoundError";
+import { GroupEntity } from "../../../../domain/entity/GroupEntity";
+import { UserEntity } from "../../../../domain/entity/UserEntity";
+import { GroupService } from "../../../services/GroupService";
+import { UserService } from "../../../services/UserService";
+import { LocalEntity } from '../../../../domain/entity/LocalEntity';
 
 export class GetGroupDetailsUseCase {
-    private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
-        this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
     async execute(groupId: number, userId: string): Promise<GroupDTO> {
-        const user = await this.getUserByUserId(userId);
+        const user = await this.stepValidateOrganizer(userId);
+        const group = await this.stepValidateOrganizerGroup(user.id, groupId);
+        const entity = await LocalEntity.fromService(group.local!);
 
-        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, user?.id!);
-
-        if (group == null) {
-            logger.warn(`Group not found for user ${userId} and group ${groupId}`);
-            throw new GroupNotFoundError();
-        }
-
-        return mapGroupToDTO(group);
+        return await mapGroupWithLocalToDTO(group, entity);
     }
 
-    async getUserByUserId(userId: string) {
-        return await this.userRepository.getUserByUserId(userId);
+    async stepValidateOrganizer(userId: string): Promise<UserEntity> {
+        return await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
     }
+
+    async stepValidateOrganizerGroup(groupId: number, userIdPk: number): Promise<GroupEntity> {
+        return await this.groupService.ensureIsOwnerGroupAndReturnGroup(groupId, userIdPk);
+    }
+
 
 }

@@ -11,10 +11,11 @@ import { Local } from "../../domain/models/LocalModel";
 // Errors
 import DatabaseError from "../../application/erros/DatabaseError";
 import { CustomError } from "../../application/erros/CustomError";
+import { Transaction } from "sequelize";
 
 export class GroupRepositoryImpl implements GroupRepositoryInterface {
 
-    async createGroup(groupEntity: GroupEntity, options: { transaction?: any }): Promise<Group> {
+    async createGroup(groupEntity: GroupEntity, options: { transaction?: Transaction }): Promise<Group> {
         try {
             return await Group.create(groupEntity.toCreatePayload(), { transaction: options.transaction });
         } catch (error) {

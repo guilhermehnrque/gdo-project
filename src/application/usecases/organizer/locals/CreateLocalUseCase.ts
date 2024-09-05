@@ -5,7 +5,7 @@ import { CreateLocalDTO } from "../../../dto/local/CreateLocalDTO";
 import { Transaction } from "sequelize";
 import { LocalService } from "../../../services/LocalService";
 
-export default class CreateLocalUseCase {
+export class CreateLocalUseCase {
 
     private localRepository: LocalRepositoryImpl;
     private localService: LocalService;

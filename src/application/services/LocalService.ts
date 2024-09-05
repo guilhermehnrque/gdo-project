@@ -1,6 +1,6 @@
 import { LocalEntity } from "../../domain/entity/LocalEntity";
 import { Local } from "../../domain/models/LocalModel";
-import LocalRepositoryImpl from "../../infrastructure/repositories/LocalRepositoryImpl";
+import { LocalRepositoryImpl } from "../../infrastructure/repositories/LocalRepositoryImpl";
 import LocalNotFoundError from "../erros/local/LocalNotFoundError";
 
 export class LocalService {

@@ -6,7 +6,7 @@ import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupService } from "../../../services/GroupService";
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 
-export default class CreateGroupUseCase {
+export class CreateGroupUseCase {
 
     private groupRepository: GroupRepositoryImpl;
     private userService: UserService;

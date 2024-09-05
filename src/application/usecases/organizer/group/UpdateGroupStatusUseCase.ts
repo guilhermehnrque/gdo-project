@@ -1,41 +1,37 @@
-import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import { UserRepositoryImpl } from '../../../../infrastructure/repositories/UserRepositoryImpl';
-import GroupEntity from '../../../../domain/entity/GroupEntity';
-import logger from '../../../utils/LoggerConfig';
-import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
+import { GroupRepositoryImpl } from '../../../../infrastructure/repositories/GroupRepositoryImpl';
+import { GroupEntity } from '../../../../domain/entity/GroupEntity';
+import { UserEntity } from '../../../../domain/entity/UserEntity';
+import { GroupService } from '../../../services/GroupService';
+import { UserService } from '../../../services/UserService';
 
 export class UpdateGroupStatusUseCase {
 
     private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
         this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
-    async execute(groupId: number, userId: string, status: boolean,): Promise<number> {
-        const user = await this.getUserByUserId(userId);
-        const group = await this.getUserGroup(user?.id!, groupId);
+    async execute(groupId: number, userId: string, status: boolean): Promise<number> {
+        const user = await this.stepValidateOrganizer(userId);
+        const group = await this.stepValidateOrganizerGroup(user.id, groupId);
+        group.is_active = status;
 
-        const groupEntity = await GroupEntity.createFromPayloadUpdate(group.id, user?.id!, group?.description, status, group.visibility);
+        const groupEntity = await GroupEntity.createFromPayloadUpdate(group);
 
         return await this.groupRepository.changeGroupStatus(groupEntity);
     }
 
-    async getUserByUserId(userId: string) {
-        return await this.userRepository.getUserByUserId(userId);
+    async stepValidateOrganizer(userId: string): Promise<UserEntity> {
+        return await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
     }
 
-    async getUserGroup(userId: number, groupId: number) {
-        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, userId);
-
-        if (group == null) {
-            logger.warn(`Group with id ${groupId} not found`);
-            throw new GroupNotFoundError();
-        }
-
-        return group;
+    async stepValidateOrganizerGroup(groupId: number, userIdPk: number): Promise<GroupEntity> {
+        return await this.groupService.ensureIsOwnerGroupAndReturnGroup(groupId, userIdPk);
     }
 
 }

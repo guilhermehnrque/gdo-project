@@ -1,12 +1,10 @@
-import sequelize from "../../../infrastructure/database/index";
 import { getGroupVisibility } from "../../../domain/enums/GroupVisibilityEnum";
 import { RegisterUserGroupRequest } from "../../../infrastructure/requests/organizer/group/RegisterUserGroupRequest";
-import { UpdateGroupRequest } from "../../../infrastructure/requests/organizer/group/UpdateGroupRequest";
 import { CreateGroupDTO } from "../../dto/group/CreateGroupDTO";
 import { GroupDTO } from "../../dto/group/GroupDTO";
-import GroupMemberDTO from "../../dto/groupMember/GroupMemberDTO";
+import { GroupMemberDTO } from "../../dto/groupMember/GroupMemberDTO";
 import { CreateLocalDTO } from "../../dto/local/CreateLocalDTO";
-import CreateGroupUseCase from "../../usecases/organizer/group/CreateGroupUseCase";
+import { CreateGroupUseCase } from "../../usecases/organizer/group/CreateGroupUseCase";
 import { DeleteGroupUseCase } from "../../usecases/organizer/group/DeleteGroupUseCase";
 import { GetGroupDetailsUseCase } from "../../usecases/organizer/group/GetGroupDetailsUseCase";
 import { GetGroupMembersUseCase } from "../../usecases/organizer/group/GetGroupMembersUseCase";
@@ -15,7 +13,9 @@ import { RegisterGroupUserUseCase } from "../../usecases/organizer/group/Registe
 import { RemoveGroupUserUseCase } from "../../usecases/organizer/group/RemoveGroupUserUseCase";
 import { UpdateGroupStatusUseCase } from "../../usecases/organizer/group/UpdateGroupStatusUseCase";
 import { UpdateGroupUseCase } from "../../usecases/organizer/group/UpdateGroupUseCase";
-import CreateLocalUseCase from "../../usecases/organizer/locals/CreateLocalUseCase";
+import { CreateLocalUseCase } from "../../usecases/organizer/locals/CreateLocalUseCase";
+import sequelize from "../../../infrastructure/database/index";
+
 
 export class GroupFacade {
 
@@ -43,7 +43,7 @@ export class GroupFacade {
         this.getGroupMembersUseCase = new GetGroupMembersUseCase();
     }
 
-    async createGroup(createGroupDTO: CreateGroupDTO, createLocalDTO: CreateLocalDTO, userId: string): Promise<boolean> {
+    async createGroup(createGroupDTO: CreateGroupDTO, createLocalDTO: CreateLocalDTO, userId: string): Promise<void> {
         const transaction = await sequelize.transaction();
         let groupEntity;
 
@@ -61,48 +61,31 @@ export class GroupFacade {
         }
     }
 
-    async getUserGroupsByUserId(request: Request): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
-        const userId = request.userId as string;
-        return await this.getGroupsUseCase.execute(userId);
-    }
-
-    async getGroupById(request: Request): Promise<GroupDTO> {
-        const userId = request.userId as string;
-        const groupId = parseInt(request.params.groupId);
-
-        return await this.getGroupDetailsUseCase.execute(groupId, userId);
-    }
-
-    async updateGroupById(request: Request): Promise<number> {
-        const userId = request.userId as string;
-        const groupId = parseInt(request.params.groupId);
-        const { description, status, visibility } = request.body as UpdateGroupRequest
-
+    async updateGroupById(groupId: number, userId: string, description: string, status: boolean, visibility: string): Promise<number> {
         return await this.updateGroupUseCase.execute(groupId, userId, description, status, getGroupVisibility(visibility));
     }
 
-    async changeGroupStatus(request: Request): Promise<number> {
-        const userId = request.userId as string;
-        const groupId = parseInt(request.params.groupId);
-        const status = request.query.active as unknown as boolean;
+    async getUserGroupsByUserId(userId: string): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
+        return await this.getGroupsUseCase.execute(userId);
+    }
 
+    async getGroupById(userId: string, groupId: number): Promise<GroupDTO> {
+        return await this.getGroupDetailsUseCase.execute(groupId, userId);
+    }
+
+    async changeGroupStatus(groupId: number, userId: string, status: boolean): Promise<number> {
         return this.updateGroupStatusUseCase.execute(groupId, userId, status);
     }
 
-    async deleteGroupById(request: Request): Promise<void> {
-        const userId = request.userId as string;
-        const groupId = parseInt(request.params.groupId);
-
-        this.deleteGroupUseCase.execute(groupId, userId);
+    async deleteGroupById(groupId: number, userId: string): Promise<void> {
+        return this.deleteGroupUseCase.execute(groupId, userId);
     }
 
-    async addUserToGroup(request: Request): Promise<void> {
-        const { userId, groupId, req } = this.prepareData(request);
-
+    async addUserToGroup(groupId: number, playersId: number[], userId: string): Promise<void> {
         const transaction = await sequelize.transaction();
 
         try {
-            await this.registerGroupUserUseCase.execute(req.users_id, userId, groupId, null);
+            await this.registerGroupUserUseCase.execute(playersId, userId, groupId, transaction);
             transaction.commit();
         } catch (error) {
             await transaction.rollback();
@@ -111,13 +94,11 @@ export class GroupFacade {
 
     }
 
-    async removeUsersFromGroup(request: Request): Promise<void> {
-        const { userId, groupId, req } = this.prepareData(request);
-
+    async removeUsersFromGroup(groupId: number, playersId: number[], userId: string): Promise<void> {
         const transaction = await sequelize.transaction();
 
         try {
-            await this.removeGroupUserUseCase.execute(req.users_id, userId, groupId, null);
+            await this.removeGroupUserUseCase.execute(playersId, userId, groupId, transaction);
             transaction.commit();
         } catch (error) {
             await transaction.rollback();
@@ -125,19 +106,8 @@ export class GroupFacade {
         }
     }
 
-    async getGroupMembers(request: Request): Promise<GroupMemberDTO[]> {
-        const { userId, groupId } = request.params;
-
-        return await this.getGroupMembersUseCase.execute(parseInt(groupId), userId);
-    }
-
-    private prepareData(request: Request) {
-        const userId = request.userId as string;
-        const req = request.body as RegisterUserGroupRequest;
-        const groupId = req.group_id
-
-        return { userId, groupId, req }
-
+    async getGroupMembers(groupId: number, userId: string): Promise<GroupMemberDTO[]> {
+        return await this.getGroupMembersUseCase.execute(groupId, userId);
     }
 
 }

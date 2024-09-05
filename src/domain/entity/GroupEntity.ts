@@ -1,4 +1,19 @@
 import { GroupAttributes } from "../interfaces/attributes/GroupAttributes";
+import { Group } from "../models/GroupModel";
+
+interface Local {
+    id?: number;
+    country: string;
+    state: string;
+    city: string;
+    street: string;
+    zip_code: number;
+    number: number | null;
+    description: string;
+    groups_id: number;
+    created_at: Date;
+    updated_at?: Date;
+}
 
 export class GroupEntity implements GroupAttributes {
 
@@ -10,6 +25,8 @@ export class GroupEntity implements GroupAttributes {
     public created_at: Date;
     public updated_at: Date | undefined;
     public deleted_at: Date | undefined;
+
+    public local?: Local;
 
     constructor(payload: Partial<GroupEntity>) {
         this.description = payload.description!;
@@ -37,10 +54,30 @@ export class GroupEntity implements GroupAttributes {
         });
     }
 
-    static async fromUseCase(payload: Partial<GroupEntity>): Promise<GroupEntity> {
-        return new GroupEntity({
-            ...payload,
-        });
+    static async fromService(payload: Partial<GroupEntity>): Promise<GroupEntity> {
+        let groupEntity = new GroupEntity({ ...payload });
+
+        if (payload.local) {
+            groupEntity.local = groupEntity.mapLocal(payload.local)
+        }
+
+        return groupEntity
+    }
+
+    private mapLocal(local: Local): Local {
+        return {
+            id: local.id,
+            country: local.country,
+            state: local.state,
+            city: local.city,
+            street: local.street,
+            zip_code: local.zip_code,
+            number: local.number,
+            description: local.description,
+            groups_id: local.groups_id,
+            created_at: local.created_at,
+            updated_at: local.updated_at
+        };
     }
 
     toCreatePayload() {
@@ -63,6 +100,5 @@ export class GroupEntity implements GroupAttributes {
             updated_at: this.updated_at
         };
     }
-
 
 }

@@ -15,13 +15,13 @@ import { EmailAdapterImpl } from "../../../infrastructure/adapters/EmailAdapterI
 import logger from "../../utils/LoggerConfig";
 
 // Repositories
-import GroupRepositoryImpl from "../../../infrastructure/repositories/GroupRepositoryImpl";
+import { GroupRepositoryImpl } from "../../../infrastructure/repositories/GroupRepositoryImpl";
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
 import { UserRepositoryImpl } from "../../../infrastructure/repositories/UserRepositoryImpl";
 
 // Errors
 import { CustomError } from "../../erros/CustomError";
-import GroupNotFoundError from "../../erros/groups/GroupNotFoundError";
+import { GroupNotFoundError } from "../../erros/groups/GroupNotFoundError";
 import InvitationPendingError from "../../erros/invitation/InvitationPendingError";
 import { UserNotFoundError } from "../../erros/UserNotFoundError";
 

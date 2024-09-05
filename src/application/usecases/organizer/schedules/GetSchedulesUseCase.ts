@@ -20,7 +20,7 @@ export class GetSchedulesUseCase {
         const user = await this.userService.getUserByUserId(organizerId);
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user!.id);
 
-        const groupsId = groups.map(group => group.id);
+        const groupsId = await Promise.all(groups.map(async group => group.id!));
 
         const groupsSchedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);
         return schedulesMapper(groupsSchedules);
