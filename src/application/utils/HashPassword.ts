@@ -3,7 +3,7 @@ import bcrypt  from 'bcrypt';
 const saltRounds = parseInt(process.env.PROJECT_GDB_SALT_ROUNDS ?? '10', 10);
 const secretKey = process.env.PROJECT_GDB_SECRET_KEY ?? '';
 
-class HashPassword {
+export class HashPassword {
     static async hashPassword(password: string) {
         return await bcrypt.hash(password, saltRounds);
     }
@@ -21,4 +21,3 @@ class HashPassword {
     }
 }
 
-export default HashPassword;

@@ -1,8 +1,8 @@
-import CustomError from "./CustomError";
+import { CustomError } from "./CustomError";
 
-export default class UserNotFoundError extends CustomError {
+export class UserNotFoundError extends CustomError {
     constructor(
-        message: string = "Usuário não encontrado", 
+        message: string = "Usuário não encontrado",
         public statusCode: number = 404
     ) {
         super(message, statusCode);

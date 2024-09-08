@@ -1,4 +1,4 @@
-import GroupEntity from "../entity/GroupEntity";
+import { GroupEntity } from "../entity/GroupEntity";
 import { Group } from "../models/GroupModel";
 
 export interface GroupRepositoryInterface {
@@ -8,6 +8,6 @@ export interface GroupRepositoryInterface {
     getGroupById(groupId: number): Promise<Group | null>;
     updateGroupById(groupEntity: GroupEntity): Promise<number>;
     changeGroupStatus(groupEntity: GroupEntity): Promise<number>;
-    getGroupByDescription(groupDescription: string): Promise<boolean>;
+    getGroupByDescription(groupDescription: string): Promise<Group | null>;
     deleteGroupById(groupId: number, userId: number): Promise<void>;
 }

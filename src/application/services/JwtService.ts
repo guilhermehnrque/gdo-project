@@ -1,8 +1,8 @@
 import { JwtTokensRepositoryImpl } from "../../infrastructure/repositories/JwtTokensRepositoryImpl";
 import { JwtTokenEntity } from "../../domain/entity/JwtTokenEntity";
-import HashPassword from '../../infrastructure/configs/HashPassword';
-
-import Jwt from '../../infrastructure/configs/Jwt';
+import { HashPassword } from '../utils/HashPassword';
+import { UserEntity } from "../../domain/entity/UserEntity";
+import Jwt from '../utils/Jwt';
 
 interface JSONConvertible {
     toJSON(): any;
@@ -35,8 +35,14 @@ export class JwtService {
         return await this.jwtRepository.expireLatestToken(userIdPk);
     }
 
-    async getLatestValidToken(userIdPk: number): Promise<string | null | undefined> {
-        return await this.jwtRepository.getLatestValidToken(userIdPk);
+    public async getLatestValidToken(userEntity: UserEntity): Promise<string | null | undefined> {
+        const jwtToken = await this.jwtRepository.getLatestValidToken(userEntity.id);
+
+        if (jwtToken != null || jwtToken != undefined) {
+            return jwtToken;
+        }
+
+        return await this.createToken(userEntity);
     }
 
 }

@@ -1,5 +1,6 @@
+import { LocalEntity } from "../../domain/entity/LocalEntity";
 import { Local } from "../../domain/models/LocalModel";
-import LocalRepositoryImpl from "../../infrastructure/repositories/LocalRepositoryImpl";
+import { LocalRepositoryImpl } from "../../infrastructure/repositories/LocalRepositoryImpl";
 import LocalNotFoundError from "../erros/local/LocalNotFoundError";
 
 export class LocalService {
@@ -18,6 +19,26 @@ export class LocalService {
         const local = await this.getLocalById(localId);
 
         if (!local || local === undefined) {
+            throw new LocalNotFoundError();
+        }
+    }
+
+    async getLocalByDescription(description: string): Promise<Local | null | undefined> {
+        return this.localRepository.getLocalByDescription(description);
+    }
+
+    async ensureLocalExistsAndReturnIfExists(description: string): Promise<LocalEntity | null> {
+        const local = await this.getLocalByDescription(description);
+
+        if (!local || local === undefined) {
+            return null;
+        }
+
+        return await LocalEntity.fromService(local);
+    }
+
+    private ensureLocalExists(local: Local): void {
+        if (local || local !== undefined) {
             throw new LocalNotFoundError();
         }
     }

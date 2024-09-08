@@ -1,10 +1,10 @@
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
 import { Group } from "../../domain/models/GroupModel";
 import { Local } from "../../domain/models/LocalModel";
 import { Schedule as ScheduleModel } from "../../domain/models/ScheduleModel";
 import { ScheduleRepositoryInterface } from "../../domain/repositories/ScheduleRepositoryInterface";
-import logger from "../configs/LoggerConfig";
+import logger from "../../application/utils/LoggerConfig";
 
 export class ScheduleRepositoryImpl implements ScheduleRepositoryInterface {
 

@@ -1,4 +1,4 @@
-import CustomError from "../CustomError";
+import { CustomError } from "../CustomError";
 
 export default class InvitationNotFoundError extends CustomError {
     constructor(

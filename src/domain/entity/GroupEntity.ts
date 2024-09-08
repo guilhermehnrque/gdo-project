@@ -1,51 +1,83 @@
-import CreateGroupDTO from "../../application/dto/group/CreateGroupDTO";
+import { GroupAttributes } from "../interfaces/attributes/GroupAttributes";
+import { Group } from "../models/GroupModel";
 
-export default class GroupEntity {
-
-    id: number | null;
+interface Local {
+    id?: number;
+    country: string;
+    state: string;
+    city: string;
+    street: string;
+    zip_code: number;
+    number: number | null;
     description: string;
-    is_active: boolean;
-    users_id: number;
-    visibility: string;
+    groups_id: number;
+    created_at: Date;
+    updated_at?: Date;
+}
 
-    constructor(
-        id: number | null,
-        description: string,
-        is_active: boolean,
-        users_id: number,
-        visibility: string,
-    ) {
-        this.id = id;
-        this.description = description;
-        this.is_active = is_active;
-        this.users_id = users_id;
-        this.visibility = visibility;
+export class GroupEntity implements GroupAttributes {
+
+    public id?: number;
+    public description: string;
+    public is_active: boolean;
+    public users_id: number;
+    public visibility: string;
+    public created_at: Date;
+    public updated_at: Date | undefined;
+    public deleted_at: Date | undefined;
+
+    public local?: Local;
+
+    constructor(payload: Partial<GroupEntity>) {
+        this.description = payload.description!;
+        this.is_active = payload.is_active!;
+        this.users_id = payload.users_id!;
+        this.visibility = payload.visibility!;
+        this.created_at = payload.created_at!;
+        this.updated_at = payload.updated_at;
+        this.deleted_at = payload.deleted_at;
+        this.id = payload.id;
     }
 
-    static async createFromDTO(payload: CreateGroupDTO, userId: number): Promise<GroupEntity> {
-        return new GroupEntity(
-            null,
-            payload.description,
-            true,
-            userId,
-            payload.visibility
-        );
+    static async createFromDTO(payload: Partial<GroupEntity>, user_id: number): Promise<GroupEntity> {
+        return new GroupEntity({
+            ...payload,
+            users_id: user_id,
+            created_at: new Date(),
+        });
     }
 
-    static async createFromPayloadUpdate(
-        groupId: number,
-        userId: number,
-        description: string,
-        status: boolean,
-        visibility: string
-    ): Promise<GroupEntity> {
-        return new GroupEntity(
-            groupId,
-            description,
-            status,
-            userId,
-            visibility
-        )
+    static async createFromPayloadUpdate(payload: Partial<GroupEntity>): Promise<GroupEntity> {
+        return new GroupEntity({
+            ...payload,
+            updated_at: new Date(),
+        });
+    }
+
+    static async fromService(payload: Partial<GroupEntity>): Promise<GroupEntity> {
+        let groupEntity = new GroupEntity({ ...payload });
+
+        if (payload.local) {
+            groupEntity.local = groupEntity.mapLocal(payload.local)
+        }
+
+        return groupEntity
+    }
+
+    private mapLocal(local: Local): Local {
+        return {
+            id: local.id,
+            country: local.country,
+            state: local.state,
+            city: local.city,
+            street: local.street,
+            zip_code: local.zip_code,
+            number: local.number,
+            description: local.description,
+            groups_id: local.groups_id,
+            created_at: local.created_at,
+            updated_at: local.updated_at
+        };
     }
 
     toCreatePayload() {
@@ -53,7 +85,8 @@ export default class GroupEntity {
             description: this.description,
             is_active: this.is_active,
             users_id: this.users_id,
-            visibility: this.visibility
+            visibility: this.visibility,
+            created_at: this.created_at
         };
     }
 
@@ -63,9 +96,9 @@ export default class GroupEntity {
             description: this.description,
             is_active: this.is_active,
             users_id: this.users_id,
-            visibility: this.visibility
+            visibility: this.visibility,
+            updated_at: this.updated_at
         };
     }
-
 
 }

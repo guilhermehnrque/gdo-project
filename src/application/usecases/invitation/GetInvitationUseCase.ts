@@ -10,13 +10,13 @@ import { mapInvitationToDTO } from "../../mappers/InvitationMapper";
 
 // Repositories
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
-import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+import { UserRepositoryImpl } from "../../../infrastructure/repositories/UserRepositoryImpl";
 
 // Errors
 import InvitationNotFoundError from "../../erros/invitation/InvitationNotFoundError";
 
 // Configs
-import logger from "../../../infrastructure/configs/LoggerConfig";
+import logger from "../../utils/LoggerConfig";
 
 export class GetInvitationUseCase {
 

@@ -1,56 +1,35 @@
-import { Group } from "../../../../domain/models/GroupModel";
+import { Transaction } from "sequelize";
 import { GroupsUsers } from "../../../../domain/models/GroupUserModel";
-import { User } from "../../../../domain/models/UserModel";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
-import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
 import { GroupUserRepositoryImpl } from "../../../../infrastructure/repositories/GroupUserRepositoryImpl";
-import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
 import { RegisterGroupUserDTO } from "../../../dto/group/RegisterGroupUserDTO";
-import GroupNotFoundError from "../../../erros/groups/GroupNotFoundError";
-import GroupUsersEmptyError from "../../../erros/groups/GroupUsersEmptyError";
-import UserNotFoundError from "../../../erros/UserNotFoundError";
+import { GroupUsersEmptyError } from "../../../erros/groups/GroupUsersEmptyError";
+import { GroupService } from "../../../services/GroupService";
+import { UserService } from "../../../services/UserService";
+import logger from "../../../utils/LoggerConfig";
 
 export class RegisterGroupUserUseCase {
 
     private groupUserRepository: GroupUserRepositoryImpl;
-    private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
         this.groupUserRepository = new GroupUserRepositoryImpl();
-        this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
-    async execute(usersId: Array<number>, userId: string, groupId: number, transaction: any): Promise<GroupsUsers[]> {
-        const user = await this.getUser(userId);
-        const group = await this.validateAndGetGroupAndUser(groupId, user?.id!);
+    async execute(usersId: Array<number>, userId: string, groupId: number, transaction: Transaction): Promise<GroupsUsers[]> {
+        const userOrganizer = await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
+        const group = await this.groupService.ensureIsOwnerGroupAndReturnGroup(userOrganizer.id, groupId);
 
         await this.validateIsGroupEmpty(usersId);
-        await this.validateAllUsers(usersId)
+        await this.userService.validateArrayOfUsers(usersId)
 
-        const groupUserDTO = new RegisterGroupUserDTO(group.id, usersId);
-        const sanitizedArray = await this.removeMembers(groupUserDTO.getUsersId(), user?.id!);
+        const groupUserDTO = new RegisterGroupUserDTO(group.id!, usersId);
+        const sanitizedArray = await this.removeMembers(groupUserDTO.getUsersId(), userOrganizer.id);
 
-        return await this.groupUserRepository.createGroupUser(group.id, sanitizedArray, { transaction });
-    }
-
-    async validateAndGetGroupAndUser(groupId: number, userId: number): Promise<Group> {
-        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, userId);
-
-        if (!group) {
-            throw new GroupNotFoundError();
-        }
-
-        return group;
-    }
-
-    async getUser(userId: string): Promise<User | null> {
-        return await this.userRepository.getUserByUserId(userId);
-    }
-
-    async getUserById(userId: number): Promise<User | null> {
-        return await this.userRepository.getUserByPK(userId);
+        return await this.groupUserRepository.createGroupUser(group.id!, sanitizedArray, { transaction });
     }
 
     async validateIsGroupEmpty(usersArray: Array<number>) {
@@ -64,15 +43,4 @@ export class RegisterGroupUserUseCase {
         return usersArray.filter(user => user !== userId);
     }
 
-    async validateAllUsers(usersArray: Array<number>) {
-        const userValidationPromises = usersArray.map(async user => {
-            const usr = await this.getUserById(user);
-            if (!usr) {
-                logger.error(`[RegisterGroupUserUseCase] Usuário ${user} não inválido`);
-                throw new UserNotFoundError(`Usuário ${user} não encontrado`);
-            }
-        });
-
-        await Promise.all(userValidationPromises);
-    }
 }

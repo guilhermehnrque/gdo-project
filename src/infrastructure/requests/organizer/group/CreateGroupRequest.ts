@@ -10,7 +10,7 @@ export interface CreateGroupRequest {
         city: string;
         street: string;
         number: number;
-        zip_code: number;
+        zipCode: number;
         description: string;
     };
 }

@@ -7,14 +7,14 @@ import { Invitation as InvitationModel } from "../../../domain/models/Invitation
 
 // Repositories
 import { InvitationRepositoryImpl } from "../../../infrastructure/repositories/InvitationRepositoryImpl";
-import UserRepositoryImpl from "../../../infrastructure/repositories/UserRepositoryImpl";
+import { UserRepositoryImpl } from "../../../infrastructure/repositories/UserRepositoryImpl";
 
 // Errors
 import InvitationNotFoundError from "../../erros/invitation/InvitationNotFoundError";
 import InvitationAcceptError from "../../erros/invitation/InvitationAcceptError";
 
 // Configs
-import logger from "../../../infrastructure/configs/LoggerConfig";
+import logger from "../../utils/LoggerConfig";
 import InvitationInvalidStatusError from "../../erros/invitation/InvitationInvalidStatusError";
 
 export class HandleInvitationResponseUseCase {

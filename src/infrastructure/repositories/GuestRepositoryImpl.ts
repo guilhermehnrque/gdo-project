@@ -1,4 +1,4 @@
-import CustomError from "../../application/erros/CustomError";
+import { CustomError } from "../../application/erros/CustomError";
 import DatabaseError from "../../application/erros/DatabaseError";
 import { GuestEntity } from "../../domain/entity/GuestEntity";
 import { Guest } from "../../domain/models/GuestModel";

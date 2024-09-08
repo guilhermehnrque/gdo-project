@@ -1,4 +1,4 @@
-class UserAlreadyExistsError extends Error {
+export class UserAlreadyExistsError extends Error {
     constructor(
         message: string = "Usuário já cadastrado", 
         public statusCode: number = 400
@@ -7,5 +7,3 @@ class UserAlreadyExistsError extends Error {
         this.name = "UserAlreadyExistsError";
     }
 }
-
-export default UserAlreadyExistsError;

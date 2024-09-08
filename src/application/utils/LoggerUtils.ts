@@ -1,4 +1,4 @@
-import loggerConfig from '../../infrastructure/configs/LoggerConfig';
+import loggerConfig from './LoggerConfig';
 
 class LoggerUtils {
 

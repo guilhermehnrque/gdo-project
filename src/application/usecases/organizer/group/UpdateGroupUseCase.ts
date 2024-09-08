@@ -1,41 +1,43 @@
-import GroupEntity from '../../../../domain/entity/GroupEntity';
+import { GroupEntity } from '../../../../domain/entity/GroupEntity';
+import { UserEntity } from '../../../../domain/entity/UserEntity';
 import { GroupVisibilityEnum } from '../../../../domain/enums/GroupVisibilityEnum';
-import logger from '../../../../infrastructure/configs/LoggerConfig';
-import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
-import GroupNotFoundError from '../../../erros/groups/GroupNotFoundError';
+import { GroupRepositoryImpl } from '../../../../infrastructure/repositories/GroupRepositoryImpl';
+import { GroupService } from '../../../services/GroupService';
+import { UserService } from '../../../services/UserService';
 
 export class UpdateGroupUseCase {
 
     private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
         this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
     async execute(groupId: number, userId: string, description: string, status: boolean, visibility: GroupVisibilityEnum): Promise<number> {
-        const user = await this.getUserByUserId(userId);
-        const group = await this.getUserGroup(user?.id!, groupId);
+        const user = await this.stepValidateOrganizer(userId);
+        const group = await this.stepValidateOrganizerGroup(user.id, groupId);
 
-        const groupEntity = await GroupEntity.createFromPayloadUpdate(group.id, user?.id!, description, status, visibility);
+        const groupEntity = await GroupEntity.createFromPayloadUpdate({
+            id: group.id,
+            users_id: user.id,
+            description,
+            is_active: status,
+            visibility
+        });
+
         return this.groupRepository.updateGroupById(groupEntity);
     }
 
-    async getUserByUserId(userId: string) {
-        return await this.userRepository.getUserByUserId(userId);
+    async stepValidateOrganizer(userId: string): Promise<UserEntity> {
+        return await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
     }
 
-    async getUserGroup(userId: number, groupId: number) {
-        const group = await this.groupRepository.getOwnerGroupByIdAndUserId(groupId, userId);
-
-        if (group == null) {
-            logger.warn(`Group with id ${groupId} not found`);
-            throw new GroupNotFoundError();
-        }
-
-        return group;
+    async stepValidateOrganizerGroup(groupId: number, userIdPk: number): Promise<GroupEntity> {
+        return await this.groupService.ensureIsOwnerGroupAndReturnGroup(groupId, userIdPk);
     }
 
 }

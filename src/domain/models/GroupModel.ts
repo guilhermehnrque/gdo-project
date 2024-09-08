@@ -3,17 +3,7 @@ import { User } from './UserModel';
 import { Local } from './LocalModel';
 import { Invitation } from './InvitationModel';
 import sequelize from '../../infrastructure/database/index';
-
-interface GroupAttributes {
-    id: number;
-    description: string;
-    is_active: boolean;
-    users_id: number;
-    visibility: string;
-    created_at: Date;
-    updated_at?: Date;
-    deleted_at?: Date;
-}
+import { GroupAttributes } from '../../domain/interfaces/attributes/GroupAttributes';
 
 type GroupCreationAttributes = Omit<GroupAttributes, 'id' | 'created_at' | 'updated_at'>;
 

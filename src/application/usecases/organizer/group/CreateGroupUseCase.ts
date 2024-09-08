@@ -1,68 +1,42 @@
-import GroupRepositoryImpl from "../../../../infrastructure/repositories/GroupRepositoryImpl";
-import UserRepositoryImpl from "../../../../infrastructure/repositories/UserRepositoryImpl";
-import { User } from "../../../../domain/models/UserModel";
-import GroupEntity from "../../../../domain/entity/GroupEntity";
-import { Group } from "../../../../domain/models/GroupModel";
-import CustomError from "../../../erros/CustomError";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
-import UserNotStaffError from "../../../erros/groups/UserNotStaffError";
-import GroupAlreadyExistsError from "../../../erros/groups/GroupAlreadyExistsError";
-import CreateGroupDTO from "../../../dto/group/CreateGroupDTO";
-import { UserTypes } from "../../../../domain/enums/UserTypes";
+import { GroupRepositoryImpl } from "../../../../infrastructure/repositories/GroupRepositoryImpl";
+import { CreateGroupDTO } from "../../../dto/group/CreateGroupDTO";
+import { Transaction } from "sequelize";
+import { UserService } from "../../../services/UserService";
+import { UserEntity } from "../../../../domain/entity/UserEntity";
+import { GroupService } from "../../../services/GroupService";
+import { GroupEntity } from "../../../../domain/entity/GroupEntity";
 
-export default class CreateGroupUseCase {
+export class CreateGroupUseCase {
 
     private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
         this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
-    async execute(createGroupDTO: CreateGroupDTO, userId: string, transaction: any): Promise<Group> {
-        const user = await this.validateUserAndGroup(createGroupDTO, userId);
+    async execute(createGroupDTO: CreateGroupDTO, userId: string, transaction: Transaction): Promise<GroupEntity> {
+        const user = await this.stepValidateUserAndGroupAndReturnUser(createGroupDTO, userId);
 
-        const groupEntity = await this.createGroupEntity(createGroupDTO, user.id);
+        const groupEntity = await GroupEntity.createFromDTO(createGroupDTO, user.id);
 
-        return await this.createGroup(groupEntity, transaction);
+        await this.createGroup(groupEntity, transaction);
+
+        return groupEntity;
     }
 
-    private async validateUserAndGroup(createGroupDTO: CreateGroupDTO, userId: string): Promise<User> {
-        const user = await this.userValidateIsStaffAndExists(userId);
-        await this.groupValidateExists(createGroupDTO.description);
-        return user;
-    }
-
-    private async userValidateIsStaffAndExists(userId: string): Promise<User> {
-        const user = await this.userRepository.getUserByUserId(userId);
-
-        if (!user || user.type != UserTypes.ORGANIZER) {
-            throw new UserNotStaffError("[CreateGroupUseCase] Usuário não permitido para executar essa operação");
-        }
+    private async stepValidateUserAndGroupAndReturnUser(createGroupDTO: CreateGroupDTO, userId: string): Promise<UserEntity> {
+        const user = await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
+        await this.groupService.validateIfAlreadyExistsAndGetGroupByDescription(createGroupDTO.description)
 
         return user;
     }
 
-    private async groupValidateExists(description: string): Promise<void> {
-        const group = await this.groupRepository.getGroupByDescription(description);
-
-        if (group) {
-            throw new GroupAlreadyExistsError("[CreateGroupUseCase] Grupo já registrado");
-        }
-    }
-
-    private createGroupEntity(createGroupDTO: CreateGroupDTO, userId: number): Promise<GroupEntity> {
-        return GroupEntity.createFromDTO(createGroupDTO, userId);
-    }
-
-    private async createGroup(groupEntity: GroupEntity, transaction: any): Promise<Group> {
-        return await this.groupRepository.createGroup(groupEntity, { transaction });
-    }
-
-    logAndThrow(error: CustomError, context: string): void {
-        logger.error(`${error.message} -> ${context}`);
-        throw error;
+    private async createGroup(groupEntity: GroupEntity, transaction: Transaction): Promise<void> {
+        await this.groupRepository.createGroup(groupEntity, { transaction });
     }
 
 }

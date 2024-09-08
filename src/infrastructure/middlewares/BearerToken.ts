@@ -1,4 +1,4 @@
-import JwtUtils from '../configs/Jwt';
+import JwtUtils from '../../application/utils/Jwt';
 import { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import DecodedToken from '../interfaces/DecodedTokenInterface';

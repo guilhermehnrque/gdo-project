@@ -1,8 +1,8 @@
-import CustomError from "./CustomError";
+import { CustomError } from "./CustomError";
 
-export default class LoginError extends CustomError {
+export class LoginError extends CustomError {
     constructor(
-        message: string = "Usuário ou senha inválidos", 
+        message: string = "Usuário ou senha inválidos",
         public statusCode: number = 400
     ) {
         super(message, statusCode);

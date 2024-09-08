@@ -1,36 +1,40 @@
-import LocalEntity from "../../../../domain/entity/LocalEntity";
+import { LocalEntity } from "../../../../domain/entity/LocalEntity";
 import { Local } from "../../../../domain/models/LocalModel";
-import logger from "../../../../infrastructure/configs/LoggerConfig";
-import LocalRepositoryImpl from "../../../../infrastructure/repositories/LocalRepositoryImpl";
-import CreateLocalDTO from "../../../dto/local/CreateLocalDTO";
-import CustomError from "../../../erros/CustomError";
-import DatabaseError from "../../../erros/DatabaseError";
+import { LocalRepositoryImpl } from "../../../../infrastructure/repositories/LocalRepositoryImpl";
+import { CreateLocalDTO } from "../../../dto/local/CreateLocalDTO";
+import { Transaction } from "sequelize";
+import { LocalService } from "../../../services/LocalService";
 
-export default class CreateLocalUseCase {
+export class CreateLocalUseCase {
 
     private localRepository: LocalRepositoryImpl;
+    private localService: LocalService;
 
     constructor() {
         this.localRepository = new LocalRepositoryImpl();
+        this.localService = new LocalService();
     }
 
-    async execute(CreateLocalDTO: CreateLocalDTO, groupId: number, transaction: any): Promise<Local | undefined> {
-        const localEntity = await this.createLocalEntity(CreateLocalDTO, groupId);
+    async execute(CreateLocalDTO: CreateLocalDTO, groupId: number, transaction: Transaction): Promise<void> {
+        let localEntity: LocalEntity | undefined;
+        const local = await this.localService.ensureLocalExistsAndReturnIfExists(CreateLocalDTO.description);
 
-        try {
-            return await this.localRepository.createLocal(localEntity, { transaction });
-        } catch (error) {
-            this.logAndThrow(error as CustomError, "[CreateLocalUseCase] Error on database");
+        if (local) {
+            CreateLocalDTO.setGroupsId(groupId)
+            localEntity = await this.prepareLocalEntity(CreateLocalDTO, groupId);
         }
 
+        localEntity = await this.prepareLocalEntity(CreateLocalDTO, groupId);
+        await this.createLocal(localEntity, transaction);
     }
 
-    private async createLocalEntity(CreateLocalDTO: CreateLocalDTO, groupId: number): Promise<LocalEntity> {
+    private async createLocal(localEntity: LocalEntity, transaction: Transaction): Promise<Local | undefined> {
+        return await this.localRepository.createLocal(localEntity, { transaction });
+    }
+
+    private async prepareLocalEntity(CreateLocalDTO: CreateLocalDTO, groupId: number): Promise<LocalEntity> {
         return await LocalEntity.createFromDTO(CreateLocalDTO, groupId);
     }
 
-    private logAndThrow(error: CustomError, context: string): void {
-        logger.error(`[${error.name}] ${error.message} -> ${context}`);
-        throw new DatabaseError(context + " -> " + error.message);
-    }
+
 }

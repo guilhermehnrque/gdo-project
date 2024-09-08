@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import CustomError from "../../../application/erros/CustomError";
+import { CustomError } from "../../../application/erros/CustomError";
 import { GuestFacade } from "../../../application/facade/organizer/GuestFacade";
 
 export class GuestController {
 
     private guestFacade: GuestFacade;
 
-    constructor(){
+    constructor() {
         this.guestFacade = new GuestFacade();
     }
 

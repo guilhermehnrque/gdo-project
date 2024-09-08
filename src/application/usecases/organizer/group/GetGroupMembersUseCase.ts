@@ -1,4 +1,4 @@
-import GroupMemberDTO from "../../../dto/groupMember/GroupMemberDTO";
+import { GroupMemberDTO } from "../../../dto/groupMember/GroupMemberDTO";
 import { GroupMemberService } from "../../../services/GroupMemberService";
 import { mapToGroupMemberDTO } from "../../../mappers/GroupMemberMapper";
 

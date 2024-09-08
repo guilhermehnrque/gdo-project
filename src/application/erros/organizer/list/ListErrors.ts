@@ -1,8 +1,8 @@
-import { newCustomError } from "../../CustomError";
+import { CustomError } from "../../CustomError";
 
-export class ListNotFoundError extends newCustomError {
+export class ListNotFoundError extends CustomError {
     constructor(
-        message: string = "Lista não encontrada", 
+        message: string = "Lista não encontrada",
         public statusCode: number = 400
     ) {
         super(message, statusCode);
@@ -10,9 +10,9 @@ export class ListNotFoundError extends newCustomError {
     }
 }
 
-export class ListAlreadyInProgress extends newCustomError {
+export class ListAlreadyInProgress extends CustomError {
     constructor(
-        message: string = "Lista já está em andamento", 
+        message: string = "Lista já está em andamento",
         public statusCode: number = 400
     ) {
         super(message, statusCode);

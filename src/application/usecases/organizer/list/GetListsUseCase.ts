@@ -3,13 +3,13 @@ import { mapListWithDTO } from "../../../mappers/organizer/ListDetailMapper";
 import { GroupService } from "../../../services/GroupService";
 import { ListService } from "../../../services/organizer/ListService";
 import { SchedulesService } from "../../../services/SchedulesService";
-import UserService from "../../../services/UserService";
+import { UserService } from "../../../services/UserService";
 
 export class GetListsUseCase {
 
     private listService: ListService;
     private scheduleService: SchedulesService;
-    private groupService: GroupService; 
+    private groupService: GroupService;
     private userService: UserService;
 
     constructor() {
@@ -20,10 +20,10 @@ export class GetListsUseCase {
     }
 
     public async execute(userId: string): Promise<ListDTO[]> {
-        const user = await this.userService.getUserById(userId);
+        const user = await this.userService.getUserByUserId(userId);
 
         const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user!.id);
-        const groupsId = groups.map(group => group.id);
+        const groupsId = await Promise.all(groups.map(async group => group.id!));
 
         const schedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);
         const schedulesId = schedules.map(schedule => schedule.id);
@@ -32,5 +32,5 @@ export class GetListsUseCase {
 
         return await Promise.all(lists.map(list => mapListWithDTO(list)));
     }
-    
+
 }

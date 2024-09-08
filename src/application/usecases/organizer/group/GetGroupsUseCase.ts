@@ -1,45 +1,49 @@
-import { Group } from '../../../../domain/models/GroupModel';
-import GroupRepositoryImpl from '../../../../infrastructure/repositories/GroupRepositoryImpl';
-import UserRepositoryImpl from '../../../../infrastructure/repositories/UserRepositoryImpl';
-import { mapGroupToDTO } from '../../../../application/mappers/GroupMapper';
+import { mapGroupWithoutLocalToDTO } from '../../../../application/mappers/GroupMapper';
 import { GroupDTO } from '../../../dto/group/GroupDTO';
+import { UserService } from '../../../services/UserService';
+import { GroupEntity } from '../../../../domain/entity/GroupEntity';
+import { UserEntity } from '../../../../domain/entity/UserEntity';
+import { GroupService } from '../../../services/GroupService';
 
 export class GetGroupsUseCase {
 
-    private groupRepository: GroupRepositoryImpl;
-    private userRepository: UserRepositoryImpl;
+    private userService: UserService;
+    private groupService: GroupService;
 
     constructor() {
-        this.groupRepository = new GroupRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
+        this.userService = new UserService();
+        this.groupService = new GroupService();
     }
 
     async execute(userId: string): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
-        const user = await this.getUserByUserId(userId);
-        const groups = await this.groupRepository.getUserGroupsByUserId(user?.id!);
-        const groupDTO = await this.createGroupDTO(groups);
+        const user = await this.stepValidateOrganizer(userId);
+        const groups = await this.stepGetOrganizerGroups(user.id);
 
-        return this.categorizeGroupsByStatus(groupDTO);
+        const groupDTOs = await this.createGroupDTO(groups);
+
+        return this.categorizeGroupsByStatus(groupDTOs);
     }
 
-    async createGroupDTO(groups: Group[]): Promise<GroupDTO[]> {
-        return await Promise.all(groups.map(mapGroupToDTO));
+    async createGroupDTO(groups: GroupEntity[]): Promise<GroupDTO[]> {
+        return await Promise.all(groups.map(mapGroupWithoutLocalToDTO));
     }
 
-    async categorizeGroupsByStatus(groupsDTO: GroupDTO[]): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
-        const groupsWithStatus = groupsDTO.reduce((acc: { active: GroupDTO[], inactive: GroupDTO[] }, group: GroupDTO) => {
-            if (group.is_active) {
-                acc.active.push(group);
-            } else {
-                acc.inactive.push(group);
-            }
-            return acc;
-        }, { active: [], inactive: [] });
+    async categorizeGroupsByStatus(groups: GroupDTO[]): Promise<{ active: GroupDTO[], inactive: GroupDTO[] }> {
+        const activeGroups = groups.filter(group => group.is_active);
+        const inactiveGroups = groups.filter(group => !group.is_active);
 
-        return groupsWithStatus;
+        return {
+            active: activeGroups,
+            inactive: inactiveGroups
+        };
     }
 
-    async getUserByUserId(userId: string) {
-        return await this.userRepository.getUserByUserId(userId);
+    async stepValidateOrganizer(userId: string): Promise<UserEntity> {
+        return await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
     }
+
+    async stepGetOrganizerGroups(userIdPk: number): Promise<GroupEntity[]> {
+        return await this.groupService.getOrganizerGroupsByUserIdPk(userIdPk);
+    }
+
 }

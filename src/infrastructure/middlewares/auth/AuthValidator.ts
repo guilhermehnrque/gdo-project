@@ -33,7 +33,7 @@ const schemas = {
         body('password')
             .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),
 
-        body('phone_number')
+        body('phoneNumber')
             .notEmpty().withMessage('Número de telefone é obrigatório')
             .isNumeric().withMessage('Número de telefone deve ser numérico'),
     ],
@@ -57,7 +57,7 @@ const schemas = {
         body('password')
             .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),
 
-        body('confirm_password')
+        body('confirmPassword')
             .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres')
             .custom((value, { req }) => {
                 if (value !== req.body.password) {
