@@ -19,11 +19,11 @@ export class UpdateGroupUseCase {
 
     async execute(groupId: number, userId: string, description: string, status: boolean, visibility: GroupVisibilityEnum): Promise<number> {
         const user = await this.stepValidateOrganizer(userId);
-        const group = await this.stepValidateOrganizerGroup(user?.id!, groupId);
+        const group = await this.stepValidateOrganizerGroup(user.id, groupId);
 
         const groupEntity = await GroupEntity.createFromPayloadUpdate({
             id: group.id,
-            users_id: user.id!,
+            users_id: user.id,
             description,
             is_active: status,
             visibility

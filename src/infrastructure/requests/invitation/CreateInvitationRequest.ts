@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-interface CreateInvitationRequest extends Request {
+export interface CreateInvitationRequest extends Request {
     body: {
         invite: {
             guest_id: string;
@@ -9,5 +9,3 @@ interface CreateInvitationRequest extends Request {
 
     };
 }
-
-export default CreateInvitationRequest;

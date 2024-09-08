@@ -1,5 +1,4 @@
 import { getGroupVisibility } from "../../../domain/enums/GroupVisibilityEnum";
-import { RegisterUserGroupRequest } from "../../../infrastructure/requests/organizer/group/RegisterUserGroupRequest";
 import { CreateGroupDTO } from "../../dto/group/CreateGroupDTO";
 import { GroupDTO } from "../../dto/group/GroupDTO";
 import { GroupMemberDTO } from "../../dto/groupMember/GroupMemberDTO";

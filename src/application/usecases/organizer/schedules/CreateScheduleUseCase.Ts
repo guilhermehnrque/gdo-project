@@ -34,7 +34,7 @@ export class CreateScheduleUseCase {
             execInHour = null;
         }
 
-        await this.validations(groupId, dayOfWeek, startTime, endTime, localId);
+        await this.validations(dayOfWeek, startTime, endTime, localId);
         
         const schedule = await ScheduleEntity.fromUseCase({
             day_of_week: dayOfWeek,
@@ -52,7 +52,7 @@ export class CreateScheduleUseCase {
         return this.save(schedule);
     }
 
-    private async validations(groupId: number, dayOfWeek: string, startTime: string, endTime: string, localId: number) {
+    private async validations(dayOfWeek: string, startTime: string, endTime: string, localId: number) {
         await this.scheduleService.checkGroupScheduleConflict(dayOfWeek, startTime, endTime);
         await this.localService.ensureLocalDoesNotExist(localId);
     }

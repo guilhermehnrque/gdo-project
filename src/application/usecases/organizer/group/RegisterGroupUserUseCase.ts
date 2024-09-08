@@ -7,7 +7,6 @@ import { GroupService } from "../../../services/GroupService";
 import { UserService } from "../../../services/UserService";
 import logger from "../../../utils/LoggerConfig";
 
-
 export class RegisterGroupUserUseCase {
 
     private groupUserRepository: GroupUserRepositoryImpl;

@@ -10,7 +10,7 @@ function mapLocalToDTO(local: LocalEntity): LocalDTO {
 export async function mapGroupWithLocalToDTO(group: GroupEntity, localEntity: LocalEntity): Promise<GroupDTO> {
     return new GroupDTO({
         ...group,
-        local: mapLocalToDTO(localEntity)
+        local: mapLocalToDTO(localEntity) ?? null
     });
 }
 

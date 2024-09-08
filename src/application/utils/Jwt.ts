@@ -5,7 +5,6 @@ const secretKey = process.env.PROJECT_GDB_SECRET_KEY;
 const DAYS_TO_EXPIRE_AS_HOUR = process.env.DAYS_TO_EXPIRE_IN_HOUR;
 
 export default class JwtUtils {
-
     
     static async generateToken(payload: any) {
         const secrets = { 
