@@ -30,10 +30,10 @@ export class PlayersListService {
         return new PlayersEntity(list);
     }
 
-    public async getPlayersList(): Promise<PlayersEntity[]> {
-        const playersList = await this.playersListRepository.getPlayersList();
+    public async getListOfPlayers(listId: number): Promise<PlayersEntity[]> {
+        const playersList = await this.playersListRepository.getPlayerListsByListId(listId);
 
-        if (playersList.length <= 0) {
+        if (playersList.length <= 0 || playersList === null) {
             throw new PlayerListNotFoundError();
         }
 
@@ -48,12 +48,6 @@ export class PlayersListService {
             throw new PlayerAlreadyInListError(`O jogador ${name} já está na lista`);
         }
 
-    }
-
-    private checkIsPlayerNotInList(player: PlayersEntity | null): void {
-        if (!player || player === null) {
-            throw new PlayerNotFoundInListError();
-        }
     }
 
 }

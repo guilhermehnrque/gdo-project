@@ -12,7 +12,6 @@ export interface PlayersListUpdateRequest {
 
 export interface PlayersListGetRequest {
     params: {
-        playerId: number;
         listId: number;
     }[];
     [key: string]: any; 

@@ -50,43 +50,17 @@ export class PlayersListsController {
         }
     }
 
-    public async getPlayerList(request: Request, response: Response): Promise<Response> {
+    public async getPlayersFromList(request: Request, response: Response): Promise<Response> {
         try {
-            const { playerId, listId } = request.params as PlayersListGetRequest;
+            const userId = request.userId;
+            const { listId } = request.params as PlayersListGetRequest;
 
-            const res = await this.playersListFacade.getPlayerList(playerId, listId);
+            const res = await this.playersListFacade.getPlayerList(userId!, listId);
             return response.status(200).json({ data: res });
         }
         catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             console.error(error);
-            return response.status(statusCode).json({ error: message });
-        }
-    }
-
-
-    public async getPlayerLists(request: Request, response: Response): Promise<Response> {
-        try {
-            const { playerId } = request.params as PlayersListGetRequest;
-
-            const res = await this.playersListFacade.getPlayerLists(playerId);
-            return response.status(200).json({ data: res });
-        }
-        catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-
-            return response.status(statusCode).json({ error: message });
-        }
-    }
-
-    public async getAllList(request: Request, response: Response): Promise<Response> {
-        try {
-            const res = await this.playersListFacade.getAllLists();
-            return response.status(200).json({ data: res });
-        }
-        catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-
             return response.status(statusCode).json({ error: message });
         }
     }
