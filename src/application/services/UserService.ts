@@ -117,7 +117,7 @@ export class UserService {
         }
 
         const usersPromises = users.map(async user => {
-            const usr = await this.getUserByUserId(user.toString());
+            const usr = await this.getUserByIdPk(user);
 
             if (!usr) {
                 this.logAndThrowError(new UserNotFoundError(), `[UserService] validateArrayOfUsers -> User not found ${user}`);

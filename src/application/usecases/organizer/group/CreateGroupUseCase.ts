@@ -5,6 +5,7 @@ import { UserService } from "../../../services/UserService";
 import { UserEntity } from "../../../../domain/entity/UserEntity";
 import { GroupService } from "../../../services/GroupService";
 import { GroupEntity } from "../../../../domain/entity/GroupEntity";
+import { Group } from "../../../../domain/models/GroupModel";
 
 export class CreateGroupUseCase {
 
@@ -22,21 +23,23 @@ export class CreateGroupUseCase {
         const user = await this.stepValidateUserAndGroupAndReturnUser(createGroupDTO, userId);
 
         const groupEntity = await GroupEntity.createFromDTO(createGroupDTO, user.id);
+        groupEntity.setStatus(true);
 
-        await this.createGroup(groupEntity, transaction);
+        const createdGroup = await this.createGroup(groupEntity, transaction);
+        groupEntity.setId(createdGroup.id!);
 
         return groupEntity;
     }
 
     private async stepValidateUserAndGroupAndReturnUser(createGroupDTO: CreateGroupDTO, userId: string): Promise<UserEntity> {
         const user = await this.userService.getUserAndCheckIfUserIsOrganizer(userId);
-        await this.groupService.validateIfAlreadyExistsAndGetGroupByDescription(createGroupDTO.description)
+        await this.groupService.ensureGroupDoesNotExists(createGroupDTO.description)
 
         return user;
     }
 
-    private async createGroup(groupEntity: GroupEntity, transaction: Transaction): Promise<void> {
-        await this.groupRepository.createGroup(groupEntity, { transaction });
+    private async createGroup(groupEntity: GroupEntity, transaction: Transaction): Promise<Group> {
+        return await this.groupRepository.createGroup(groupEntity, { transaction });
     }
 
 }

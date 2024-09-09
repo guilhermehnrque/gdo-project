@@ -64,6 +64,14 @@ export class GroupEntity implements GroupAttributes {
         return groupEntity
     }
 
+    public setStatus(status: boolean) {
+        this.is_active = status;
+    }   
+
+    public setId(id: number) {
+        this.id = id;
+    }
+
     private mapLocal(local: Local): Local {
         return {
             id: local.id,

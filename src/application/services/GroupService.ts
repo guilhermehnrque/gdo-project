@@ -89,11 +89,9 @@ export class GroupService {
         }
     }
 
-    async validateIfAlreadyExistsAndGetGroupByDescription(description: string): Promise<GroupEntity | null> {
+    async ensureGroupDoesNotExists(description: string): Promise<void> {
         const group = await this.getGroupByDescription(description);
         await this.validateIfGroupExists(group);
-
-        return await GroupEntity.fromService(group!);
     }
 
     async prepareEntityWithIdPk(group: Group): Promise<GroupEntity> {
