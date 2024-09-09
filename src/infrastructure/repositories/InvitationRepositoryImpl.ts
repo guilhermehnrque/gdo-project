@@ -66,14 +66,6 @@ export class InvitationRepositoryImpl implements InvitationRepositoryInterface {
         }
     }
 
-    updateInvitationByCode(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-
-    deleteInvitationByCode(request: Request): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-
     async getInvitationByStatusAndGroupId(status: string, groupId: number): Promise<Invitation | null> {
         try {
             return await Invitation.findOne({

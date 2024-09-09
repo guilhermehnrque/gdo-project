@@ -50,6 +50,17 @@ export class GroupService {
         return await this.groupRepository.getGroupByDescription(description);
     }
 
+    async getGroupById(groupId: number): Promise<GroupEntity> {  
+        const group = await this.groupRepository.getGroupById(groupId);
+
+        if (!group) {
+            logger.error(`[GroupService] getGroupById Grupo não encontrado -> groupId: ${groupId}`);
+            throw new GroupNotFoundError('Grupo não encontrado');
+        }
+
+        return await this.prepareEntityWithIdPk(group);
+    }
+
     async ensureIsOwnerGroupAndReturnGroup(userIdPk: number, groupIdPk: number): Promise<GroupEntity> {
         const group = await this.getGroupOwnerByUserIdPk(userIdPk, groupIdPk);
 
@@ -83,6 +94,19 @@ export class GroupService {
         await this.validateIfGroupExists(group);
 
         return await GroupEntity.fromService(group!);
+    }
+
+    async prepareEntityWithIdPk(group: Group): Promise<GroupEntity> {
+        return new GroupEntity({
+            id: group.id,
+            description: group.description,
+            is_active: group.is_active,
+            users_id:   group.users_id,
+            visibility: group.visibility,
+            created_at: group.created_at,
+            updated_at: group.updated_at,
+            deleted_at: group.deleted_at
+        });
     }
 
 }

@@ -96,8 +96,14 @@ export class UserRepositoryImpl implements AuthRepositoryInterface {
 
     }
 
-    getUserByPK(userId: number): Promise<UserModel | null> {
-        return UserModel.findOne({ where: { id: userId } });
+    async getUserByPK(userId: number): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({ where: { id: userId } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] getUserByPK -> Error getting user by PK: ${customError.message}`);
+        }
+
     }
 
 }

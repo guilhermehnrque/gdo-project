@@ -1,5 +1,5 @@
-import { Invitation } from "../../domain/models/InvitationModel";
-import { User } from "../../domain/models/UserModel";
+import { InvitationEntity } from "../../domain/entity/InvitationEntity";
+import { UserEntity } from "../../domain/entity/UserEntity";
 import { InvitationDTO } from "../dto/invitation/InvitationDTO";
 import { InvitationUserDTO } from "../dto/invitation/InvitationUserDTO";
 
@@ -12,15 +12,15 @@ function mapUserToDTO(invitationUserDTO: InvitationUserDTO): InvitationUserDTO {
     );
 }
 
-export function mapInvitationToDTO(invitation: Invitation, invitedUser: User, invitingUser: User): InvitationDTO {
+export function mapInvitationToDTO(invitation: InvitationEntity, invitedUser: UserEntity, invitingUser: UserEntity): InvitationDTO {
     return new InvitationDTO(
-        invitation.code,
-        invitation.status,
-        invitation.groups_id,
-        invitation.created_at,
-        invitation.expires_at,
+        invitation.code!,
+        invitation.status!,
+        invitation.group_id!,
+        invitation.created_at!,
+        invitation.expires_at!,
         undefined,
-        invitation.id,
+        invitation.id!,
         mapUserToDTO(invitedUser),
         mapUserToDTO(invitingUser),
     );

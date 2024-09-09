@@ -6,8 +6,8 @@ import { UserNotFoundError } from '../erros/UserNotFoundError';
 import { UserEntity } from '../../domain/entity/UserEntity';
 import { JwtService } from '../../application/services/JwtService';
 import { LoginError } from '../erros/LoginError';
+import { UserNotStaffError } from '../erros/groups/UserNotStaffError';
 import logger from '../utils/LoggerConfig';
-import UserNotStaffError from '../erros/groups/UserNotStaffError';
 
 export class UserService {
 
@@ -53,7 +53,7 @@ export class UserService {
         return await this.userRepository.updateUser(user);
     }
 
-    async getUserByUserId(userId: string): Promise<User | null> {
+    async getUserByUserId(userId: string): Promise<UserEntity> {
         const user = await this.userRepository.getUserByUserId(userId);
 
         if (!user) {
@@ -61,7 +61,18 @@ export class UserService {
             throw new UserNotFoundError('Usuário não encontrado');
         }
 
-        return user;
+        return await this.prepareEntity(user);
+    }
+
+    async getUserByIdPk(userIdPk: number): Promise<UserEntity> {
+        const user = await this.userRepository.getUserByPK(userIdPk);
+
+        if (!user) {
+            logger.error(`[UserService] User not found`);
+            throw new UserNotFoundError('Usuário não encontrado');
+        }
+
+        return await this.prepareEntity(user);
     }
 
     public async checkIfUserExists(login: string, email: string, phoneNumber: number): Promise<void> {
@@ -97,7 +108,7 @@ export class UserService {
             this.logAndThrowError(new UserNotStaffError('Usuário não permitido para executar essa operação', 401), '[UserService] getUserAndCheckIfUserIsOrganizer -> User is not an organizer');
         }
 
-        return this.prepareEntity(user!);
+        return user;
     }
 
     public async validateArrayOfUsers(users: Array<number>): Promise<void> {

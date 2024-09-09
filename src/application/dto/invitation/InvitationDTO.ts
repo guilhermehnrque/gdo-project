@@ -41,7 +41,6 @@ export class InvitationDTO {
             code: this.code,
             status: this.status,
             created_at: this.createdAt,
-            updated_at: this.updatedAt,
             expires_at: this.expiresAt,
             group_id: this.groupId,
             invited_user: this.invited_user,
