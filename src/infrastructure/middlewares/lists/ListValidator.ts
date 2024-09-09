@@ -11,6 +11,10 @@ const schemas = {
             .notEmpty().withMessage('Status é obrigatório')
             .isBoolean().withMessage('Status deve ser um boolean'),
 
+        body('limitOfPlayers')
+            .notEmpty().withMessage('Limite de jogadores é obrigatório')
+            .isNumeric().withMessage('Limite de jogadores deve ser um número'),
+
         body('scheduleId')
             .notEmpty().withMessage('Id do agendamento é obrigatório')
             .isNumeric().withMessage('Id do agendamento deve ser um número')

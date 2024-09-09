@@ -43,6 +43,7 @@ export class ListDTO {
     public id?: number;
     public description: string | null;
     public status: boolean;
+    public limit: number;
     public createdAt?: Date;
     public updatedAt?: Date;
     public scheduleId: number;
@@ -52,6 +53,7 @@ export class ListDTO {
     constructor(data: Partial<ListDTO>) {
         this.description = data.description!;
         this.status = data.status!;
+        this.limit = data.limit!;
         this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
         this.id = data.id;

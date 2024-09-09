@@ -1,28 +1,69 @@
-export class ScheduleDTO {
-    dayOfWeek: string;
-    active: boolean;
-    startTime: string;
-    endTime: string;
-    schedulingStatus: boolean;
-    executeBeforeDays: number | null;
-    executeInHour: string | null;
-    group: GroupDTO;
-    local: LocalDTO;
-    createdAt: Date;
-    updatedAt: Date | null | undefined;
+import { Schedule } from "../../../../domain/models/ScheduleModel";
 
-    constructor(data: Partial<ScheduleDTO>) {
-        this.dayOfWeek = data.dayOfWeek!;
-        this.active = data.active!;
-        this.startTime = data.startTime!;
-        this.endTime = data.endTime!;
-        this.schedulingStatus = data.schedulingStatus!;
-        this.executeBeforeDays = data.executeBeforeDays!;
-        this.executeInHour = data.executeInHour!;
-        this.group = new GroupDTO(data.group!);
-        this.local = new LocalDTO(data.local!);
-        this.createdAt = data.createdAt!;
-        this.updatedAt = data.updatedAt!;
+export class ScheduleDTO {
+    id?: number | null;
+    dayOfWeek?: string;
+    active?: boolean;
+    startTime?: string;
+    endTime?: string;
+    schedulingStatus?: boolean;
+    executeBeforeDays?: number | null;
+    executeInHour?: string | null;
+    group?: GroupDTO;
+    local?: LocalDTO;
+    createdAt?: Date;
+    updatedAt?: Date | null;
+
+    constructor() {}
+
+    static async fromMapper(schedule: Schedule) {
+        let instance = new ScheduleDTO();
+        instance.id = schedule.id;
+        instance.dayOfWeek = schedule.day_of_week;
+        instance.active = schedule.active;
+        instance.startTime = schedule.start;
+        instance.endTime = schedule.finish;
+        instance.schedulingStatus = schedule.scheduling;
+        instance.executeBeforeDays = schedule.execute_before_days!;
+        instance.executeInHour = schedule.execute_in_hour!;
+        instance.createdAt = schedule.created_at!;
+        instance.updatedAt = schedule.updated_at!;
+
+        return instance;
+    }
+
+    static async fromDetailsMapper(schedule: Schedule) {
+        let instance = new ScheduleDTO();
+        instance.id = schedule.id;
+        instance.dayOfWeek = schedule.day_of_week;
+        instance.active = schedule.active;
+        instance.startTime = schedule.start;
+        instance.endTime = schedule.finish;
+        instance.schedulingStatus = schedule.scheduling;
+        instance.executeBeforeDays = schedule.execute_before_days!;
+        instance.executeInHour = schedule.execute_in_hour!;
+        instance.createdAt = schedule.created_at!;
+        instance.updatedAt = schedule.updated_at!;
+
+        instance.group = {
+            description: schedule.group!.description,
+            isActive: schedule.group!.is_active,
+            createdAt: schedule.group!.created_at,
+            updatedAt: schedule.group!.updated_at,
+        };
+
+        instance.local = {
+            description: schedule.local!.description,
+            state: schedule.local!.state,
+            city: schedule.local!.city,
+            street: schedule.local!.street,
+            number: schedule.local!.number!,
+            zipCode: schedule.local!.zip_code,
+            createdAt: schedule.local!.created_at,
+            updatedAt: schedule.local!.updated_at,
+        };
+
+        return instance;
     }
 }
 

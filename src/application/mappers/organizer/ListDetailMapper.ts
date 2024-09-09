@@ -7,6 +7,7 @@ export function mapListWithDetailsDTO(list: ListEntity): Promise<ListDTO> {
             id: list.id,
             description: list.description,
             status: list.status,
+            limit: list.limit,
             createdAt: list.created_at,
             updatedAt: list.updated_at,
             schedule: list.schedule,
@@ -21,6 +22,7 @@ export function mapListWithDTO(list: ListEntity): Promise<ListDTO> {
             description: list.description,
             status: list.status,
             scheduleId: list.schedules_id,
+            limit: list.limit,
             createdAt: list.created_at,
             updatedAt: list.updated_at
         })

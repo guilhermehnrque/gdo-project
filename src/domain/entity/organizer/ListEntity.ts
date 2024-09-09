@@ -5,6 +5,7 @@ export class ListEntity {
     public id?: number;
     public description: string | null;
     public status: boolean;
+    public limit: number;
     public schedules_id: number;
     public created_at?: Date;
     public updated_at?: Date;
@@ -19,6 +20,7 @@ export class ListEntity {
         this.updated_at = data.updated_at;
         this.id = data.id;
         this.schedule = data.schedule!;
+        this.limit = data.limit!;
     }
 
     public toCreatePayload() {
@@ -26,6 +28,7 @@ export class ListEntity {
             description: this.description,
             status: this.status,
             schedules_id: this.schedules_id,
+            limit: this.limit,
             created_at: this.created_at,
             updated_at: this.updated_at
         };

@@ -41,7 +41,7 @@ export class ListService {
         const list = await this.listRepository.getListsByScheduleId(schedulesId);
 
         if (list) {
-            throw new ListNotFoundError();
+            throw new ListNotFoundError("Já existe uma lista para esse horário");
         }
     }
 

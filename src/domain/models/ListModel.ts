@@ -6,6 +6,7 @@ interface ListAttributes {
     id: number;
     description: string | null;
     status: boolean;
+    limit: number;
     schedules_id: number;
     created_at: Date;
     updated_at: Date;
@@ -18,6 +19,7 @@ class List extends Model<ListAttributes, ListCreationAttributes> implements List
     public description!: string | null;
     public status!: boolean;
     public schedules_id!: number;
+    public limit!: number;
     public created_at!: Date;
     public updated_at!: Date;
 
@@ -39,6 +41,10 @@ List.init({
     },
     status: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    limit: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     schedules_id: {

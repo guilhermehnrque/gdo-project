@@ -1,4 +1,4 @@
-import { schedulesMapper } from "../../../mappers/SchedulesMapper";
+import { scheduleMapper } from "../../../mappers/ScheduleMapper";
 import { GroupService } from "../../../services/GroupService";
 import { SchedulesService } from "../../../services/SchedulesService";
 import { ScheduleDTO } from "../../../../application/dto/organizer/schedules/SchedulesDTO";
@@ -23,7 +23,8 @@ export class GetSchedulesUseCase {
         const groupsId = await Promise.all(groups.map(async group => group.id!));
 
         const groupsSchedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);
-        return schedulesMapper(groupsSchedules);
+        
+        return scheduleMapper(groupsSchedules);
     }
 
 }
