@@ -1,16 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../infrastructure/database/index';
 import { Schedule } from './ScheduleModel';
-
-interface ListAttributes {
-    id: number;
-    description: string | null;
-    status: boolean;
-    limit: number;
-    schedules_id: number;
-    created_at: Date;
-    updated_at: Date;
-}
+import { ListAttributes } from '../interfaces/attributes/ListAttributes';
+import { Group } from './GroupModel';
 
 type ListCreationAttributes = Omit<ListAttributes, 'id' | 'created_at' | 'updated_at'>;
 
@@ -19,6 +11,7 @@ class List extends Model<ListAttributes, ListCreationAttributes> implements List
     public description!: string | null;
     public status!: boolean;
     public schedules_id!: number;
+    public groups_id!: number;
     public limit!: number;
     public created_at!: Date;
     public updated_at!: Date;
@@ -55,6 +48,14 @@ List.init({
             key: 'id',
         }
     },
+    groups_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Group,
+            key: 'id',
+        }
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -74,5 +75,6 @@ List.init({
 });
 
 List.belongsTo(Schedule, { foreignKey: 'schedules_id', as: 'schedule' });
+List.belongsTo(Group, { foreignKey: 'groups_id', as: 'group' });
 
 export { List };

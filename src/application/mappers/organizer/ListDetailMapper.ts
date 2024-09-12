@@ -24,7 +24,8 @@ export function mapListWithDTO(list: ListEntity): Promise<ListDTO> {
             scheduleId: list.schedules_id,
             limit: list.limit,
             createdAt: list.created_at,
-            updatedAt: list.updated_at
+            updatedAt: list.updated_at,
+            groupId: list.groups_id,
         })
     );
 }

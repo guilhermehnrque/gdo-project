@@ -3,4 +3,5 @@ export interface ListCreateRequest {
     status: boolean;
     scheduleId: number;
     limitOfPlayers: number;
+    groupId: number;
 }

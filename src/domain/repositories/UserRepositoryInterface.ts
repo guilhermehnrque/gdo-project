@@ -9,5 +9,5 @@ export interface AuthRepositoryInterface {
     getUserByResetPasswordToken(token: string): Promise<UserModel | null>;
     getUserByPK(userId: number): Promise<UserModel | null>;
     getUserByLoginEmailOrPhone(login: string, email: string, phoneNumber: number): Promise<UserModel | null>;
-    updateUser(user: UserEntity): Promise<number>
+    updateUser(user: UserEntity): Promise<number>;
 }

@@ -8,6 +8,7 @@ import { JwtService } from '../../application/services/JwtService';
 import { LoginError } from '../erros/LoginError';
 import { UserNotStaffError } from '../erros/groups/UserNotStaffError';
 import logger from '../utils/LoggerConfig';
+import { UserTypes } from '../../domain/enums/UserTypes';
 
 export class UserService {
 
@@ -74,7 +75,7 @@ export class UserService {
 
         return await this.prepareEntity(user);
     }
-
+    
     public async checkIfUserExists(login: string, email: string, phoneNumber: number): Promise<void> {
         const user = await this.userRepository.getUserByLoginEmailOrPhone(login, email, phoneNumber);
 
@@ -104,7 +105,7 @@ export class UserService {
     public async getUserAndCheckIfUserIsOrganizer(userId: string): Promise<UserEntity> {
         const user = await this.getUserByUserId(userId);
 
-        if (!user || user.type != 'ORGANIZER') {
+        if (!user || user.type != UserTypes.ORGANIZER.toString()) {
             this.logAndThrowError(new UserNotStaffError('Usuário não permitido para executar essa operação', 401), '[UserService] getUserAndCheckIfUserIsOrganizer -> User is not an organizer');
         }
 

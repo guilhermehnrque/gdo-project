@@ -30,7 +30,8 @@ export class PlayersListFacade {
         return await this.updatePlayerUseCase.execute(listId, playerId, playerStatus);
     }
 
-    public async getPlayerList(userId: string, listId: number) {
-        return await this.getlistOfPlayersUseCase.execute(userId, listId);
+    public async getPlayerList(userId: string, groupId: number): Promise<any> {
+        return await this.getlistOfPlayersUseCase.execute(userId, groupId);
     }
+
 }

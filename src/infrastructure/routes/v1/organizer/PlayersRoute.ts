@@ -7,8 +7,8 @@ const router = Router();
 const playersListsController = new PlayersListsController();
 
 router.post('', [...schemas.register, handleValidationErrors], async (req: Request, res: Response) => { playersListsController.registerPlayer(req, res) });
-router.get('/players/:listId/', async (req: Request, res: Response) => { playersListsController.getPlayersFromList(req, res) });
-router.put('/list/:listId', [...schemas.update, handleValidationErrors] ,async (req: Request, res: Response) => { playersListsController.updatePlayer(req, res) });
-router.delete('/list/:listId/player/:playerId', [...schemas.delete, handleValidationErrors],async (req: Request, res: Response) => { playersListsController.removePlayer(req, res) });
+router.get('/:groupId', async (req: Request, res: Response) => { playersListsController.getListOfPlayers(req, res) });
+router.put('/:listId', [...schemas.update, handleValidationErrors] ,async (req: Request, res: Response) => { playersListsController.updatePlayer(req, res) });
+router.delete('/delete/:listId/:playerId', [...schemas.delete, handleValidationErrors],async (req: Request, res: Response) => { playersListsController.removePlayer(req, res) });
 
 export default router

@@ -37,6 +37,16 @@ export class ListService {
         return this.mapListEntity(lists);
     }
 
+    public async getListsByGroupsIds(groupIds: number[]): Promise<ListEntity[]> {
+        const lists = await this.listRepository.getListsByGroupsIds(groupIds);
+
+        if (lists.length <= 0) {
+            throw new ListNotFoundError();
+        }
+
+        return this.mapListEntity(lists);
+    }
+
     public async checkListConflict(schedulesId: number): Promise<void> {
         const list = await this.listRepository.getListsByScheduleId(schedulesId);
 

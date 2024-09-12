@@ -1,5 +1,4 @@
 import { GroupAttributes } from "../interfaces/attributes/GroupAttributes";
-import { Group } from "../models/GroupModel";
 
 interface Local {
     id?: number;

@@ -30,15 +30,16 @@ export class PlayersListService {
         return new PlayersEntity(list);
     }
 
-    public async getListOfPlayers(listId: number): Promise<PlayersEntity[]> {
-        const playersList = await this.playersListRepository.getPlayerListsByListId(listId);
+    public async getListOfPlayersByListOfIds(listIds: number[]): Promise<PlayersEntity[]> {
+        const playerList = await this.playersListRepository.getListOfPlayersByListOfIds(listIds);
 
-        if (playersList.length <= 0 || playersList === null) {
+        if (playerList.length <= 0) {
             throw new PlayerListNotFoundError();
         }
 
-        return playersList.map(player => new PlayersEntity(player));
+        return playerList.map(player => new PlayersEntity(player));
     }
+
 
     public async checkIsPlayerAlreadyInList(playerEntity: PlayersEntity): Promise<void> {
         const response = await this.playersListRepository.getPlayerInListByPlayerId(playerEntity.players_id, playerEntity.lists_id);

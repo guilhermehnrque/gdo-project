@@ -26,7 +26,7 @@ export class PlayersListsController {
 
     public async removePlayer(request: Request, response: Response): Promise<Response> {
         try {
-            const { listId, playerId } = request.body as PlayersListRemoveRequest;
+            const { listId, playerId } = request.params as PlayersListRemoveRequest;
 
             await this.playersListFacade.removePlayer(listId, playerId);
             return response.status(200).json({ message: "Jogador removido da lista" });
@@ -50,12 +50,12 @@ export class PlayersListsController {
         }
     }
 
-    public async getPlayersFromList(request: Request, response: Response): Promise<Response> {
+    public async getListOfPlayers(request: Request, response: Response): Promise<Response> {
         try {
             const userId = request.userId;
-            const { listId } = request.params as PlayersListGetRequest;
+            const { groupId } = request.params as PlayersListGetRequest;
 
-            const res = await this.playersListFacade.getPlayerList(userId!, listId);
+            const res = await this.playersListFacade.getPlayerList(userId!, groupId);
             return response.status(200).json({ data: res });
         }
         catch (error) {
@@ -64,5 +64,6 @@ export class PlayersListsController {
             return response.status(statusCode).json({ error: message });
         }
     }
+
 
 }

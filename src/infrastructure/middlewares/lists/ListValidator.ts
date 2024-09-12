@@ -17,7 +17,11 @@ const schemas = {
 
         body('scheduleId')
             .notEmpty().withMessage('Id do agendamento é obrigatório')
-            .isNumeric().withMessage('Id do agendamento deve ser um número')
+            .isNumeric().withMessage('Id do agendamento deve ser um número'),
+
+        body('groupId')
+            .notEmpty().withMessage('Id do grupo é obrigatório')
+            .isNumeric().withMessage('Id do grupo deve ser um número')
     ],
 
     get: [
