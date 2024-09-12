@@ -16,8 +16,8 @@ export class UserEntity implements UserAttributes {
     public created_at: Date;
     public updated_at: Date;
     public deleted_at: Date | undefined;
-    public reset_password_expires?: Date | null | undefined;
-    public reset_password_token?: string | null | undefined;
+    public reset_password_expires: Date | null | undefined;
+    public reset_password_token: string | null | undefined;
 
     constructor(payload: Partial<UserEntity>) {
         this.user_id = payload.user_id!;

@@ -22,7 +22,7 @@ export class GetListsUseCase {
     public async execute(userId: string): Promise<ListDTO[]> {
         const user = await this.userService.getUserByUserId(userId);
 
-        const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user!.id);
+        const groups = await this.groupService.getOrganizerGroupsByUserIdPk(user.id);
         const groupsId = await Promise.all(groups.map(async group => group.id!));
 
         const schedules = await this.scheduleService.getAllSchedulesByGroupsId(groupsId);

@@ -26,6 +26,7 @@ export class GroupController {
             await this.groupFacade.createGroup(createGroupDTO, createLocalDTO, userId!);
             return response.status(201).json({ message: "Grupo e local registrado" });
         } catch (error) {
+            console.log(error);
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
         }

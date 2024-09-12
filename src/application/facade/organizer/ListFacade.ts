@@ -24,8 +24,8 @@ export class ListFacade {
     }
 
     public async createList(payload: ListCreatePayload): Promise<void> {
-        const { description, status, scheduleId } = payload
-        await this.createListUseCase.execute(description, status, scheduleId);
+        const { description, status, scheduleId, limitOfPlayers, groupId } = payload
+        await this.createListUseCase.execute(description, status, scheduleId, limitOfPlayers, groupId);
     }
 
     public async updateListById(listId: number, listUpdateRequest: ListUpdatePayload): Promise<number> {

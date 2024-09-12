@@ -38,7 +38,7 @@ const schemas = {
             .optional()
             .isNumeric().withMessage('Número deve ser uma numérico'),
 
-        body('local.zip_code')
+        body('local.zipCode')
             .notEmpty().withMessage('Cep é obrigatório')
             .isNumeric().withMessage('Cep deve ser um numérico'),
 

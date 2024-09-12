@@ -15,7 +15,6 @@ import { UpdateGroupUseCase } from "../../usecases/organizer/group/UpdateGroupUs
 import { CreateLocalUseCase } from "../../usecases/organizer/locals/CreateLocalUseCase";
 import sequelize from "../../../infrastructure/database/index";
 
-
 export class GroupFacade {
 
     private createGroupUseCase: CreateGroupUseCase;
@@ -51,13 +50,14 @@ export class GroupFacade {
 
             await this.createLocalUseCase.execute(createLocalDTO, groupEntity.id!, transaction);
 
-            await this.registerGroupUserUseCase.execute([groupEntity.users_id], userId, groupEntity.id!, transaction);
-
             transaction.commit();
+
         } catch (error) {
             await transaction.rollback();
             throw error;
         }
+
+        await this.addUserToGroup(groupEntity.id!, [groupEntity.users_id], userId);
     }
 
     async updateGroupById(groupId: number, userId: string, description: string, status: boolean, visibility: string): Promise<number> {

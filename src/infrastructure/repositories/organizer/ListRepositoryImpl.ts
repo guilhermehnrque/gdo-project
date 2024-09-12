@@ -106,4 +106,17 @@ export class ListRepositoryImpl implements ListRepositoryInterface {
         }
     }
 
+    async getListsByGroupsIds(groupsIds: number[]): Promise<List[]> {
+        try {
+            return await List.findAll({
+                where: {
+                    groups_id: groupsIds
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupRepositoryImpl] getListsByGroupsIds error getting lists -> ${customError.message}`);
+        }
+    }
+
 }

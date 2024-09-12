@@ -33,6 +33,7 @@ export class PlayersEntity implements PlayersListAttributes {
         this.player_status = this.mapStatus(payload.player_status!);
         this.created_at = payload.created_at!;
         this.updated_at = payload.updated_at!;
+        this.user = payload.user!;
     }
 
     static async fromCreateUseCase(payload: Partial<PlayersEntity>): Promise<PlayersEntity> {

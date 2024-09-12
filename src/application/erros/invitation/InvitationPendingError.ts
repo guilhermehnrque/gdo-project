@@ -1,6 +1,6 @@
 import { CustomError } from "../CustomError";
 
-export default class InvitationPendingError extends CustomError {
+export class InvitationPendingError extends CustomError {
     constructor(
         message: string = "O usuário já tem um convite pendente para este grupo", 
         public statusCode: number = 422

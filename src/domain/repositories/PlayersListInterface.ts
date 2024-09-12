@@ -8,4 +8,5 @@ export interface PlayersListInterface {
     getPlayerListsByListId(listId: number): Promise<PlayersList[]>;
     getPlayerInListByPlayerId(playerId: number, listId: number): Promise<PlayersList | null>;
     getPlayersList(): Promise<PlayersList[]>;
+    getListOfPlayersByListOfIds(listIds: number[]): Promise<PlayersList[]>
 }

@@ -49,7 +49,7 @@ export class UserRepositoryImpl implements AuthRepositoryInterface {
         }
     }
 
-    getUserByUserId(userId: string): Promise<UserModel | null> {
+    async getUserByUserId(userId: string): Promise<UserModel | null> {
         return UserModel.findOne({
             where: {
                 user_id: userId,
@@ -57,7 +57,7 @@ export class UserRepositoryImpl implements AuthRepositoryInterface {
         });
     }
 
-    getUserByEmail(email: string): Promise<UserModel | null> {
+    async getUserByEmail(email: string): Promise<UserModel | null> {
         return UserModel.findOne({
             where: {
                 email,
@@ -96,8 +96,14 @@ export class UserRepositoryImpl implements AuthRepositoryInterface {
 
     }
 
-    getUserByPK(userId: number): Promise<UserModel | null> {
-        return UserModel.findOne({ where: { id: userId } });
+    async getUserByPK(userId: number): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({ where: { id: userId } });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[UserRepository] getUserByPK -> Error getting user by PK: ${customError.message}`);
+        }
+
     }
 
 }

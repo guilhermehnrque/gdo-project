@@ -54,6 +54,22 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
         }
     }
 
+    async checkIfUserIsInGroup(userId: number, groupId: number): Promise<boolean> {
+        try {
+            const groupUser = await GroupsUsers.findOne({
+                where: {
+                    users_id: userId,
+                    groups_id: groupId
+                }
+            });
+
+            return groupUser !== null;
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupUserRepository] checkIfUserIsInGroup Error checking if user is in group: ${customError.message}`);
+        }
+    }
+
 
 }
 

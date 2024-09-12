@@ -26,7 +26,7 @@ export class PlayersListsController {
 
     public async removePlayer(request: Request, response: Response): Promise<Response> {
         try {
-            const { listId, playerId } = request.body as PlayersListRemoveRequest;
+            const { listId, playerId } = request.params as PlayersListRemoveRequest;
 
             await this.playersListFacade.removePlayer(listId, playerId);
             return response.status(200).json({ message: "Jogador removido da lista" });
@@ -50,11 +50,12 @@ export class PlayersListsController {
         }
     }
 
-    public async getPlayerList(request: Request, response: Response): Promise<Response> {
+    public async getListOfPlayers(request: Request, response: Response): Promise<Response> {
         try {
-            const { playerId, listId } = request.params as PlayersListGetRequest;
+            const userId = request.userId;
+            const { groupId } = request.params as PlayersListGetRequest;
 
-            const res = await this.playersListFacade.getPlayerList(playerId, listId);
+            const res = await this.playersListFacade.getPlayerList(userId!, groupId);
             return response.status(200).json({ data: res });
         }
         catch (error) {
@@ -64,31 +65,5 @@ export class PlayersListsController {
         }
     }
 
-
-    public async getPlayerLists(request: Request, response: Response): Promise<Response> {
-        try {
-            const { playerId } = request.params as PlayersListGetRequest;
-
-            const res = await this.playersListFacade.getPlayerLists(playerId);
-            return response.status(200).json({ data: res });
-        }
-        catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-
-            return response.status(statusCode).json({ error: message });
-        }
-    }
-
-    public async getAllList(request: Request, response: Response): Promise<Response> {
-        try {
-            const res = await this.playersListFacade.getAllLists();
-            return response.status(200).json({ data: res });
-        }
-        catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-
-            return response.status(statusCode).json({ error: message });
-        }
-    }
 
 }

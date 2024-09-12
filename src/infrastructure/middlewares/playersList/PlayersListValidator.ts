@@ -41,7 +41,7 @@ const schemas = {
             .notEmpty().withMessage('Id da lista é obrigatório')
             .isNumeric().withMessage('Id da lista deve ser um número'),
 
-            param('playerId')
+        param('playerId')
             .notEmpty().withMessage('Id do jogador é obrigatório')
             .isNumeric().withMessage('Id do jogador deve ser um número')
     ],

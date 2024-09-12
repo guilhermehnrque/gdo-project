@@ -35,7 +35,7 @@ Group.init({
         allowNull: false,
     },
     is_active: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
     users_id: {

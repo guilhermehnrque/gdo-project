@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import { InvitationGatewayImpl } from "../gateways/organizer/InvitationGatewayImpl";
+import { InvitationFacade } from "../../application/facade/InvitationFacade";
 import { CustomError } from "../../application/erros/CustomError";
 
 export class InvitationController {
 
-    private invitationGateway: InvitationGatewayImpl;
+    private invitationFacade: InvitationFacade;
 
     constructor() {
-        this.invitationGateway = new InvitationGatewayImpl();
+        this.invitationFacade = new InvitationFacade();
     }
 
     async createInvitation(request: Request, response: Response) {
         try {
-            const inviteCode = await this.invitationGateway.createInvitation(request);
+            const inviteCode = await this.invitationFacade.createInvitation(request);
             return response.status(201).json({
                 message: "Convite criado ", data: {
                     invite_code: inviteCode
@@ -26,7 +26,7 @@ export class InvitationController {
 
     async getInvitationByCode(request: Request, response: Response) {
         try {
-            const invitation = await this.invitationGateway.getInvitationByCode(request);
+            const invitation = await this.invitationFacade.getInvitationByCode(request);
             return response.status(200).json(invitation);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
@@ -36,21 +36,12 @@ export class InvitationController {
 
     async acceptOrRecuseInvitationByCode(request: Request, response: Response) {
         try {
-            await this.invitationGateway.acceptOrRecuseInvitationByCode(request);
-            return response.status(201).json({ message: "Convite aceito" });
+            await this.invitationFacade.acceptOrRecuseInvitationByCode(request);
+            return response.status(201).json({ message: "Convite atualizado" });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
         }
     }
 
-    async deleteInvitationByCode(request: Request, response: Response) {
-        try {
-            await this.invitationGateway.deleteInvitationByCode(request);
-            return response.status(204).json();
-        } catch (error) {
-            const { statusCode = 500, message } = error as CustomError;
-            return response.status(statusCode).json({ error: message });
-        }
-    }
 }

@@ -12,13 +12,21 @@ export interface PlayersListUpdateRequest {
 
 export interface PlayersListGetRequest {
     params: {
-        playerId: number;
-        listId: number;
+        groupId: number;
     }[];
-    [key: string]: any; 
+    query: {
+
+    };
+    [key: string]: any;
 }
 
 export interface PlayersListRemoveRequest {
-    listId: number;
-    playerId: number;
+    params: {
+        listId: number;
+        playerId: number;
+    }[];
+    query: {
+
+    };
+    [key: string]: any;
 }

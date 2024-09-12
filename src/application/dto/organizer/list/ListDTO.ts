@@ -9,6 +9,7 @@ class ScheduleDTO {
     execute_in_hour: string | null;
     created_at: Date;
     updated_at: Date | null | undefined;
+    groups_id: number;
 
     constructor(data: Partial<ScheduleDTO>) {
         this.id = data.id;
@@ -20,7 +21,8 @@ class ScheduleDTO {
         this.execute_before_days = data.execute_before_days!;
         this.execute_in_hour = data.execute_in_hour!;
         this.created_at = data.created_at!;
-        this.updated_at = data.updated_at
+        this.updated_at = data.updated_at;
+        this.groups_id = data.groups_id!;
     }
 
     public toCamelCase() {
@@ -43,19 +45,23 @@ export class ListDTO {
     public id?: number;
     public description: string | null;
     public status: boolean;
+    public limit: number;
     public createdAt?: Date;
     public updatedAt?: Date;
     public scheduleId: number;
+    public groupId: number;
 
     public schedule: Object | null;
 
     constructor(data: Partial<ListDTO>) {
         this.description = data.description!;
         this.status = data.status!;
+        this.limit = data.limit!;
         this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
         this.id = data.id;
         this.scheduleId = data.scheduleId!;
+        this.groupId = data.groupId!
         this.schedule = data.schedule ? new ScheduleDTO(data.schedule).toCamelCase() : null;
     }
 
