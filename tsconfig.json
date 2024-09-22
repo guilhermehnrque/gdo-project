@@ -12,6 +12,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },
-  "include": ["src/**/*"],                   // Inclui todos os arquivos TypeScript dentro do diretório src
+  "include": ["src/**/*", "src/infrastructure/routes/v1/players/PlayersGroupRoute.ts"],                   // Inclui todos os arquivos TypeScript dentro do diretório src
   "exclude": ["node_modules", "stack-utils"] // Exclui diretórios que não devem ser compilados
 }
