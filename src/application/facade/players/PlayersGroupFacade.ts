@@ -1,15 +1,16 @@
 import sequelize from "../../../infrastructure/database/index";
+import { ListGroupUseCase } from "../../usecases/player/ListGroupUseCase";
 
 export class PlayersGroupFacade {
 
-    constructor() { }
+    private listGroupUseCase: ListGroupUseCase;
 
-    public async listGroups(): Promise<void> {
-        try {
-            return;
-        } catch (error) {
-            throw error;
-        }
+    constructor() { 
+        this.listGroupUseCase = new ListGroupUseCase();
+    }
+
+    public async listGroups(userId: string): Promise<Object> {
+        return await this.listGroupUseCase.execute(userId);
     }
 
     public async groupDetail(): Promise<void> {

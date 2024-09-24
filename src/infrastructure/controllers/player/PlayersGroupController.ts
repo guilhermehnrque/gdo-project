@@ -1,14 +1,21 @@
 import { Request, Response } from "express";
 import { CustomError } from "../../../application/erros/CustomError";
+import { PlayersGroupFacade } from "../../../application/facade/players/PlayersGroupFacade";
 
 export class PlayersGroupController {
 
+    private playersGroupFacade: PlayersGroupFacade;
+
     constructor() {
+        this.playersGroupFacade = new PlayersGroupFacade();
     }
 
     public async listGroups(request: Request, response: Response): Promise<Response> {
         try {
-            return response.status(200).json({ message: 'This is the group route' });
+            const { userId } = request.params;
+            const groups = await this.playersGroupFacade.listGroups(userId);
+            
+            return response.status(200).json(groups);
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
