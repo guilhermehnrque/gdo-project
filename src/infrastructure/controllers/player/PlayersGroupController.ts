@@ -14,8 +14,8 @@ export class PlayersGroupController {
         try {
             const { userId } = request.params;
             const groups = await this.playersGroupFacade.listGroups(userId);
-            
-            return response.status(200).json(groups);
+
+            return response.status(200).json({ data: groups });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
@@ -24,7 +24,10 @@ export class PlayersGroupController {
 
     public async groupDetail(request: Request, response: Response): Promise<Response> {
         try {
-            return response.status(200).json({ message: 'This is the group detail route' });
+            const { userId, groupIdPk } = request.params;
+            const group = await this.playersGroupFacade.groupDetail(userId, parseInt(groupIdPk));
+            
+            return response.status(200).json({ data: group });
         } catch (error) {
             const { statusCode = 500, message } = error as CustomError;
             return response.status(statusCode).json({ error: message });
