@@ -7,4 +7,5 @@ export default interface LocalRepositoryInterface {
     getLocalByIdPk(id: number): Promise<Local | null | undefined>;
     getLocalByDescription(description: string): Promise<Local | null | undefined>;
     updateLocal(localEntity: LocalEntity, options: { transaction: Transaction }): Promise<number | undefined>;
+    getLocalsByGroupId(groupId: number): Promise<Local[] | undefined>
 }

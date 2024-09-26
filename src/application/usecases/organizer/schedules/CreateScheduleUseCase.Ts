@@ -24,6 +24,7 @@ export class CreateScheduleUseCase {
         isSchedulingActive: boolean,
         executeBeforeDays: number | null,
         executeInHour: string | null,
+        playersLimit: number,
     ): Promise<boolean> {
         const registerStatus = true;
         let execBeforeDays = executeBeforeDays;
@@ -46,6 +47,7 @@ export class CreateScheduleUseCase {
             execute_before_days: execBeforeDays,
             execute_in_hour: execInHour,
             locals_id: localId,
+            players_limit: playersLimit,
         });
         
 

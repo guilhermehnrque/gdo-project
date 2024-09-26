@@ -25,7 +25,7 @@ export class SchedulesFacade {
     }
 
     public async createSchedule(payload: ScheduleCreateRequest): Promise<boolean> {
-        const { groupId, localId } = payload;
+        const { groupId, localId, playersLimit } = payload;
         const { dayOfWeek, startTime, endTime } = payload.schedule;
         const { isSchedulingActive, executeBeforeDays, executeInHour } = payload.scheduling;
 
@@ -37,7 +37,8 @@ export class SchedulesFacade {
             localId,
             isSchedulingActive,
             executeBeforeDays ?? null,
-            executeInHour ?? null
+            executeInHour ?? null,
+            playersLimit
         );
 
         return schedule;
@@ -61,7 +62,8 @@ export class SchedulesFacade {
             payload.scheduling.isSchedulingActive,
             payload.scheduling.executeBeforeDays,
             payload.scheduling.executeInHour,
-            payload.scheduleId
+            payload.scheduleId,
+            payload.playersLimit
         );
     }
 

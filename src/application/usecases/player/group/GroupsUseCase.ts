@@ -1,9 +1,9 @@
-import { GroupEntity } from "../../../domain/entity/GroupEntity";
-import { GroupService } from "../../services/GroupService";
-import { GroupsUsersService } from "../../services/GroupsUsersService";
-import { UserService } from "../../services/UserService";
+import { GroupEntity } from "../../../../domain/entity/GroupEntity";
+import { GroupService } from "../../../services/GroupService";
+import { GroupsUsersService } from "../../../services/GroupsUsersService";
+import { UserService } from "../../../services/UserService";
 
-export class ListGroupUseCase {
+export class GroupsUseCase {
 
     private userService: UserService
     private groupService: GroupService
@@ -20,7 +20,7 @@ export class ListGroupUseCase {
         const groupsId = await this.getUserGroups(user.id);
         const groupData = await this.getGroupData(groupsId);
 
-        return await this.prepareGroupDetails(groupData);
+        return await this.prepareOutput(groupData);
     }
 
     async getUserData(userId: string) {
@@ -38,12 +38,12 @@ export class ListGroupUseCase {
         }));
     }
 
-    async prepareGroupDetails(groupData: GroupEntity[]) {
+    async prepareOutput(groupData: GroupEntity[]) {
         return groupData.map(group => {
             return {
-                id: group.id,
+                groupId: group.id,
                 description: group.description,
-                status: group.is_active
+                status: group.is_active,
             }
         })
     }

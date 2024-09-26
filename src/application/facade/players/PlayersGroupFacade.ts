@@ -1,23 +1,22 @@
-import sequelize from "../../../infrastructure/database/index";
-import { DetailGroupUseCase } from "../../usecases/player/DetailGroupUseCase";
-import { ListGroupUseCase } from "../../usecases/player/ListGroupUseCase";
+import { GroupDetailsUseCase } from "../../usecases/player/group/GroupDetailsUseCase";
+import { GroupsUseCase } from "../../usecases/player/group/GroupsUseCase";
 
 export class PlayersGroupFacade {
 
-    private listGroupUseCase: ListGroupUseCase;
-    private detailGroupUseCase: DetailGroupUseCase;
+    private GroupsUseCase: GroupsUseCase;
+    private groupDetailsUseCase: GroupDetailsUseCase;
 
     constructor() { 
-        this.listGroupUseCase = new ListGroupUseCase();
-        this.detailGroupUseCase = new DetailGroupUseCase();
+        this.GroupsUseCase = new GroupsUseCase();
+        this.groupDetailsUseCase = new GroupDetailsUseCase();
     }
 
     public async listGroups(userId: string): Promise<Object> {
-        return await this.listGroupUseCase.execute(userId);
+        return await this.GroupsUseCase.execute(userId);
     }
 
     public async groupDetail(userId: string, groupIdPk: number): Promise<Object> {
-        return await this.detailGroupUseCase.execute(userId, groupIdPk);
+        return await this.groupDetailsUseCase.execute(userId, groupIdPk);
     }
 
     public async groupList(): Promise<void> {

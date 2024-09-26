@@ -2,6 +2,7 @@ import { GroupUserRepositoryImpl } from "../../infrastructure/repositories/Group
 import { PlayerAlreadyInGroup } from "../erros/players/PlayersErros";
 import { GroupHasUsers } from "../../domain/entity/GroupHasUsers";
 import { GroupsUsers } from "../../domain/models/GroupUserModel";
+import { Transaction } from "sequelize";
 
 export class GroupsUsersService {
 
@@ -16,6 +17,14 @@ export class GroupsUsersService {
 
         if (userIsInGroup) {
             throw new PlayerAlreadyInGroup();
+        }
+    }
+
+    async ensureUserIsMemberOfGroup(userId: number, groupId: number): Promise<void> {
+        const userIsInGroup = await this.groupUserRepository.checkIfUserIsInGroup(userId, groupId);
+
+        if (!userIsInGroup) {
+            throw new Error('User is not in group');
         }
     }
 
@@ -37,5 +46,17 @@ export class GroupsUsersService {
                 userGroup.id
             );
         }));
+    }
+
+    async registerUserInGroup(groupId: number, userId: number, transaction: Transaction): Promise<void> {
+        await this.ensureUserIsNotInGroup(userId, groupId);
+
+        await this.groupUserRepository.createGroupUser(groupId, [userId], { transaction });
+    }
+
+    async removeUserFromGroup(groupId: number, userId: number, transaction: Transaction): Promise<void> {
+        await this.ensureUserIsMemberOfGroup(userId, groupId);
+
+        await this.groupUserRepository.removeGroupUser(groupId, [userId], { transaction });
     }
 }

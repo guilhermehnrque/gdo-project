@@ -2,6 +2,7 @@ export interface ScheduleCreateRequest {
 
     groupId: number;
     localId: number;
+    playersLimit: number;
 
     schedule: {
         dayOfWeek: string;

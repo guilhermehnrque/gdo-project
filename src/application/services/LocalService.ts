@@ -11,7 +11,7 @@ export class LocalService {
         this.localRepository = new LocalRepositoryImpl();
     }
 
-    async getLocalById(id: number): Promise<Local | null | undefined> {
+    private async getLocalById(id: number): Promise<Local | null | undefined> {
         return await this.localRepository.getLocalByIdPk(id);
     }
 
@@ -23,7 +23,7 @@ export class LocalService {
         }
     }
 
-    async getLocalByDescription(description: string): Promise<Local | null | undefined> {
+    private async getLocalByDescription(description: string): Promise<Local | null | undefined> {
         return this.localRepository.getLocalByDescription(description);
     }
 
@@ -37,10 +37,31 @@ export class LocalService {
         return await LocalEntity.fromService(local);
     }
 
-    private ensureLocalExists(local: Local): void {
-        if (local || local !== undefined) {
+    async getLocalByIdPk(id: number): Promise<LocalEntity> {
+        const local = await this.getLocalById(id);
+
+        if (!local || local === undefined) {
             throw new LocalNotFoundError();
         }
+
+        return await LocalEntity.fromService(local);
+    }
+
+    async getGroupLocalsByGroupId(groupId: number): Promise<LocalEntity[]> {
+        const locals = await this.localRepository.getLocalsByGroupId(groupId);
+
+        if (!locals || locals === undefined) {
+            throw new LocalNotFoundError();
+        }
+
+        const localsEntities = await Promise.all(
+            locals.map(async (local) => {
+                return await LocalEntity.fromService(local);
+            })
+        );
+
+        return localsEntities;
+
     }
 
 }

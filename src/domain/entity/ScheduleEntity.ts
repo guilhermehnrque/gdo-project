@@ -7,6 +7,7 @@ export class ScheduleEntity {
     start: string;
     finish: string;
     groups_id: number;
+    players_limit: number;
     created_at: Date;
     updated_at?: Date;
     scheduling: boolean;
@@ -27,6 +28,7 @@ export class ScheduleEntity {
         this.updated_at = payload.updated_at ?? new Date();
         this.locals_id = payload.locals_id ?? null;
         this.id = payload.id;
+        this.players_limit = payload.players_limit ?? 0;
 
         this.start = this.addSecondsToHour(this.start);
         this.finish = this.addSecondsToHour(this.finish);
