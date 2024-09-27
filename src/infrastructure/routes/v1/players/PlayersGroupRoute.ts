@@ -1,25 +1,19 @@
 import { Router, Request, Response } from 'express';
+import { PlayersGroupController } from '../../../controllers/player/PlayersGroupController';
 
 const router = Router();
 
-// Listar grupos que é participante
-router.get('', async (req: Request, res: Response) => { res.json({ message: 'This is the group route' }); });
+const playersGroupController = new PlayersGroupController();
 
-// Listar detalhes do grupo do participante / Acessar grupo que é participante
-// Contém informação da lista e membros do grupo
-router.get('/:groupId', async (req: Request, res: Response) => { res.json({ message: 'This is the group detail route' }); });
+router.get('', async (req: Request, res: Response) => { playersGroupController.listGroups(req, res); });
+router.get('/:groupId', async (req: Request, res: Response) => { playersGroupController.groupDetail(req, res); });
+router.get('/:groupId/schedule', async (req: Request, res: Response) => { playersGroupController.groupSchedule(req, res); });
+router.get('/:groupId/lists', async (req: Request, res: Response) => { playersGroupController.groupList(req, res); });
+router.post('/', async (req: Request, res: Response) => { playersGroupController.groupRegister(req, res); });
+router.delete('/:groupId', async (req: Request, res: Response) => { playersGroupController.groupLeave(req, res); });
 
-// Verificar se existe lista disponível 
-router.get('/:groupId/list', async (req: Request, res: Response) => { res.json({ message: 'This is the group list route' }); });
-
-// Se registar na lista do grupo 
-router.post('/:groupId/list', async (req: Request, res: Response) => { res.json({ message: 'This is the group list route' }); });
-
-// Atualizar seu estatus da lista do grupo (desisti ou confirmar)
-router.put('/:groupId/list', async (req: Request, res: Response) => { res.json({ message: 'This is the group list route' }); });
-
-// Sair do grupo
-router.delete('/:groupId', async (req: Request, res: Response) => { res.json({ message: 'This is the group list route' }); });
+router.post('/list', async (req: Request, res: Response) => { playersGroupController.registerGroupList(req, res); });
+router.patch('/:groupId/list/:listId', async (req: Request, res: Response) => { playersGroupController.leaveGroupList(req, res); });
 
 
 export default router;
