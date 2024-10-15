@@ -6,7 +6,6 @@ export class ListEntity implements ListAttributes {
     public id?: number;
     public description: string | null;
     public status: boolean;
-    public limit: number;
     public groups_id: number;
     public schedules_id: number;
     public created_at?: Date;
@@ -23,7 +22,6 @@ export class ListEntity implements ListAttributes {
         this.groups_id = data.groups_id!;
         this.id = data.id;
         this.schedule = data.schedule!;
-        this.limit = data.limit!;
     }
 
     public toCreatePayload() {
@@ -32,7 +30,6 @@ export class ListEntity implements ListAttributes {
             status: this.status,
             schedules_id: this.schedules_id,
             groups_id: this.groups_id,
-            limit: this.limit,
             created_at: this.created_at,
             updated_at: this.updated_at
         };

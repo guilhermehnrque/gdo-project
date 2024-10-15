@@ -3,6 +3,7 @@ import logger from "../utils/LoggerConfig";
 import { ScheduleRepositoryImpl } from "../../infrastructure/repositories/ScheduleRepositoryImpl";
 import ScheduleAlreadyExistsError from "../erros/schedules/ScheduleAlreadyExistsError";
 import ScheduleNotFoundError from "../erros/schedules/ScheduleNotFoundError";
+import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
 
 export class SchedulesService {
 
@@ -32,7 +33,7 @@ export class SchedulesService {
         }
     }
 
-    async getAllSchedulesByGroupsId(groupsId: number[]): Promise<Schedule[]> {
+    async getAllSchedulesByGroupsId(groupsId: number[]): Promise<ScheduleEntity[]> {
         const schedules = await this.scheduleRepository.getAllSchedulesByGroupsId(groupsId);
 
         if (!schedules) {
@@ -40,10 +41,10 @@ export class SchedulesService {
             throw new ScheduleNotFoundError();
         }
 
-        return schedules;
+        return this.createListOfEntities(schedules);
     }
 
-    async getScheduleByGroupId(groupId: number): Promise<Schedule> {
+    async getScheduleByGroupId(groupId: number): Promise<ScheduleEntity> {
         const schedule = await this.scheduleRepository.getScheduleGroupId(groupId);
 
         if (!schedule) {
@@ -51,7 +52,7 @@ export class SchedulesService {
             throw new ScheduleNotFoundError();
         }
 
-        return schedule;
+        return this.createEntity(schedule);
     }
 
     async getScheduleByScheduleIdPkAndGroupIdPk(scheduleId: number, groupId: number): Promise<Schedule> {
@@ -63,6 +64,27 @@ export class SchedulesService {
         }
 
         return schedule;
+    }
+
+    async createEntity(schedule: Schedule): Promise<ScheduleEntity> {
+        return await ScheduleEntity.fromUseCase({
+            day_of_week: schedule.day_of_week,
+            active: schedule.active,
+            start: schedule.start,
+            finish: schedule.finish,
+            groups_id: schedule.groups_id,
+            scheduling: schedule.scheduling,
+            execute_before_days: schedule.execute_before_days,
+            execute_in_hour: schedule.execute_in_hour,
+            locals_id: schedule.locals_id,
+            id: schedule.id
+        });
+    }
+
+    async createListOfEntities(schedules: Schedule[]): Promise<ScheduleEntity[]> {
+        return await Promise.all(schedules.map(async schedule => {
+            return await this.createEntity(schedule);
+        }));
     }
 
 }

@@ -48,10 +48,18 @@ export class LocalRepositoryImpl implements LocalRepositoryInterface {
         }
     }
 
+    async getLocalsByGroupId(groupId: number): Promise<Local[] | undefined> {
+        try {
+            return await Local.findAll({ where: { groups_id: groupId } });
+        } catch (error) {
+            this.logAndThrowError(error as CustomError, "[LocalRepositoryImpl] getLocalsByGroupId");
+        }
+    }
+
     logAndThrowError(error: CustomError, context: string): void {
         logger.error(`${context} error message -> ${error.message}`);
 
-        throw new DatabaseError(`${context}Database error`);
+        throw new DatabaseError(`${context} Database error`);
     }
 
 }

@@ -24,7 +24,8 @@ export class UpdateScheduleUseCase {
         isSchedulingActive: boolean,
         executeBeforeDays: number | null,
         executeInHour: string | null,
-        scheduleId: number
+        scheduleId: number,
+        playersLimit: number,
     ): Promise<boolean> {
         const registerStatus = true;
         let execBeforeDays = executeBeforeDays;
@@ -48,6 +49,7 @@ export class UpdateScheduleUseCase {
             execute_in_hour: execInHour,
             locals_id: localId,
             id: scheduleId,
+            players_limit: playersLimit,
         });
 
 

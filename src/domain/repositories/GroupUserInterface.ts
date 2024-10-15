@@ -6,4 +6,5 @@ export interface GroupUserInterface {
     removeGroupUser(groupId: number, usersId: Array<number>, options: { transaction?: Transaction }): Promise<number>;
     getAllGroupMembers(groupId: number): Promise<GroupsUsers[]>;
     checkIfUserIsInGroup(userId: number, groupId: number): Promise<boolean>;
+    getGroupByUserId(userId: number): Promise<GroupsUsers[]>
 }

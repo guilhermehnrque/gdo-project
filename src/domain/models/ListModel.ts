@@ -12,7 +12,6 @@ class List extends Model<ListAttributes, ListCreationAttributes> implements List
     public status!: boolean;
     public schedules_id!: number;
     public groups_id!: number;
-    public limit!: number;
     public created_at!: Date;
     public updated_at!: Date;
 
@@ -34,10 +33,6 @@ List.init({
     },
     status: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
-    },
-    limit: {
-        type: DataTypes.INTEGER,
         allowNull: false,
     },
     schedules_id: {

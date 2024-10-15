@@ -12,14 +12,13 @@ export class CreateListUseCase {
         this.listService = new ListService();
     }
 
-    public async execute(description: string, status: boolean, scheduleId: number, limitOfPlayers: number, groupId: number): Promise<void> {
+    public async execute(description: string, status: boolean, scheduleId: number, groupId: number): Promise<void> {
         await this.validations(scheduleId);
 
         const listEntity = new ListEntity({
             description,
             status,
             schedules_id: scheduleId,
-            limit: limitOfPlayers,
             groups_id: groupId,
             created_at: new Date(),
             updated_at: new Date()

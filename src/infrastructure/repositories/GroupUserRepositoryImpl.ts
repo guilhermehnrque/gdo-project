@@ -5,7 +5,6 @@ import { User } from "../../domain/models/UserModel";
 import { GroupUserInterface } from "../../domain/repositories/GroupUserInterface";
 import DatabaseError from "../../application/erros/DatabaseError";
 
-
 export class GroupUserRepositoryImpl implements GroupUserInterface {
     async createGroupUser(groupId: number, usersId: Array<number>, options: { transaction?: Transaction }): Promise<GroupsUsers[]> {
         try {
@@ -70,6 +69,18 @@ export class GroupUserRepositoryImpl implements GroupUserInterface {
         }
     }
 
+    async getGroupByUserId(userId: number): Promise<GroupsUsers[]> {
+        try {
+            return await GroupsUsers.findAll({
+                where: {
+                    users_id: userId
+                }
+            });
+        } catch (error) {
+            const customError = error as CustomError;
+            throw new DatabaseError(`[GroupUserRepository] getGroupByUserId Error getting group by user id: ${customError.message}`);
+        }
+    }
 
 }
 

@@ -1,15 +1,20 @@
 import "reflect-metadata"
 import express, { Application, Request, Response } from 'express'
 import bearerToken from "./infrastructure/middlewares/BearerToken"
-// Organizer
+
+// Common
 import AuthRoute from './infrastructure/routes/v1/AuthRoute'
+import InvitationRoute from './infrastructure/routes/v1/InvitationRoute'
+
+// Organizer
 import GroupRoute from  './infrastructure/routes/v1/organizer/GroupRoute'
 import SchedulesRoutes from './infrastructure/routes/v1/organizer/SchedulesRoute'
-import InvitationRoute from './infrastructure/routes/v1/InvitationRoute'
 import ListRoute from './infrastructure/routes/v1/organizer/ListRoute'
 import PlayersRoute from './infrastructure/routes/v1/organizer/PlayersRoute'
 import GuestRoute from './infrastructure/routes/v1/organizer/GuestRoute'
 
+// Players
+import PlayersGroupRoute from './infrastructure/routes/v1/players/PlayersGroupRoute'
 
 import jwt from 'jsonwebtoken';
 
@@ -25,6 +30,7 @@ app.use('/api/v1/organizer/schedules', bearerToken.validate, SchedulesRoutes)
 app.use('/api/v1/organizer/lists', bearerToken.validate, ListRoute)
 app.use('/api/v1/organizer/player-list', bearerToken.validate, PlayersRoute);
 app.use('/api/v1/organizer/guest-list', bearerToken.validate, GuestRoute);
+app.use('/api/v1/players', bearerToken.validate, PlayersGroupRoute)
 
 app.get('/api/v1/protected', bearerToken.validate, (request: Request, response: Response) => {
     response.json({ message: 'You have access to this protected route!', userId: request.userId, userType: request.userType });

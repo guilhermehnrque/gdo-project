@@ -4,10 +4,11 @@ import { SchedulesFacade } from "../../../application/facade/organizer/Schedules
 import { ScheduleCreateRequest } from "../../requests/organizer/schedules/ScheduleCreateRequest";
 import { ScheduleUpdateRequest } from "../../requests/organizer/schedules/ScheduleUpdateRequest";
 import { ScheduleUpdateStatusRequest } from "../../requests/organizer/schedules/ScheduleUpdateStatusRequest";
+import { UpdateSchedulePayload } from "../../../application/interfaces/payloads/UpdateSchedulePayload";
 
 export class SchedulesController {
 
-    private scheduleFacade: SchedulesFacade;
+    private readonly scheduleFacade: SchedulesFacade;
 
     constructor() {
         this.scheduleFacade = new SchedulesFacade();
@@ -59,7 +60,7 @@ export class SchedulesController {
             const body = request.body as ScheduleUpdateRequest;
             const scheduleId = parseInt(request.params.scheduleId);
 
-            const updatePayload = {
+            const updatePayload: UpdateSchedulePayload = {
                 ...body,
                 scheduleId
             }

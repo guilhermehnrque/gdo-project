@@ -11,6 +11,7 @@ export class ListService {
         this.listRepository = new ListRepositoryImpl();
     }
 
+    // TODO: Ajustar nomeclaturas e tipos de retorno
     public async getListById(listId: number): Promise<ListEntity> {
         const list = await this.listRepository.getList(listId);
 

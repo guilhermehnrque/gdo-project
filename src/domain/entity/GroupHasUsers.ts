@@ -20,6 +20,14 @@ export class GroupHasUsers {
         );
     }
 
+    static async createFromDatabase(groups_id: number, users_id: number, id: number): Promise<GroupHasUsers> {
+        return new GroupHasUsers(
+            groups_id,
+            users_id,
+            id
+        );
+    }
+
     toRegister() {
         return {
             groups_id: this.groups_id,

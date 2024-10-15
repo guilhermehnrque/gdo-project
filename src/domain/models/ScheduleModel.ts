@@ -12,6 +12,7 @@ interface ScheduleAttributes {
     created_at: Date;
     groups_id: number;
     scheduling: boolean;
+    players_limit: number
     execute_before_days?: number | null;
     execute_in_hour?: string | null;
     updated_at?: Date | null;
@@ -29,6 +30,7 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
     public created_at!: Date;
     public groups_id!: number;
     public scheduling!: boolean;
+    public players_limit!: number
     public execute_before_days?: number | null;
     public execute_in_hour?: string | null;
     public updated_at?: Date | null;
@@ -106,6 +108,10 @@ Schedule.init({
         allowNull: true,
         defaultValue: null,
     },
+    players_limit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }
 }, {
     sequelize,
     tableName: 'schedules',
