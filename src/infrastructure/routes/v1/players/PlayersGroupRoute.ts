@@ -15,5 +15,4 @@ router.delete('/:groupId', async (req: Request, res: Response) => { playersGroup
 router.post('/list', async (req: Request, res: Response) => { playersGroupController.registerGroupList(req, res); });
 router.patch('/:groupId/list/:listId', async (req: Request, res: Response) => { playersGroupController.leaveGroupList(req, res); });
 
-
 export default router;

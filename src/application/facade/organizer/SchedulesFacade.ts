@@ -10,11 +10,11 @@ import { UpdateStatusScheduleUseCase } from '../../usecases/organizer/schedules/
 
 export class SchedulesFacade {
 
-    private createScheduleUseCase: CreateScheduleUseCase;
-    private getSchedulesUseCase: GetSchedulesUseCase;
-    private getScheduleUseCase: GetScheduleUseCase;
-    private updateScheduleUseCase: UpdateScheduleUseCase;
-    private updateStatusScheduleUseCase: UpdateStatusScheduleUseCase;
+    private readonly createScheduleUseCase: CreateScheduleUseCase;
+    private readonly getSchedulesUseCase: GetSchedulesUseCase;
+    private readonly getScheduleUseCase: GetScheduleUseCase;
+    private readonly updateScheduleUseCase: UpdateScheduleUseCase;
+    private readonly updateStatusScheduleUseCase: UpdateStatusScheduleUseCase;
 
     constructor() {
         this.createScheduleUseCase = new CreateScheduleUseCase();

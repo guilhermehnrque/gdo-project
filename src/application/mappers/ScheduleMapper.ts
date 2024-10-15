@@ -1,9 +1,10 @@
+import { ScheduleEntity } from "../../domain/entity/ScheduleEntity";
 import { Schedule } from "../../domain/models/ScheduleModel";
 import { ScheduleDTO } from "../dto/organizer/schedules/SchedulesDTO";
 
-export function scheduleMapper(schedules: Schedule[]): Promise<ScheduleDTO[]> {
+export function scheduleMapper(schedules: ScheduleEntity[]): Promise<ScheduleDTO[]> {
     return Promise.all(
-        schedules.map((schedule: Schedule) => {
+        schedules.map((schedule: ScheduleEntity) => {
             return ScheduleDTO.fromMapper(schedule);
         })
     );

@@ -1,3 +1,4 @@
+import { ScheduleEntity } from "../../../../domain/entity/ScheduleEntity";
 import { Schedule } from "../../../../domain/models/ScheduleModel";
 
 export class ScheduleDTO {
@@ -16,7 +17,7 @@ export class ScheduleDTO {
 
     constructor() {}
 
-    static async fromMapper(schedule: Schedule) {
+    static async fromMapper(schedule: ScheduleEntity) {
         let instance = new ScheduleDTO();
         instance.id = schedule.id;
         instance.dayOfWeek = schedule.day_of_week;
